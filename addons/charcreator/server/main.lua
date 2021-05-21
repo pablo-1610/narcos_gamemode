@@ -10,3 +10,7 @@
   Unauthorized using, copying, modifying and/or distributing of this file,
   via any medium is strictly prohibited. This code is confidential.
 --]]
+
+Narcos.netHandleBasic("narcos:cbPlayerRegistred", function(identify, baseSkinData)
+
+end)

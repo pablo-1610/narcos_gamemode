@@ -11,10 +11,11 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-Narcos.netHandleBasic("narcos:cbPlayerRegistred", function(target, identity, baseSkinData)
-    if identity == "" then
-        NarcosServer.toClient("narcos:creatorStarts", target)
-    else
-
+RegisterNetEvent("esx:onPlayerSpawn")
+Narcos.netHandleBasic("esx:onPlayerSpawn", function()
+    local _src = source
+    local xPlayer = ESX.GetPlayerFromId(_src)
+    if xPlayer.identity == "" then
+        NarcosServer.toClient("creatorStarts", _src)
     end
 end)

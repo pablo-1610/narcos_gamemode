@@ -31,6 +31,10 @@ NarcosClient.requestModel = function(model)
     while not HasModelLoaded(model) do Wait(1) end
 end
 
+NarcosClient.trace = function(message)
+    print(("[^1Los Narcos^7] ^7%s"):format(message))
+end
+
 NarcosClient.inputBox = function(TextEntry, ExampleText, MaxStringLenght, isValueInt)
     AddTextEntry('FMMC_KEY_TIP1', TextEntry)
     DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP1", "", ExampleText, "", "", "", MaxStringLenght)

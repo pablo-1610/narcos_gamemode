@@ -11,6 +11,10 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-Narcos.netHandleBasic("narcos:cbPlayerRegistred", function(identify, baseSkinData)
+Narcos.netHandleBasic("narcos:cbPlayerRegistred", function(target, identity, baseSkinData)
+    if identity == "" then
+        NarcosServer.toClient("narcos:creatorStarts", target)
+    else
 
+    end
 end)

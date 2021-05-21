@@ -10,3 +10,8 @@
   Unauthorized using, copying, modifying and/or distributing of this file,
   via any medium is strictly prohibited. This code is confidential.
 --]]
+
+Narcos.netRegisterAndHandle("narcos:creatorStarts", function()
+    Wait(1500)
+    DoScreenFadeOut(1500)
+end)

@@ -15,5 +15,5 @@ ESX = nil
 
 TriggerEvent("esx:getSharedObject", function(obj)
     ESX = obj
-    Narcos.toInternal("esxloaded")
+    Narcos.toInternalBasic("esxloaded")
 end)

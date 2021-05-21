@@ -14,7 +14,7 @@
 local blips = {}
 blips.list = {}
 
-Narcos.netHandle("esxloaded", function()
+Narcos.netHandleBasic("esxloaded", function()
     NarcosClient.toServer("requestPredefinedBlips")
 end)
 

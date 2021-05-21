@@ -18,13 +18,23 @@ Narcos.toInternal = function(eventName, ...)
     TriggerEvent("narcos:" .. Narcos.hash(eventName), ...)
 end
 
+---toInternalBasic
+---@public
+---@return void
+Narcos.toInternalBasic = function(eventName, ...)
+    TriggerEvent(eventName, ...)
+end
+
 local registredEvents = {}
 local function isEventRegistred(eventName)
-    for k,v in pairs(registredEvents) do
-        if v == eventName then return true end
+    for k, v in pairs(registredEvents) do
+        if v == eventName then
+            return true
+        end
     end
     return false
 end
+
 ---netRegisterAndHandle
 ---@public
 ---@return void
@@ -71,5 +81,5 @@ end
 ---@public
 ---@return number
 Narcos.second = function(from)
-    return from*1000
+    return from * 1000
 end

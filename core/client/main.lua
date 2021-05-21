@@ -22,5 +22,4 @@ Narcos.newThread(function()
         Wait(1)
     end
     ESX.PlayerData = ESX.GetPlayerData()
-    Astra.toInternal("esxloaded")
 end)

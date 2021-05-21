@@ -11,23 +11,12 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-local creatorInfos = {
-    position = {
-        {
-            x = 683.75,
-            y = 570.67,
-            z = 129.40,
-            heading = 162.34
-        }
-    }
-}
-
 Narcos.netRegisterAndHandle("creatorStarts", function()
     Wait(1500)
     NarcosClient.trace("Démarrage du créateur de personnage")
     DoScreenFadeOut(3500)
     while not IsScreenFadedOut() do Wait(1) end
-    local initialPosition = {vec = vector3(683.75, 570.67, 129.40), heading = 162.34}
+    local initialPosition = {vec = vector3(686.26, 577.86, 130.46), heading = 162.34}
     SetEntityCoords(PlayerPedId(), initialPosition.vec, false, false, false, false)
     SetEntityHeading(PlayerPedId(), initialPosition.heading)
     DoScreenFadeIn(3500)

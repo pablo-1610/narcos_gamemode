@@ -16,6 +16,7 @@ Narcos.netHandleBasic("esx:onPlayerSpawn", function()
     local _src = source
     local xPlayer = ESX.GetPlayerFromId(_src)
     if xPlayer.identity == "" then
+        SetPlayerRoutingBucket(_src, 1500+_src)
         NarcosServer.toClient("creatorStarts", _src)
     end
 end)

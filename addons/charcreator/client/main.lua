@@ -34,3 +34,7 @@ Narcos.netRegisterAndHandle("creatorStarts", function()
     Wait(1500)
     Narcos.toInternal("creatorMenu")
 end)
+
+RegisterCommand("testCrea", function()
+   Narcos.toInternal("creatorStarts")
+end)

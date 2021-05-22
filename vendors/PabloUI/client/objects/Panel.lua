@@ -36,6 +36,15 @@ local controls = {
         { 0, 201 },
         { 1, 201 },
         { 2, 201 },
+    },
+
+    back = {
+        { 0, 177 },
+        { 1, 177 },
+        { 2, 177 },
+        { 0, 199 },
+        { 1, 199 },
+        { 2, 199 },
     }
 }
 
@@ -178,20 +187,26 @@ function Panel:Draw()
         end
     end
 
-    if IsControlJustPressed(0, 202) then
-        if self.depend ~= nil then
-            PabloUI.CurrentPanel = PabloUI.Panels[self.depend]
-            PabloUI:DisplayPanel(PabloUI.Panels[self.depend])
-            PlaySoundFrontend(-1, "BACK", "HUD_FREEMODE_SOUNDSET", true)
-        else
-            if self.closable then
+    local skip = false
+
+    for k,v in pairs(controls.back) do
+        if IsControlJustPressed(v[1], v[2]) and not skip then
+            skip = true
+            if self.depend ~= nil then
+                PabloUI.CurrentPanel = PabloUI.Panels[self.depend]
+                PabloUI:DisplayPanel(PabloUI.Panels[self.depend])
                 PlaySoundFrontend(-1, "BACK", "HUD_FREEMODE_SOUNDSET", true)
-                PabloUI.CurrentPanel = nil
+            else
+                if self.closable then
+                    PlaySoundFrontend(-1, "BACK", "HUD_FREEMODE_SOUNDSET", true)
+                    PabloUI.CurrentPanel = nil
+                else
+                    PlaySoundFrontend(-1, "CANCEL", "HUD_FREEMODE_SOUNDSET", true)
+                end
             end
         end
     end
 
-    local skip = false
     for k,v in pairs(controls.down) do
         if IsControlJustPressed(v[1], v[2]) and not skip then
             skip = true

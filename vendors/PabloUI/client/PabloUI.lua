@@ -66,24 +66,3 @@ function PabloUI:DisplayPanel(basePanel)
         end
     end)
 end
-
-RegisterCommand("pabui", function()
-    if not PabloUI:PanelExists("creator") then
-        ---@type Panel
-        local panel = PabloUI:CreatePanel("creator", "Créateur", "Customisation du personnage", {255,0,0})
-        panel:SetClosable(true)
-
-        ---@type Panel
-        local subPanel = PabloUI:CreatePanel("identity", "Créateur", "Identité du personnage", {255,0,255})
-        subPanel:SetDepend("creator")
-
-        panel:SetElement(1, Panel.CreateButton("Identité de mon personnage", ">>", nil, function()
-            ESX.ShowNotification("Ok !")
-        end, "identity"))
-        panel:SetElement(2, Panel.CreateButton("Traits du visage", ">>"))
-        panel:SetElement(4, Panel.CreateCheckBox("Coucou", nil, function(newValue)
-            ESX.ShowNotification(("Value: %s"):format(json.encode(newValue)))
-        end, false))
-    end
-    PabloUI:DisplayPanel(PabloUI:GetPanel("creator"))
-end, false)

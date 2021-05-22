@@ -81,9 +81,8 @@ RegisterCommand("pabui", function()
             ESX.ShowNotification("Ok !")
         end, "identity"))
         panel:SetElement(2, Panel.CreateButton("Traits du visage", ">>"))
-        panel:SetElement(3, Panel.CreateButton("Ma bite", ">>"))
         panel:SetElement(4, Panel.CreateCheckBox("Coucou", nil, function(newValue)
-
+            ESX.ShowNotification(("Value: %s"):format(json.encode(newValue)))
         end, false))
     end
     PabloUI:DisplayPanel(PabloUI:GetPanel("creator"))

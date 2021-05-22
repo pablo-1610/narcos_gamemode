@@ -32,5 +32,5 @@ Narcos.netRegisterAndHandle("creatorStarts", function()
     SetCamFov(cam, 12.0)
     DoScreenFadeIn(3500)
 
-    -- @TODO -> Faire le menu
+
 end)

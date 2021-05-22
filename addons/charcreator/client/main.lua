@@ -31,6 +31,6 @@ Narcos.netRegisterAndHandle("creatorStarts", function()
     SetFocusPosAndVel(initialPosition.vec, 0,0,0)
     SetCamFov(cam, 12.0)
     DoScreenFadeIn(3500)
-
-
+    Wait(1500)
+    Narcos.toInternal("creatorMenu")
 end)

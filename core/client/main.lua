@@ -11,7 +11,7 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-ESX = nil
+ESX, isAMenuActive = nil, false
 
 Narcos.newThread(function()
     Wait(1500)

@@ -11,27 +11,46 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
+local cat, desc = "creatorMenu", "~g~Customisation du personnage"
+local sub = function(str)
+    return cat .. "_" .. str
+end
+
 Narcos.netHandle("creatorMenu", function()
     if isAMenuActive then
         return
     end
     isAMenuActive = true
-    if not PabloUI:PanelExists("creator") then
-        ---@type Panel
-        local panel = PabloUI:CreatePanel("creator", "Créateur", "Customisation du personnage", {255,0,0})
-        panel:SetClosable(false)
-
-        ---@type Panel
-        local subPanel = PabloUI:CreatePanel("identity", "Créateur", "Identité du personnage", {255,0,255})
-        subPanel:SetDepend("creator")
-
-        panel:SetElement(1, Panel.CreateButton("Identité de mon personnage", ">>", nil, function()
-            ESX.ShowNotification("Ok !")
-        end, "identity"))
-        panel:SetElement(2, Panel.CreateButton("Traits du visage", ">>"))
-        panel:SetElement(4, Panel.CreateCheckBox("Coucou", nil, function(newValue)
-            ESX.ShowNotification(("Value: %s"):format(json.encode(newValue)))
-        end, false))
+    FreezeEntityPosition(PlayerPedId(), true)
+    RMenu.Add(cat, sub("main"), RageUI.CreateMenu(nil, desc, nil, nil, "root_cause", "shopui_title_bawsaq"))
+    RMenu:Get(cat, sub("main")).Closed = function()
     end
-    PabloUI:DisplayPanel(PabloUI:GetPanel("creator"))
+
+    RMenu.Add(cat, sub("identity"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("main")), nil, desc, nil, nil, "root_cause", "shopui_title_bawsaq"))
+    RMenu:Get(cat, sub("identity")).Closed = function()
+    end
+
+    RageUI.Visible(RMenu:Get(cat, sub("main")), true)
+
+    Narcos.newThread(function()
+        while isAMenuActive do
+            local shouldStayOpened = false
+            local function tick()
+                shouldStayOpened = true
+            end
+
+            RageUI.IsVisible(RMenu:Get(cat, sub("main")), true, true, true, function()
+                tick()
+                RageUI.Separator("↓ ~g~Informations ~s~↓")
+            end, function()
+            end)
+
+            if not shouldStayOpened and isAMenuActive then
+                isAMenuActive = false
+            end
+            Wait(0)
+        end
+        FreezeEntityPosition(PlayerPedId(), false)
+        RMenu:Delete(cat, sub("main"))
+    end)
 end)

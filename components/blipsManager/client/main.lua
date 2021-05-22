@@ -55,5 +55,10 @@ Narcos.netRegisterAndHandle("cbBlips", function(incomingBlips)
         AddTextComponentString(blip.text)
         EndTextCommandSetBlipName(b)
         blips.list[blipID].blip = b
+        SetBlipFlashes(b, true)
+        Narcos.newWaitingThread(4500, function()
+            SetBlipFlashes(b, false)
+        end)
+        Wait(250)
     end
 end)

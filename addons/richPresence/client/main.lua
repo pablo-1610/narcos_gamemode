@@ -23,3 +23,13 @@ Narcos.netHandleBasic("esxloaded", function()
             }
     )
 end)
+
+Narcos.netHandle("rpOverride", function(image, text)
+    NarcosClient_DiscordRpManager.setImageOverride(image)
+    NarcosClient_DiscordRpManager.setTextOverride(text)
+end)
+
+Narcos.netHandle("rpSetToDefault", function()
+    NarcosClient_DiscordRpManager.setImageOverride("city")
+    NarcosClient_DiscordRpManager.setTextOverride("Se promène dans la nature")
+end)

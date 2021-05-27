@@ -15,11 +15,11 @@ NarcosClient_DiscordRpManager = {}
 
 local taskId, running, id, info, buttons, image = nil, false, 0, "", {}, ""
 
-NarcosClient_DiscordRpManager.setImage = function(newVal)
+NarcosClient_DiscordRpManager.setImageOverride = function(newVal)
     image = newVal
 end
 
-NarcosClient_DiscordRpManager.setText = function(newVal)
+NarcosClient_DiscordRpManager.setTextOverride = function(newVal)
     info = newVal
 end
 

@@ -16,8 +16,7 @@ local camPos = vector3(684.11, 571.66, 130.46)
 
 Narcos.netRegisterAndHandle("creatorStarts", function()
     Wait(1500)
-    NarcosClient_DiscordRpManager.setImage("builder")
-    NarcosClient_DiscordRpManager.setText("Créé son personnage")
+    Narcos.toInternal("rpOverride", "builder", "Créé son personnage")
     NarcosClient.trace("Démarrage du créateur de personnage")
     DoScreenFadeOut(3000)
     while not IsScreenFadedOut() do Wait(1) end

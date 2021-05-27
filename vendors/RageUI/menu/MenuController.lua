@@ -478,6 +478,7 @@ end
 ---@public
 function RageUI.GoBack()
     if RageUI.CurrentMenu ~= nil then
+        RageUI.SetIndicator(nil)
         local Audio = RageUI.Settings.Audio
         RageUI.PlaySound(Audio[Audio.Use].Back.audioName, Audio[Audio.Use].Back.audioRef)
         if RageUI.CurrentMenu.Parent ~= nil then

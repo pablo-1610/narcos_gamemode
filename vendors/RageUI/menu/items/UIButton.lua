@@ -53,6 +53,7 @@ function RageUI.Button(Label, Description, Enabled, Callback, Submenu)
                     RageUI.PlaySound(Audio[Audio.Use].Select.audioName, Audio[Audio.Use].Select.audioRef)
 
                     if Submenu and Submenu() then
+                        RageUI.SetIndicator(nil)
                         RageUI.NextMenu = Submenu
                     end
                 end
@@ -145,6 +146,7 @@ function RageUI.ButtonWithStyle(Label, Description, Style, Enabled, Callback, Su
                     RageUI.PlaySound(Audio[Audio.Use].Select.audioName, Audio[Audio.Use].Select.audioRef)
 
                     if Submenu and Submenu() then
+                        RageUI.SetIndicator(nil)
                         RageUI.NextMenu = Submenu
                     end
                 end

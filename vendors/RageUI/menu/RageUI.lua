@@ -341,6 +341,7 @@ function RageUI.Visible(Menu, Value)
         if Menu() then
             if type(Value) == "boolean" then
                 if Value then
+                    RageUI.SetIndicator(nil)
                     if RageUI.CurrentMenu ~= nil then
                         RageUI.CurrentMenu.Closed()
                         RageUI.CurrentMenu.Open = not Value
@@ -650,6 +651,9 @@ function RageUI.IsVisible(menu, header, glare, instructional, items, panels)
             RageUI.Banner(true, glare or false)
         end
         RageUI.Subtitle()
+        if RageUI.Indicator ~= nil then
+            RageUI.Separator(("%s%s"):format(NarcosClient.dangerVariator, RageUI.Indicator))
+        end
         if (items ~= nil) then
             items()
         end
@@ -661,6 +665,15 @@ function RageUI.IsVisible(menu, header, glare, instructional, items, panels)
         end
         RageUI.Render(instructional or false)
     end
+end
+
+RageUI.Indicator = nil
+---SetIndicator
+---@param indicator string
+---@return void
+---@public
+function RageUI.SetIndicator(indicator)
+    RageUI.Indicator = indicator
 end
 
 

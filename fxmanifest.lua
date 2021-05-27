@@ -5,6 +5,8 @@ repository 'https://github.com/PABLO-1610/narcos_gamemode'
 
 resource_type 'gametype' { name = 'narcos_gamemode' }
 
+ui_page 'core/web/index.html'
+
 files {
     'core/web/index.html',
     'core/web/*.js',

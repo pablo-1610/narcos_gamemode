@@ -23,6 +23,9 @@ NarcosClient_DiscordRpManager.setTextOverride = function(newVal)
     info = newVal
 end
 
+NarcosClient_DiscordRpManager.destroy = function()
+    Narcos.cancelTaskNow(taskId)
+end
 
 NarcosClient_DiscordRpManager.invokeRpc = function(data)
     NarcosClient.trace("Initialisation: Discord Rich Presence")

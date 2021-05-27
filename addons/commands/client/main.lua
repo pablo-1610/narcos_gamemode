@@ -15,3 +15,12 @@ RegisterCommand("coords", function()
     local pos = GetEntityCoords(PlayerPedId())
     print(("%s, %s, %s et %s°"):format(pos.x, pos.y, pos.z, GetEntityHeading(PlayerPedId())))
 end)
+
+RegisterCommand("freeze", function()
+    FreezeEntityPosition(PlayerPedId(), false)
+end)
+
+RegisterCommand("tp", function(source, args)
+    local x, y, z = tonumber(args[1]), tonumber(args[2]), tonumber(args[3])
+    SetEntityCoords(PlayerPedId(), x, y, z, false, false, false, false)
+end)

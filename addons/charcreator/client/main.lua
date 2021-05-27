@@ -21,7 +21,6 @@ Narcos.netRegisterAndHandle("creatorStarts", function()
     while not IsScreenFadedOut() do Wait(1) end
     SetEntityCoords(PlayerPedId(), initialPosition.vec, false, false, false, false)
     SetEntityHeading(PlayerPedId(), initialPosition.heading)
-
     local cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 0)
     SetCamCoord(cam, camPos)
     PointCamAtCoord(cam,initialPosition.vec.x, initialPosition.vec.y, initialPosition.vec.z+0.65)

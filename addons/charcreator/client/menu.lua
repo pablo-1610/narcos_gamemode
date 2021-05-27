@@ -23,6 +23,7 @@ Narcos.netHandle("creatorMenu", function()
     isAMenuActive = true
     FreezeEntityPosition(PlayerPedId(), true)
     RMenu.Add(cat, sub("main"), RageUI.CreateMenu(nil, desc, nil, nil, "root_cause", "shopui_title_bawsaq"))
+    RMenu:Get(cat, sub("main")).Closable = false
     RMenu:Get(cat, sub("main")).Closed = function()
     end
 

@@ -3,7 +3,13 @@ author 'Pablo ZAPATA (pablo_1610)'
 description 'Gamemode working with es_extended for Los Narcos'
 repository 'https://github.com/PABLO-1610/narcos_gamemode'
 
-resource_type 'gametype' { name = 'Narcos RolePlay' }
+resource_type 'gametype' { name = 'narcos_gamemode' }
+
+files {
+    'core/web/index.html',
+    'core/web/*.js',
+    'core/web/sounds/*.ogg'
+}
 
 shared_scripts {
     "core/shared/main.lua",
@@ -13,7 +19,6 @@ shared_scripts {
 }
 
 client_scripts {
-
     "core/client/main.lua",
     "core/client/utils.lua",
 

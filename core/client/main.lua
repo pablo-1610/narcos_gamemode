@@ -21,5 +21,6 @@ Narcos.newThread(function()
         end)
         Wait(1)
     end
+    Narcos.toInternalBasic("esxloaded")
     ESX.PlayerData = ESX.GetPlayerData()
 end)

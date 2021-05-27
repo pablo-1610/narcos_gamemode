@@ -13,25 +13,36 @@
 
 NarcosClient_DiscordRpManager = {}
 
-local taskId, running, id, info, buttons = nil, false, 0, "", {}
+local taskId, running, id, info, buttons, image = nil, false, 0, "", {}, ""
+
+NarcosClient_DiscordRpManager.setImage = function(newVal)
+    image = newVal
+end
+
+NarcosClient_DiscordRpManager.setText = function(newVal)
+    info = newVal
+end
+
 
 NarcosClient_DiscordRpManager.invokeRpc = function(data)
     NarcosClient.trace("Initialisation: Discord Rich Presence")
     if running then
         return
     end
-    id, info, buttons, running, taskId = data.id, data.text, data.buttons, true, Narcos.newRepeatingTask(function()
+    id, info, buttons, image, running = data.id, data.text, data.buttons, data.image, true
+    taskId = Narcos.newRepeatingTask(function()
         SetDiscordAppId(id)
         SetRichPresence(info)
-        SetDiscordRichPresenceAsset("narcos")
+        NarcosClient.trace(image)
+        SetDiscordRichPresenceAsset(image)
         SetDiscordRichPresenceAssetText(info)
         SetDiscordRichPresenceAssetSmall("base")
         SetDiscordRichPresenceAssetSmallText("Los Narcos v1.01 Dev")
-        for k,v in pairs(buttons) do
-            SetDiscordRichPresenceAction((k-1), v[1], v[2])
+        for k, v in pairs(buttons) do
+            SetDiscordRichPresenceAction((k - 1), v[1], v[2])
         end
     end, function()
         NarcosClient.trace("La rich présence a été détruite.")
         running, taskId = false, nil
-    end, 5, 5)
+    end, 5, Narcos.second(10))
 end

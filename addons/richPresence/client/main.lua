@@ -15,9 +15,10 @@ Narcos.netHandleBasic("esxloaded", function()
     NarcosClient_DiscordRpManager.invokeRpc(
             {
                 id = 847445071015051264,
-                text = "Se promène dans la nature";
+                text = "Se promène dans la nature",
+                image = "city",
                 buttons = {
-                    {"Discord", "https://discord.gg/JjkVfQByVE"}
+                    {"Discord", "https://discord.gg/JjkVfQByVE"},
                 }
             }
     )

@@ -15,6 +15,7 @@ local initialPosition = {vec = vector3(686.26, 577.86, 129.75), heading = 162.34
 local camPos, cam = vector3(684.11, 571.66, 130.46), nil
 
 Narcos.netRegisterAndHandle("creatorStarts", function()
+    FreezeEntityPosition(PlayerPedId(), true)
     Wait(1500)
     Narcos.toInternal("rpOverride", "builder", "Créé son personnage")
     NarcosClient.trace("Démarrage du créateur de personnage")
@@ -84,6 +85,29 @@ Narcos.netHandle("creatorExit", function()
         setVolume("narcos", (getVolume("narcos")-0.0008))
     end
     Narcos.toInternal("rpSetToDefault")
+end)
+
+Narcos.netRegisterAndHandle("creatorSetBaseSkin", function(skin, tenue)
+    Wait(8500)
+    NarcosClient.trace("Skin reçu")
+    for k,v in pairs(skin) do
+        if k == "sex" then
+            Narcos.toInternal("skinchanger:change", k, v)
+        end
+    end
+    Wait(2000)
+    for k,v in pairs(skin) do
+        if k ~= "sex" then
+            Narcos.toInternal("skinchanger:change", k, v)
+            Wait(50)
+        end
+    end
+    for k,v in pairs(tenue) do
+        if k ~= "sex" then
+            Narcos.toInternal("skinchanger:change", k, v)
+            Wait(50)
+        end
+    end
 end)
 
 RegisterCommand("testCrea", function()

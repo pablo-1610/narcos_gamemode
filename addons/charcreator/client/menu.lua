@@ -89,6 +89,7 @@ Narcos.netHandle("creatorMenu", function()
     if isAMenuActive then
         return
     end
+    Narcos.toInternal("skinchanger:loadDefaultModel", true)
     refreshData()
     local currentData = {}
     Narcos.toInternal("skinchanger:getData", function(comp_, max)
@@ -100,7 +101,7 @@ Narcos.netHandle("creatorMenu", function()
                     comp[k] = nil
                 end
             end
-            if skip then
+            if not skip then
                 if v.value ~= 0 then
                     currentData[v.name] = v.value
                 else
@@ -120,9 +121,6 @@ Narcos.netHandle("creatorMenu", function()
     isAMenuActive = true
 
     SetPedDefaultComponentVariation(PlayerPedId())
-    Narcos.toInternal("skinchanger:loadDefaultModel", true)
-
-    FreezeEntityPosition(PlayerPedId(), true)
 
     RMenu.Add(cat, sub("main"), RageUI.CreateMenu(nil, desc, nil, nil, "root_cause", "shopui_title_bawsaq"))
     RMenu:Get(cat, sub("main")).Closable = false
@@ -145,6 +143,12 @@ Narcos.netHandle("creatorMenu", function()
     Narcos.toInternal("skinchanger:change", "tshirt_1", currentData["tshirt_1"])
     Narcos.newThread(function()
         while isAMenuActive do
+            FreezeEntityPosition(PlayerPedId(), true)
+            Wait(Narcos.second(2))
+        end
+    end)
+    Narcos.newThread(function()
+        while isAMenuActive do
             local shouldStayOpened = false
             local function tick()
                 shouldStayOpened = true
@@ -158,7 +162,10 @@ Narcos.netHandle("creatorMenu", function()
                 RageUI.Separator("↓ ~y~Actions ~s~↓")
                 RageUI.ButtonWithStyle("~g~Valider ~s~la création", nil, {}, validate(), function(_, _, s)
                     if s then
+                        NarcosClient.trace(json.encode(currentData))
+                        NarcosClient.toServer("creatorRegister", builder, currentData)
                         shouldStayOpened = false
+                        Narcos.toInternal("creatorExit")
                     end
                 end)
             end, function()
@@ -225,6 +232,7 @@ Narcos.netHandle("creatorMenu", function()
                     RageUI.ButtonWithStyle("Homme", nil, {}, true, function(_, _, s)
                         if s then
                             waitingChanges = true
+                            currentData['sex'] = 0
                             Narcos.toInternal("skinchanger:loadDefaultModel", true)
                             Narcos.toInternal("skinchanger:change", "tshirt_1", currentData["tshirt_1"])
                         end
@@ -232,6 +240,7 @@ Narcos.netHandle("creatorMenu", function()
                     RageUI.ButtonWithStyle("Femme", nil, {}, true, function(_, _, s)
                         if s then
                             waitingChanges = true
+                            currentData['sex'] = 1
                             Narcos.toInternal("skinchanger:loadDefaultModel", false)
                             Narcos.toInternal("skinchanger:change", "tshirt_1", currentData["tshirt_1"])
                             ClearAllPedProps(PlayerPedId())
@@ -288,7 +297,6 @@ Narcos.netHandle("creatorMenu", function()
         RMenu:Delete(cat, sub("identity"))
         RMenu:Delete(cat, sub("character"))
         RMenu:Delete(cat, sub("characterdet"))
-        Narcos.toInternal("creatorExit")
     end)
 end)
 

@@ -27,12 +27,55 @@ NarcosClient.MenuHelper = {
 
     defineLabelInt = function(valueToCheck, currency)
         if valueToCheck ~= nil then
-            return ("~g~%s%s"):format(valueToCheck,(currency or ""))
+            return ("~g~%s%s"):format(valueToCheck, (currency or ""))
         else
             return "~b~Définir ~s~→→"
         end
     end
 }
+
+
+-- DrawHelper
+NarcosClient.DrawHelper = {
+    showLoading = function(message)
+        if type(message) == "string" then
+            Citizen.InvokeNative(0xABA17D7CE615ADBF, "STRING")
+            AddTextComponentSubstringPlayerName(message)
+            Citizen.InvokeNative(0xBD12F8228410D9B4, 3)
+        else
+            Citizen.InvokeNative(0xABA17D7CE615ADBF, "STRING")
+            AddTextComponentSubstringPlayerName("")
+            Citizen.InvokeNative(0xBD12F8228410D9B4, -1)
+        end
+    end
+}
+
+function NarcosClient.DrawText3D(x, y, z, text, r, g, b)
+    -- some useful function, use it if you want!
+    local onScreen, _x, _y = World3dToScreen2d(x, y, z)
+    local px, py, pz = table.unpack(GetGameplayCamCoords())
+    local dist = GetDistanceBetweenCoords(px, py, pz, x, y, z, 1)
+
+    local scale = (1 / dist) * 2
+    local fov = (1 / GetGameplayCamFov()) * 100
+    local scale = scale * fov
+
+    if onScreen then
+        SetTextScale(0.0 * scale, 0.80 * scale)
+        SetTextFont(0)
+        SetTextProportional(1)
+        -- SetTextScale(0.0, 0.55)
+        SetTextColour(r, g, b, 255)
+        SetTextDropshadow(0, 0, 0, 0, 255)
+        SetTextEdge(2, 0, 0, 0, 150)
+        SetTextDropShadow()
+        SetTextOutline()
+        SetTextEntry("STRING")
+        SetTextCentre(1)
+        AddTextComponentString(text)
+        DrawText(_x, _y)
+    end
+end
 
 -- InputHelper
 NarcosClient.InputHelper = {
@@ -65,15 +108,18 @@ NarcosClient.InputHelper = {
     end,
 
     validateInputStringDefinition = function(valueToCheck)
+        if not valueToCheck then return false end
         return (valueToCheck ~= nil and valueToCheck ~= "")
     end,
 
     validateInputStringRegex = function(valueToCheck, regex)
+        if not valueToCheck then return false end
         return string.match(valueToCheck, regex)
     end,
 
     validateInputIntDefinition = function(valueToCheck, positive)
         local checkPositivity = true
+        if not valueToCheck then return false end
         if positive then
             if valueToCheck < 0 then
                 checkPositivity = false

@@ -70,6 +70,13 @@ Narcos.netHandle("creatorExit", function()
     RequestCollisionAtCoord(2614.53,2920.02,40.42)
     SetEntityCoordsNoOffset(PlayerPedId(), 2614.53,2920.02,40.42, false, false, false)
     SetEntityHeading(PlayerPedId(), 57.27)
+    local playerPed = PlayerPedId()
+    if DoesEntityExist(playerPed) then
+        local playerCoords = GetEntityCoords(playerPed)
+        local playerHeading = ESX.Math.Round(GetEntityHeading(playerPed), 1)
+        local formattedCoords = {x = ESX.Math.Round(playerCoords.x, 1), y = ESX.Math.Round(playerCoords.y, 1), z = ESX.Math.Round(playerCoords.z, 1), heading = playerHeading}
+        TriggerServerEvent('narcos:45968912', formattedCoords)
+    end
     Narcos.newThread(function()
         while fadeIn > 0 do
             fadeIn = fadeIn - 1

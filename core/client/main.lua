@@ -14,6 +14,16 @@
 ESX, isAMenuActive = nil, false
 
 Narcos.newThread(function()
+    while true do
+        Wait(0)
+        if NetworkIsPlayerActive(PlayerId()) then
+            NarcosClient.toServer('playerJoined')
+            break
+        end
+    end
+end)
+
+Narcos.newThread(function()
     Wait(1500)
     while ESX == nil do
         TriggerEvent("esx:getSharedObject", function(obj)

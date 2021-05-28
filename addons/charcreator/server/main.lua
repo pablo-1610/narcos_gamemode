@@ -47,7 +47,7 @@ Narcos.netRegisterAndHandle("creatorRegister", function(identity, face)
     SetPlayerRoutingBucket(_src, 0)
     local xPlayer = ESX.GetPlayerFromId(_src)
     local license = xPlayer.identifier
-    ESX.GetPlayerFromId(_src).baseCharacter = json.decode(xPlayer.baseCharacter)
+    ESX.GetPlayerFromId(_src).baseCharacter = face
     local tenue = {
         ['shoes_1'] = 16,
         ['shoes_2'] = 11,
@@ -59,10 +59,12 @@ Narcos.netRegisterAndHandle("creatorRegister", function(identity, face)
         ['torso_2'] = 1,
         ['arms'] = 0,
     }
-    NarcosServer.toClient("creatorSetBaseSkin", _src, face, tenue)
     MySQL.Async.execute("UPDATE users SET identity = @a, baseCharacter = @b WHERE identifier = @c", {
         ['a'] = json.encode(identity),
         ['b'] = json.encode(face),
         ['c'] = license
-    })
+    }, function()
+        Wait(5000)
+        NarcosServer.toClient("creatorSetBaseSkin", _src, face, tenue)
+    end)
 end)

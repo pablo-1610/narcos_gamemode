@@ -36,7 +36,54 @@ Narcos.netRegisterAndHandle("creatorStarts", function()
 end)
 
 Narcos.netHandle("creatorExit", function()
+    RequestStreamedTextureDict("pablo")
+    while not HasStreamedTextureDictLoaded("pablo") do Wait(1) end
     RenderScriptCams(0,0,0,0,0)
+    NarcosClient.DrawHelper.showLoading("Bienvenue sur Los Narcos")
+    PlayUrl("narcos", "https://youtu.be/4y8c1kk3gZA", 0.5, false)
+    SwitchOutPlayer(PlayerPedId(), 0, 1)
+    local run, secElapsed, fadeIn = true, 0, 0
+    Narcos.newThread(function()
+        while fadeIn < 255 do
+            fadeIn = fadeIn + 1
+            Wait(7)
+        end
+    end)
+    Narcos.newThread(function()
+        while run do
+            secElapsed = secElapsed + 1
+            Wait(Narcos.second(1))
+        end
+    end)
+    Narcos.newThread(function()
+        local baseWidth = 0.3 -- Longueur
+        local baseHeight = 0.03 -- Epaisseur
+        local baseX = 0.5 -- gauche / droite ( plus grand = droite )
+        local baseY = 1.04 -- Hauteur ( Plus petit = plus haut )
+        while run do
+            DrawSprite("pablo", "logo_base", 0.5, 0.5,0.3, 0.5, 0.0, 255, 255, 255, fadeIn)
+            Wait(0)
+        end
+    end)
+    Wait(20000)
+    RequestCollisionAtCoord(2614.53,2920.02,40.42)
+    SetEntityCoordsNoOffset(PlayerPedId(), 2614.53,2920.02,40.42, false, false, false)
+    SetEntityHeading(PlayerPedId(), 57.27)
+    Narcos.newThread(function()
+        while fadeIn > 0 do
+            fadeIn = fadeIn - 1
+            Wait(7)
+        end
+        NarcosClient.DrawHelper.showLoading(false)
+        run = false
+        SwitchInPlayer(PlayerPedId())
+    end)
+    Wait(1300)
+    while getVolume("narcos") > 0.0 do
+        Wait(25)
+        setVolume("narcos", (getVolume("narcos")-0.0008))
+    end
+    Narcos.toInternal("rpSetToDefault")
 end)
 
 RegisterCommand("testCrea", function()

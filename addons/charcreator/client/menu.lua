@@ -89,6 +89,7 @@ Narcos.netHandle("creatorMenu", function()
     if isAMenuActive then
         return
     end
+    local sexSelected = false
     Narcos.toInternal("skinchanger:loadDefaultModel", true)
     refreshData()
     local currentData = {}
@@ -176,7 +177,7 @@ Narcos.netHandle("creatorMenu", function()
                 RageUI.Separator("↓ ~g~Identité ~s~↓")
                 RageUI.ButtonWithStyle("Prénom:", nil, { RightLabel = NarcosClient.MenuHelper.defineLabelString(builder.firstname) }, true, function(_, _, s)
                     if s then
-                        local input = NarcosClient.InputHelper.showBox("Prénom", "", 20, false)
+                        local input = NarcosClient.InputHelper.showBox("Prénom (doit commencer par une majuscule)", "", 20, false)
                         if NarcosClient.InputHelper.validateInputStringDefinition(input) then
                             local matchesRegex = NarcosClient.InputHelper.validateInputStringRegex(input, "^[A-Z][A-Za-z\\é\\è\\ê\\-]+$")
                             if matchesRegex then
@@ -190,7 +191,7 @@ Narcos.netHandle("creatorMenu", function()
                 end)
                 RageUI.ButtonWithStyle("Nom:", nil, { RightLabel = NarcosClient.MenuHelper.defineLabelString(builder.lastname) }, true, function(_, _, s)
                     if s then
-                        local input = NarcosClient.InputHelper.showBox("Nom", "", 20, false)
+                        local input = NarcosClient.InputHelper.showBox("Nom (doit commencer par une majuscule)", "", 20, false)
                         if NarcosClient.InputHelper.validateInputStringDefinition(input) then
                             local matchesRegex = NarcosClient.InputHelper.validateInputStringRegex(input, "^[A-Z][A-Za-z\\é\\è\\ê\\-]+$")
                             if matchesRegex then
@@ -235,6 +236,7 @@ Narcos.netHandle("creatorMenu", function()
                             currentData['sex'] = 0
                             Narcos.toInternal("skinchanger:loadDefaultModel", true)
                             Narcos.toInternal("skinchanger:change", "tshirt_1", currentData["tshirt_1"])
+                            sexSelected = true
                         end
                     end)
                     RageUI.ButtonWithStyle("Femme", nil, {}, true, function(_, _, s)
@@ -244,17 +246,20 @@ Narcos.netHandle("creatorMenu", function()
                             Narcos.toInternal("skinchanger:loadDefaultModel", false)
                             Narcos.toInternal("skinchanger:change", "tshirt_1", currentData["tshirt_1"])
                             ClearAllPedProps(PlayerPedId())
+                            sexSelected = true
                         end
                     end)
-                    RageUI.Separator("↓ ~o~Customisation ~s~↓")
-                    for k, v in pairs(comp) do
-                        if v.table[1] ~= nil then
-                            if v.name ~= "sex" then
-                                RageUI.ButtonWithStyle(("Customisation ~y~\"~s~%s~y~\""):format(v.label), nil, { RightLabel = "→→" }, true, function(_, _, s)
-                                    if s then
-                                        currentCustom = k
-                                    end
-                                end, RMenu:Get(cat, sub("characterdet")))
+                    if sexSelected then
+                        RageUI.Separator("↓ ~o~Customisation ~s~↓")
+                        for k, v in pairs(comp) do
+                            if v.table[1] ~= nil then
+                                if v.name ~= "sex" then
+                                    RageUI.ButtonWithStyle(("Customisation ~y~\"~s~%s~y~\""):format(v.label), nil, { RightLabel = "→→" }, true, function(_, _, s)
+                                        if s then
+                                            currentCustom = k
+                                        end
+                                    end, RMenu:Get(cat, sub("characterdet")))
+                                end
                             end
                         end
                     end

@@ -60,7 +60,7 @@ local function getDistance(name_)
     return soundInfo[name_].distance
 end
 
-local function getVolume(name_)
+function getVolume(name_)
     return soundInfo[name_].volume
 end
 
@@ -157,7 +157,7 @@ local function Pause(name_)
     soundInfo[name_].paused = true
 end
 
-local function setVolume(name_, vol)
+function setVolume(name_, vol)
     SendNUIMessage({
         status = "volume",
         volume = vol,

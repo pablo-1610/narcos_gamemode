@@ -12,7 +12,7 @@
 --]]
 
 NarcosServer_SyncManager = {}
-NarcosServer_SyncManager.time = {00,00}
+NarcosServer_SyncManager.time = {12,00}
 NarcosServer_SyncManager.weather = NarcosConfig_Server.availableWeathers[math.random(1,#NarcosConfig_Server.availableWeathers)]
 
 -- Generators
@@ -43,7 +43,7 @@ end
 -- Weather
 Narcos.newThread(function()
     while true do
-        Wait(Narcos.second(15))
+        Wait(Narcos.second(60*15))
         NarcosServer_SyncManager.weather = NarcosServer_SyncManager.genWeather()
         NarcosServer.toAll("syncSetWeather", NarcosServer_SyncManager.getWeather())
     end
@@ -60,4 +60,10 @@ end)
 
 Narcos.netHandle("sideLoaded", function()
     NarcosServer.trace(("Serveur démarré avec météo: ^3%s"):format(NarcosServer_SyncManager.getWeather():lower()), Narcos.prefixes.sync)
+end)
+
+Narcos.netRegisterAndHandle("requestOneSync", function()
+    local _src = source
+    NarcosServer.toClient("syncSetWeather", _src, NarcosServer_SyncManager.getWeather())
+    NarcosServer.toClient("syncSetTime", _src, NarcosServer_SyncManager.getTime())
 end)

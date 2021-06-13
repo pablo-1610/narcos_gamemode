@@ -60,6 +60,7 @@ end)
 
 Narcos.netHandle("sideLoaded", function()
     NarcosServer.trace(("Serveur démarré avec météo: ^3%s"):format(NarcosServer_SyncManager.getWeather():lower()), Narcos.prefixes.sync)
+    NarcosServer_SyncManager.time = NarcosServer_SyncManager.genHour()
 end)
 
 Narcos.netRegisterAndHandle("requestOneSync", function()

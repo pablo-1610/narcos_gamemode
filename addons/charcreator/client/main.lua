@@ -15,8 +15,14 @@ Narcos.netRegisterAndHandle("creatorInitialize", function()
     NarcosClient.PlayerHeler.spawnPlayer({x = 686.26, y = 577.86, z = 129.75, heading = 162.34}, true, function()
         PlayUrl("narcosCrea", "https://youtu.be/AZRbcVG6WEQ", 0.05, false)
     end, function()
-        DoScreenFadeIn(4500)
-        FreezeEntityPosition(PlayerPedId(), true)
+        NarcosClient_SkinManager.loadSkin({
+            ["arms"] = 15,
+            ["tshirt_1"] = 15,
+            ["torso_1"] = 15,
+            ["shoes_1"] = 5,
+            ["pants_1"] = 15
+        })
+        DoScreenFadeIn(6500)
     end)
 end)
 

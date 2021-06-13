@@ -97,6 +97,8 @@ Narcos.netHandle("creatorMenu", function()
                 shouldStayOpened = true
             end
 
+            maxValues = NarcosClient_SkinManager.getMaxVals()
+
             RageUI.IsVisible(RMenu:Get(cat, sub("main")), true, true, true, function()
                 tick()
                 RageUI.Separator("↓ ~g~Customisation ~s~↓")
@@ -174,28 +176,43 @@ Narcos.netHandle("creatorMenu", function()
                         if s then
                             waitingChanges = true
                             builderCharacter['sex'] = 0
-
+                            NarcosClient.requestModel("mp_m_freemode_01")
+                            SetPlayerModel(PlayerId(), Narcos.hash("mp_m_freemode_01"))
+                            SetPedDefaultComponentVariation(PlayerPedId())
+                            NarcosClient_SkinManager.loadSkin({
+                                ["arms"] = 15,
+                                ["tshirt_1"] = 15,
+                                ["torso_1"] = 15,
+                                ["shoes_1"] = 5,
+                                ["pants_1"] = 15
+                            })
+                            waitingChanges = false
                         end
                     end)
                     RageUI.ButtonWithStyle("Femme", nil, {}, true, function(_, _, s)
                         if s then
                             waitingChanges = true
-                            currentData['sex'] = 1
-                            Narcos.toInternal("skinchanger:loadDefaultModel", false)
-                            Narcos.toInternal("skinchanger:change", "tshirt_1", currentData["tshirt_1"])
-                            ClearAllPedProps(PlayerPedId())
-                            sexSelected = true
+                            builderCharacter['sex'] = 1
+                            NarcosClient.requestModel("mp_f_freemode_01")
+                            SetPlayerModel(PlayerId(), Narcos.hash("mp_f_freemode_01"))
+                            SetPedDefaultComponentVariation(PlayerPedId())
+                            NarcosClient_SkinManager.loadSkin({
+                                ["arms"] = 0,
+                                ["tshirt_1"] = 0,
+                                ["torso_1"] = 0,
+                                ["shoes_1"] = 0,
+                                ["pants_1"] = 0
+                            })
+                            waitingChanges = false
                         end
                     end)
-                    if sexSelected then
-                        RageUI.Separator("↓ ~o~Customisation ~s~↓")
-                        for k, v in pairs(NarcosClient_SkinManager.trad) do
-                            RageUI.ButtonWithStyle(("Customisation ~y~\"~s~%s~y~\""):format(v), nil, { RightLabel = "→→" }, true, function(_, _, s)
-                                if s then
-                                    selectedVariator = k
-                                end
-                            end, RMenu:Get(cat, sub("characterdet")))
-                        end
+                    RageUI.Separator("↓ ~o~Customisation ~s~↓")
+                    for k, v in pairs(NarcosClient_SkinManager.trad) do
+                        RageUI.ButtonWithStyle(("Customisation ~y~\"~s~%s~y~\""):format(v), nil, { RightLabel = "→→" }, true, function(_, _, s)
+                            if s then
+                                selectedVariator = k
+                            end
+                        end, RMenu:Get(cat, sub("characterdet")))
                     end
 
                 end

@@ -11,6 +11,9 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
+NarcosClient_SkinManager = {}
+NarcosClient_SkinManager.Character = {}
+
 NarcosClient_SkinManager.trad = {
     ['face'] = 'visage',
     ['skin'] = 'peau',
@@ -88,7 +91,7 @@ NarcosClient_SkinManager.trad = {
 }
 
 local function _U(str)
-    return trad[str]
+    return NarcosClient_SkinManager.trad[str]
 end
 
 local Components = {
@@ -165,9 +168,6 @@ local Components = {
     { label = _U('beard_color_1'), name = 'beard_3', value = 0, min = 0, zoomOffset = 0.4, camOffset = 0.65 },
     { label = _U('beard_color_2'), name = 'beard_4', value = 0, min = 0, zoomOffset = 0.4, camOffset = 0.65 }
 }
-
-NarcosClient_SkinManager = {}
-NarcosClient_SkinManager.Character = {}
 
 for i = 1, #Components, 1 do
     NarcosClient_SkinManager.Character[Components[i].name] = Components[i].value

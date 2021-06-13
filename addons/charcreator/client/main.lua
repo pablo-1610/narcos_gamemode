@@ -40,7 +40,7 @@ Narcos.netRegisterAndHandle("creatorInitialize", function()
 end)
 
 Narcos.netRegisterAndHandle("creatorStarts", function()
-    FreezeEntityPosition(PlayerPedId(), true)
+    --FreezeEntityPosition(PlayerPedId(), true)
     Wait(1500)
     Narcos.toInternal("rpOverride", "builder", "Créé son personnage")
     NarcosClient.trace("Démarrage du créateur de personnage")

@@ -3,7 +3,7 @@
 --[[
   This file is part of Los Narcos.
   
-  File [main] created at [21/05/2021 16:06]
+  File [server] created at [13/06/2021 18:22]
 
   Copyright (c) Los Narcos - All Rights Reserved
 
@@ -11,8 +11,6 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-Narcos.newThread(function()
-    Narcos.toInternal("sideLoaded")
-    SetMapName("Ville de Los Narcos")
-    SetGameType("RolePlay Narcos")
-end)
+NarcosConfig_Server = {
+    defaultRank = "default"
+}

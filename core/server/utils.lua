@@ -26,10 +26,22 @@ NarcosServer.kick = function(_src, reason)
 end
 
 NarcosServer.registerConsoleCommand = function(command, func)
-    RegisterCommand(command, function(source,args)
-        if source ~= 0 then return end
+    RegisterCommand(command, function(source, args)
+        if source ~= 0 then
+            return
+        end
         func(source, args)
     end, false)
+end
+
+NarcosServer.getIdentifiers = function(source)
+    local identifiers = {}
+    local playerIdentifiers = GetPlayerIdentifiers(source)
+    for _, v in pairs(playerIdentifiers) do
+        local before, after = playerIdentifiers[_]:match("([^:]+):([^:]+)")
+        identifiers[before] = playerIdentifiers[_]
+    end
+    return identifiers
 end
 
 NarcosServer.getLicense = function(source)

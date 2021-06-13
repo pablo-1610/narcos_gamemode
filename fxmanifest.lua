@@ -21,6 +21,7 @@ shared_scripts {
 }
 
 client_scripts {
+    "core/config/client.lua",
     "core/client/main.lua",
     "core/client/utils.lua",
 
@@ -34,8 +35,10 @@ client_scripts {
     "vendors/RageUI/menu/panels/*.lua",
     "vendors/RageUI/menu/windows/*.lua",
 
+    --[[
     "vendors/PabloUI/client/PabloUI.lua",
     "vendors/PabloUI/client/objects/Panel.lua",
+    --]]
 
     "components/**/client/*.lua",
     "components/**/client/objects/*.lua",
@@ -46,6 +49,7 @@ client_scripts {
 
 server_scripts {
     "@mysql-async/lib/MySQL.lua",
+    "core/config/server.lua",
     "core/server/main.lua",
     "core/server/utils.lua",
 

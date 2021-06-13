@@ -11,26 +11,15 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-ESX, isAMenuActive = nil, false
+isAMenuActive = false
 
 Narcos.newThread(function()
     while true do
         Wait(0)
         if NetworkIsPlayerActive(PlayerId()) then
-            NarcosClient.toServer('playerJoined')
+            NarcosClient.toServer("playerJoined")
+            Narcos.toInternal("sideLoaded")
             break
         end
     end
-end)
-
-Narcos.newThread(function()
-    Wait(1500)
-    while ESX == nil do
-        TriggerEvent("esx:getSharedObject", function(obj)
-            ESX = obj
-        end)
-        Wait(1)
-    end
-    Narcos.toInternalBasic("esxloaded")
-    ESX.PlayerData = ESX.GetPlayerData()
 end)

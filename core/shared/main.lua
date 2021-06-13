@@ -22,7 +22,9 @@ Narcos.prefixes = {
     blips = "^1BLIPS",
     npcs = "^1NPCS",
     dev = "^4INFOS",
+    connection = "^4QUEUE",
     sync = "^6SYNC",
     jobs = "^6JOBS",
+    admin = "^6ADMIN",
     succes = "^2SUCCÈS"
 }

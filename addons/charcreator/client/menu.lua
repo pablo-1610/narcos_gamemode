@@ -46,38 +46,6 @@ local index, comp, ignore = {}, {}, {
     "bags_1",
     "bags_2",
 }
-local function refreshData()
-    Narcos.toInternal("skinchanger:getData", function(comp_, max)
-        open = true
-        comp = comp_
-        for k, v in pairs(comp) do
-            local skip = false
-            for _, n in pairs(ignore) do
-                if n == v.name then
-                    skip = true
-                    comp[k] = nil
-                end
-            end
-            if not skip then
-                if v.value ~= 0 then
-                    index[v.name] = v.value
-                else
-                    index[v.name] = 1
-                end
-                for i, value in pairs(max) do
-                    if i == v.name then
-                        comp[k].max = value
-                        comp[k].table = {}
-                        for i = 0, value do
-                            table.insert(comp[k].table, "~g~" .. i .. "~s~")
-                        end
-                        break
-                    end
-                end
-            end
-        end
-    end)
-end
 
 local waitingChanges = false
 
@@ -89,39 +57,19 @@ Narcos.netHandle("creatorMenu", function()
     if isAMenuActive then
         return
     end
-    local sexSelected = false
-    Narcos.toInternal("skinchanger:loadDefaultModel", true)
-    refreshData()
-    local currentData = {}
-    Narcos.toInternal("skinchanger:getData", function(comp_, max)
-        for k, v in pairs(comp) do
-            local skip = false
-            for _, n in pairs(ignore) do
-                if n == v.name then
-                    skip = true
-                    comp[k] = nil
-                end
-            end
-            if not skip then
-                if v.value ~= 0 then
-                    currentData[v.name] = v.value
-                else
-                    currentData[v.name] = 1
-                end
-            end
-        end
-    end)
-    print(json.encode(currentData))
+    isAMenuActive = true
+
     local builder = {
         firstname = nil, lastname = nil, age = nil,
     }
-    local currentCustom = nil
-    local validate = function()
-        return (NarcosClient.InputHelper.validateInputStringDefinition(builder.firstname) and NarcosClient.InputHelper.validateInputStringDefinition(builder.lastname))
-    end
-    isAMenuActive = true
 
-    SetPedDefaultComponentVariation(PlayerPedId())
+    local builderCharacter = NarcosClient_SkinManager.getSkin()
+    local maxValues = NarcosClient_SkinManager.getMaxVals()
+    local selectedVariator = nil
+
+    local validate = function()
+        return (NarcosClient.InputHelper.validateInputStringDefinition(builder.firstname) and NarcosClient.InputHelper.validateInputStringDefinition(builder.lastname) and builder.age ~= nil)
+    end
 
     RMenu.Add(cat, sub("main"), RageUI.CreateMenu(nil, desc, nil, nil, "root_cause", "shopui_title_bawsaq"))
     RMenu:Get(cat, sub("main")).Closable = false
@@ -141,13 +89,7 @@ Narcos.netHandle("creatorMenu", function()
     end
 
     RageUI.Visible(RMenu:Get(cat, sub("main")), true)
-    Narcos.toInternal("skinchanger:change", "tshirt_1", currentData["tshirt_1"])
-    Narcos.newThread(function()
-        while isAMenuActive do
-            FreezeEntityPosition(PlayerPedId(), true)
-            Wait(Narcos.second(2))
-        end
-    end)
+
     Narcos.newThread(function()
         while isAMenuActive do
             local shouldStayOpened = false
@@ -163,10 +105,8 @@ Narcos.netHandle("creatorMenu", function()
                 RageUI.Separator("↓ ~y~Actions ~s~↓")
                 RageUI.ButtonWithStyle("~g~Valider ~s~la création", nil, {}, validate(), function(_, _, s)
                     if s then
-                        NarcosClient.trace(json.encode(currentData))
                         NarcosClient.toServer("creatorRegister", builder, currentData)
                         shouldStayOpened = false
-                        Narcos.toInternal("creatorExit")
                     end
                 end)
             end, function()
@@ -233,10 +173,8 @@ Narcos.netHandle("creatorMenu", function()
                     RageUI.ButtonWithStyle("Homme", nil, {}, true, function(_, _, s)
                         if s then
                             waitingChanges = true
-                            currentData['sex'] = 0
-                            Narcos.toInternal("skinchanger:loadDefaultModel", true)
-                            Narcos.toInternal("skinchanger:change", "tshirt_1", currentData["tshirt_1"])
-                            sexSelected = true
+                            builderCharacter['sex'] = 0
+
                         end
                     end)
                     RageUI.ButtonWithStyle("Femme", nil, {}, true, function(_, _, s)
@@ -251,16 +189,12 @@ Narcos.netHandle("creatorMenu", function()
                     end)
                     if sexSelected then
                         RageUI.Separator("↓ ~o~Customisation ~s~↓")
-                        for k, v in pairs(comp) do
-                            if v.table[1] ~= nil then
-                                if v.name ~= "sex" then
-                                    RageUI.ButtonWithStyle(("Customisation ~y~\"~s~%s~y~\""):format(v.label), nil, { RightLabel = "→→" }, true, function(_, _, s)
-                                        if s then
-                                            currentCustom = k
-                                        end
-                                    end, RMenu:Get(cat, sub("characterdet")))
+                        for k, v in pairs(NarcosClient_SkinManager.trad) do
+                            RageUI.ButtonWithStyle(("Customisation ~y~\"~s~%s~y~\""):format(v), nil, { RightLabel = "→→" }, true, function(_, _, s)
+                                if s then
+                                    selectedVariator = k
                                 end
-                            end
+                            end, RMenu:Get(cat, sub("characterdet")))
                         end
                     end
 
@@ -271,24 +205,7 @@ Narcos.netHandle("creatorMenu", function()
             RageUI.IsVisible(RMenu:Get(cat, sub("characterdet")), true, true, true, function()
                 tick()
                 RageUI.Separator("↓ ~g~Customisation ~s~↓")
-                for i = 0, comp[currentCustom].max do
-                    RageUI.ButtonWithStyle(("Variation n°%s"):format(i), "Appuyez pour ~g~VALIDER ~s~cette variation", {}, true, function(_, a, s)
-                        if a then
-                            if currentData[comp[currentCustom].name] ~= (i) then
-                                Narcos.toInternal("skinchanger:change", comp[currentCustom].name, i)
-                            end
-                        end
 
-                        if s then
-                            currentData[comp[currentCustom].name] = (i)
-                            RageUI.Text { message = "~g~Changement appliqué", time_display = 1500 }
-                            refreshData()
-                            if comp[currentCustom].componentId ~= nil then
-                                SetPedComponentVariation(GetPlayerPed(-1), comp[currentCustom].componentId, i, 0, 2)
-                            end
-                        end
-                    end)
-                end
             end, function()
             end)
 

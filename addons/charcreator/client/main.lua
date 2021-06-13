@@ -11,6 +11,8 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
+local camPos, cam = vector3(684.11, 571.66, 130.46), nil
+
 Narcos.netRegisterAndHandle("creatorInitialize", function()
     NarcosClient.PlayerHeler.spawnPlayer({x = 686.26, y = 577.86, z = 129.75, heading = 162.34}, true, function()
         PlayUrl("narcosCrea", "https://youtu.be/AZRbcVG6WEQ", 0.05, false)
@@ -24,10 +26,18 @@ Narcos.netRegisterAndHandle("creatorInitialize", function()
         })
         DoScreenFadeIn(6500)
     end)
+    cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 0)
+    SetCamCoord(cam, camPos)
+    PointCamAtCoord(cam,686.26, 577.86, 129.75+1.20)
+    SetCamActive(cam, true)
+    ClearFocus()
+    RenderScriptCams(1,0,0,0,0)
+    SetFocusPosAndVel(vector3(686.26, 577.86, 129.75), 0,0,0)
+    SetCamFov(cam, 12.0)
+    Narcos.toInternal("rpOverride", "builder", "Créé son personnage")
+    NarcosClient.trace("Démarrage du créateur de personnage")
+    Narcos.toInternal("creatorMenu")
 end)
-
-local initialPosition = {vec = vector3(686.26, 577.86, 129.75), heading = 162.34}
-local camPos, cam = vector3(684.11, 571.66, 130.46), nil
 
 Narcos.netRegisterAndHandle("creatorStarts", function()
     FreezeEntityPosition(PlayerPedId(), true)
@@ -86,12 +96,6 @@ Narcos.netHandle("creatorExit", function()
     SetEntityCoordsNoOffset(PlayerPedId(), 2614.53,2920.02,40.42, false, false, false)
     SetEntityHeading(PlayerPedId(), 57.27)
     local playerPed = PlayerPedId()
-    if DoesEntityExist(playerPed) then
-        local playerCoords = GetEntityCoords(playerPed)
-        local playerHeading = ESX.Math.Round(GetEntityHeading(playerPed), 1)
-        local formattedCoords = {x = ESX.Math.Round(playerCoords.x, 1), y = ESX.Math.Round(playerCoords.y, 1), z = ESX.Math.Round(playerCoords.z, 1), heading = playerHeading}
-        TriggerServerEvent('narcos:45968912', formattedCoords)
-    end
     Narcos.newThread(function()
         while fadeIn > 0 do
             fadeIn = fadeIn - 1
@@ -107,27 +111,4 @@ Narcos.netHandle("creatorExit", function()
         setVolume("narcos", (getVolume("narcos")-0.0008))
     end
     Narcos.toInternal("rpSetToDefault")
-end)
-
-Narcos.netRegisterAndHandle("creatorSetBaseSkin", function(skin, tenue)
-    Wait(8500)
-    NarcosClient.trace("Skin reçu")
-    for k,v in pairs(skin) do
-        if k == "sex" then
-            Narcos.toInternal("skinchanger:change", k, v)
-        end
-    end
-    Wait(2000)
-    for k,v in pairs(skin) do
-        if k ~= "sex" then
-            Narcos.toInternal("skinchanger:change", k, v)
-            Wait(50)
-        end
-    end
-    for k,v in pairs(tenue) do
-        if k ~= "sex" then
-            Narcos.toInternal("skinchanger:change", k, v)
-            Wait(50)
-        end
-    end
 end)

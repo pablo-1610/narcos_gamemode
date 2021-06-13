@@ -11,7 +11,7 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-local trad = {
+NarcosClient_SkinManager.trad = {
     ['face'] = 'visage',
     ['skin'] = 'peau',
     ['wrinkles'] = 'rides',
@@ -92,6 +92,7 @@ local function _U(str)
 end
 
 local Components = {
+    { label = "Sexe", name = 'sex', value = 1, min = 0, zoomOffset = 0.6, camOffset = 0.65 },
     { label = _U('face'), name = 'face', value = 0, min = 0, zoomOffset = 0.6, camOffset = 0.65 },
     { label = _U('skin'), name = 'skin', value = 0, min = 0, zoomOffset = 0.6, camOffset = 0.65 },
     { label = _U('hair_1'), name = 'hair_1', value = 0, min = 0, zoomOffset = 0.6, camOffset = 0.65 },

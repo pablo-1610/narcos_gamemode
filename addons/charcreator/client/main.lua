@@ -41,7 +41,7 @@ Narcos.netHandle("creatorExit", function()
     while not HasStreamedTextureDictLoaded("pablo") do Wait(1) end
     RenderScriptCams(0,0,0,0,0)
     NarcosClient.DrawHelper.showLoading("Bienvenue sur Los Narcos")
-    PlayUrl("narcos", "https://youtu.be/4y8c1kk3gZA", 0.5, false)
+    PlayUrl("narcos", "https://youtu.be/4y8c1kk3gZA", 0.35, false)
     SwitchOutPlayer(PlayerPedId(), 0, 1)
     local run, secElapsed, fadeIn = true, 0, 0
     Narcos.newThread(function()
@@ -115,8 +115,4 @@ Narcos.netRegisterAndHandle("creatorSetBaseSkin", function(skin, tenue)
             Wait(50)
         end
     end
-end)
-
-RegisterCommand("testCrea", function()
-   Narcos.toInternal("creatorStarts")
 end)

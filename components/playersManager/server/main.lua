@@ -54,6 +54,7 @@ Narcos.netRegisterAndHandle("playerJoined", function()
     local player = NarcosServer_PlayersManager.get(_src)
     if player:getIsNewPlayer() then
         NarcosServer.trace(("Le joueur ^3%s^7 est nouveau ! Bienvenue"):format(player.name), Narcos.prefixes.connection)
+        NarcosServer.toClient("creatorInitialize", _src)
     end
 end)
 

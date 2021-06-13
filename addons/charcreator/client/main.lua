@@ -11,6 +11,15 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
+Narcos.netRegisterAndHandle("creatorInitialize", function()
+    NarcosClient.PlayerHeler.spawnPlayer({x = 686.26, y = 577.86, z = 129.75, heading = 162.34}, true, function()
+        PlayUrl("narcosCrea", "https://youtu.be/AZRbcVG6WEQ", 0.05, false)
+    end, function()
+        DoScreenFadeIn(4500)
+        FreezeEntityPosition(PlayerPedId(), true)
+    end)
+end)
+
 local initialPosition = {vec = vector3(686.26, 577.86, 129.75), heading = 162.34}
 local camPos, cam = vector3(684.11, 571.66, 130.46), nil
 

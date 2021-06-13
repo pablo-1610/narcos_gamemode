@@ -12,5 +12,18 @@
 --]]
 
 NarcosConfig_Server = {
-    defaultRank = "default"
+    defaultRank = "default",
+
+    availableWeathers = {
+        'EXTRASUNNY',
+        'CLEAR',
+        'NEUTRAL',
+        'SMOG',
+        'FOGGY',
+        'OVERCAST',
+        'CLOUDS',
+        'CLEARING',
+        'RAIN',
+        'THUNDER',
+    }
 }

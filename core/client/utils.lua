@@ -50,6 +50,63 @@ NarcosClient.DrawHelper = {
     end
 }
 
+-- PlayerHelper
+NarcosClient.PlayerHeler = {
+    freezePlayer = function(id, bool)
+        local player = id
+        SetPlayerControl(player, not bool, false)
+
+        local ped = GetPlayerPed(player)
+
+        if not bool then
+            if not IsEntityVisible(ped) then
+                SetEntityVisible(ped, true)
+            end
+            if not IsPedInAnyVehicle(ped) then
+                SetEntityCollision(ped, true)
+            end
+            FreezeEntityPosition(ped, false)
+            SetPlayerInvincible(player, false)
+        else
+            if IsEntityVisible(ped) then
+                SetEntityVisible(ped, false)
+            end
+            SetEntityCollision(ped, false)
+            FreezeEntityPosition(ped, true)
+            SetPlayerInvincible(player, true)
+            if not IsPedFatallyInjured(ped) then
+                ClearPedTasksImmediately(ped)
+            end
+        end
+    end,
+
+
+    spawnPlayer = function(selectedSpawn, blind, beforeReveal, afterReveal)
+        if blind then DoScreenFadeOut(0) end
+        NarcosClient.PlayerHeler.freezePlayer(PlayerId(), true)
+        NarcosClient.requestModel("mp_m_freemode_01")
+        SetPlayerModel(PlayerId(), Narcos.hash("mp_m_freemode_01"))
+        SetModelAsNoLongerNeeded(Narcos.hash("mp_m_freemode_01"))
+        RequestCollisionAtCoord(selectedSpawn.x, selectedSpawn.y, selectedSpawn.z)
+        local ped = PlayerId()
+        SetEntityCoordsNoOffset(ped, selectedSpawn.x, selectedSpawn.y, selectedSpawn.z, false, false, false, true)
+        NetworkResurrectLocalPlayer(selectedSpawn.x, selectedSpawn.y, selectedSpawn.z, selectedSpawn.heading, true, true, false)
+        ClearPedTasksImmediately(ped)
+        RemoveAllPedWeapons(ped)
+        ClearPlayerWantedLevel(PlayerId())
+        local time = GetGameTimer()
+        while (not HasCollisionLoadedAroundEntity(ped) and (GetGameTimer() - time) < 5000) do
+            Citizen.Wait(0)
+        end
+        beforeReveal()
+        ShutdownLoadingScreen()
+        ShutdownLoadingScreenNui()
+        NarcosClient.PlayerHeler.freezePlayer(PlayerId(), false)
+        SetPedDefaultComponentVariation(PlayerPedId())
+        afterReveal()
+    end
+}
+
 function NarcosClient.DrawText3D(x, y, z, text, r, g, b)
     -- some useful function, use it if you want!
     local onScreen, _x, _y = World3dToScreen2d(x, y, z)
@@ -152,10 +209,12 @@ end
 
 NarcosClient.requestModel = function(model)
     model = GetHashKey(model)
+    NarcosClient.trace(("Chargement du modèle %s"):format(model))
     RequestModel(model)
     while not HasModelLoaded(model) do
         Wait(1)
     end
+    NarcosClient.trace("Chargement effectué")
 end
 
 NarcosClient.trace = function(message)
@@ -166,34 +225,6 @@ NarcosClient.advancedNotification = function(sender, subject, msg, textureDict, 
     AddTextEntry('AutoEventAdvNotif', msg)
     BeginTextCommandThefeedPost('AutoEventAdvNotif')
     EndTextCommandThefeedPostMessagetext(textureDict, textureDict, false, iconType, sender, subject)
-end
-
-NarcosClient.freezePlayer = function(id, bool)
-    local player = id
-    SetPlayerControl(player, not bool, false)
-
-    local ped = GetPlayerPed(player)
-
-    if not bool then
-        if not IsEntityVisible(ped) then
-            SetEntityVisible(ped, true)
-        end
-        if not IsPedInAnyVehicle(ped) then
-            SetEntityCollision(ped, true)
-        end
-        FreezeEntityPosition(ped, false)
-        SetPlayerInvincible(player, false)
-    else
-        if IsEntityVisible(ped) then
-            SetEntityVisible(ped, false)
-        end
-        SetEntityCollision(ped, false)
-        FreezeEntityPosition(ped, true)
-        SetPlayerInvincible(player, true)
-        if not IsPedFatallyInjured(ped) then
-            ClearPedTasksImmediately(ped)
-        end
-    end
 end
 
 NarcosClient.playAnim = function(dict, anim, flag, blendin, blendout, playbackRate, duration)

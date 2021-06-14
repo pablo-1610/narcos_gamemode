@@ -31,6 +31,14 @@ NarcosClient.MenuHelper = {
         else
             return "~b~Définir ~s~→→"
         end
+    end,
+
+    greenIfTrue = function(bool)
+        if bool then
+            return "~g~"
+        else
+            return "~s~"
+        end
     end
 }
 

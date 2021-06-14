@@ -172,10 +172,11 @@ Narcos.netHandle("creatorMenu", function()
                     RageUI.Separator("")
                 else
                     RageUI.Separator("↓ ~g~Sexe ~s~↓")
-                    RageUI.ButtonWithStyle("Homme", nil, {}, true, function(_, _, s)
+                    RageUI.ButtonWithStyle(("%sHomme"):format(NarcosClient.MenuHelper.greenIfTrue(builderCharacter['sex'] == 1)), nil, {}, true, function(_, _, s)
                         if s then
                             waitingChanges = true
-                            builderCharacter['sex'] = 0
+                            NarcosClient_SkinManager.Character['sex'] = 1
+                            builderCharacter['sex'] = 1
                             NarcosClient.requestModel("mp_m_freemode_01")
                             SetPlayerModel(PlayerId(), Narcos.hash("mp_m_freemode_01"))
                             SetPedDefaultComponentVariation(PlayerPedId())
@@ -184,25 +185,30 @@ Narcos.netHandle("creatorMenu", function()
                                 ["tshirt_1"] = 15,
                                 ["torso_1"] = 15,
                                 ["shoes_1"] = 5,
-                                ["pants_1"] = 15
+                                ["pants_1"] = 15,
+                                ["pants_2"] = 0
                             })
                             waitingChanges = false
                         end
                     end)
-                    RageUI.ButtonWithStyle("Femme", nil, {}, true, function(_, _, s)
+                    RageUI.ButtonWithStyle(("%sFemme"):format(NarcosClient.MenuHelper.greenIfTrue(builderCharacter['sex'] == 0)), nil, {}, true, function(_, _, s)
                         if s then
                             waitingChanges = true
-                            builderCharacter['sex'] = 1
+                            NarcosClient_SkinManager.Character['sex'] = 0
+                            builderCharacter['sex'] = 0
                             NarcosClient.requestModel("mp_f_freemode_01")
                             SetPlayerModel(PlayerId(), Narcos.hash("mp_f_freemode_01"))
                             SetPedDefaultComponentVariation(PlayerPedId())
                             NarcosClient_SkinManager.loadSkin({
-                                ["arms"] = 0,
-                                ["tshirt_1"] = 0,
-                                ["torso_1"] = 0,
-                                ["shoes_1"] = 0,
-                                ["pants_1"] = 0
+                                ["arms"] = 14,
+                                ["arms_2"] = 0,
+                                ["tshirt_1"] = 2,
+                                ["torso_1"] = 49,
+                                ["shoes_1"] = 5,
+                                ["pants_1"] = 110,
+                                ["pants_2"] = 5
                             })
+                            ClearAllPedProps(PlayerPedId())
                             waitingChanges = false
                         end
                     end)

@@ -13,6 +13,13 @@
 
 NarcosClient_KeysManager = {}
 
-NarcosClient_KeysManager.addKey = function(command, defaultKey, desc)
-    RegisterKeyMapping(command, desc, "keyboard", defaultKey)
+---addKey
+---@public
+---@return void
+NarcosClient_KeysManager.addKey = function(defaultKey, desc, action)
+    local commandUuid = Narcos.uuid()
+    RegisterCommand(("+narcos_%s"):format(commandUuid), function(source, args)
+        action(source)
+    end)
+    RegisterKeyMapping(("+narcos_%s"):format(commandUuid), desc, "keyboard", defaultKey)
 end

@@ -116,8 +116,6 @@ Narcos.netHandle("creatorMenu", function()
                 shouldStayOpened = true
             end
 
-            maxValues = NarcosClient_SkinManager.getMaxVals()
-
             RageUI.IsVisible(RMenu:Get(cat, sub("main")), true, true, true, function()
                 tick()
                 RageUI.Separator("↓ ~g~Customisation ~s~↓")
@@ -208,6 +206,7 @@ Narcos.netHandle("creatorMenu", function()
                                 ["pants_2"] = 0
                             })
                             TaskStartScenarioInPlace(PlayerPedId(), "WORLD_HUMAN_AA_SMOKE", -1, false)
+                            maxValues = NarcosClient_SkinManager.getMaxVals()
                             waitingChanges = false
                         end
                     end)
@@ -230,6 +229,7 @@ Narcos.netHandle("creatorMenu", function()
                             })
                             TaskStartScenarioInPlace(PlayerPedId(), "WORLD_HUMAN_DRINKING", -1, false)
                             ClearAllPedProps(PlayerPedId())
+                            maxValues = NarcosClient_SkinManager.getMaxVals()
                             waitingChanges = false
                         end
                     end)
@@ -240,11 +240,6 @@ Narcos.netHandle("creatorMenu", function()
                                 selectedVariator = component
                             end
                         end, RMenu:Get(cat, sub("characterdet")))
-                    end
-                    for k, v in pairs(builderCharacter) do
-                        if NarcosClient_SkinManager.Character[k] ~= v then
-                            NarcosClient_SkinManager.change(k, v)
-                        end
                     end
                 end
             end, function()
@@ -260,12 +255,7 @@ Narcos.netHandle("creatorMenu", function()
                         if s then
                             builderCharacter[selectedVariator] = i
                             NarcosClient_SkinManager.change(selectedVariator, i)
-                        end
-
-                        if a then
-                            if NarcosClient_SkinManager.Character[selectedVariator] ~= i then
-                                NarcosClient_SkinManager.change(selectedVariator, i)
-                            end
+                            maxValues = NarcosClient_SkinManager.getMaxVals()
                         end
                     end)
                 end

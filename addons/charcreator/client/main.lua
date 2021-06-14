@@ -36,6 +36,7 @@ Narcos.netRegisterAndHandle("creatorInitialize", function()
     SetCamFov(cam, 12.0)
     Narcos.toInternal("rpOverride", "builder", "Créé son personnage")
     NarcosClient.trace("Démarrage du créateur de personnage")
+    TaskStartScenarioInPlace(PlayerPedId(), "WORLD_HUMAN_AA_SMOKE", -1, false)
     Narcos.toInternal("creatorMenu")
 end)
 

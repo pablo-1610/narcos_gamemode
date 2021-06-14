@@ -67,6 +67,25 @@ Narcos.netHandle("creatorMenu", function()
     local maxValues = NarcosClient_SkinManager.getMaxVals()
     local selectedVariator = nil
 
+    local customOrder = {
+        "face",
+        "skin",
+        "age_1",
+        "age_2",
+        "hair_1",
+        "hair_2",
+        "hair_color_1",
+        "hair_color_2",
+        "beard_1",
+        "beard_2",
+        "beard_3",
+        "beard_4",
+        "eyebrows_1",
+        "eyebrows_2",
+        "eyebrows_3",
+        "eyebrows_4"
+    }
+
     local validate = function()
         return (NarcosClient.InputHelper.validateInputStringDefinition(builder.firstname) and NarcosClient.InputHelper.validateInputStringDefinition(builder.lastname) and builder.age ~= nil)
     end
@@ -172,7 +191,7 @@ Narcos.netHandle("creatorMenu", function()
                     RageUI.Separator("")
                 else
                     RageUI.Separator("↓ ~g~Sexe ~s~↓")
-                    RageUI.ButtonWithStyle(("%sHomme"):format(NarcosClient.MenuHelper.greenIfTrue(builderCharacter['sex'] == 1)), nil, {}, true, function(_, _, s)
+                    RageUI.ButtonWithStyle(("%sHomme"):format(NarcosClient.MenuHelper.greenIfTrue(builderCharacter['sex'] == 1)), nil, {}, (builderCharacter['sex'] ~= 1), function(_, _, s)
                         if s then
                             waitingChanges = true
                             NarcosClient_SkinManager.Character['sex'] = 1
@@ -188,10 +207,11 @@ Narcos.netHandle("creatorMenu", function()
                                 ["pants_1"] = 15,
                                 ["pants_2"] = 0
                             })
+                            TaskStartScenarioInPlace(PlayerPedId(), "WORLD_HUMAN_AA_SMOKE", -1, false)
                             waitingChanges = false
                         end
                     end)
-                    RageUI.ButtonWithStyle(("%sFemme"):format(NarcosClient.MenuHelper.greenIfTrue(builderCharacter['sex'] == 0)), nil, {}, true, function(_, _, s)
+                    RageUI.ButtonWithStyle(("%sFemme"):format(NarcosClient.MenuHelper.greenIfTrue(builderCharacter['sex'] == 0)), nil, {}, (builderCharacter['sex'] ~= 0), function(_, _, s)
                         if s then
                             waitingChanges = true
                             NarcosClient_SkinManager.Character['sex'] = 0
@@ -208,19 +228,24 @@ Narcos.netHandle("creatorMenu", function()
                                 ["pants_1"] = 110,
                                 ["pants_2"] = 5
                             })
+                            TaskStartScenarioInPlace(PlayerPedId(), "WORLD_HUMAN_DRINKING", -1, false)
                             ClearAllPedProps(PlayerPedId())
                             waitingChanges = false
                         end
                     end)
                     RageUI.Separator("↓ ~o~Customisation ~s~↓")
-                    for k, v in pairs(NarcosClient_SkinManager.trad) do
-                        RageUI.ButtonWithStyle(("Customisation ~y~\"~s~%s~y~\""):format(v), nil, { RightLabel = "→→" }, true, function(_, _, s)
+                    for k, component in pairs(customOrder) do
+                        RageUI.ButtonWithStyle(("%s"):format(NarcosClient_SkinManager.trad[component] or "inconnue"), nil, { RightLabel = "→→" }, true, function(_, _, s)
                             if s then
-                                selectedVariator = k
+                                selectedVariator = component
                             end
                         end, RMenu:Get(cat, sub("characterdet")))
                     end
-
+                    for k, v in pairs(builderCharacter) do
+                        if NarcosClient_SkinManager.Character[k] ~= v then
+                            NarcosClient_SkinManager.change(k, v)
+                        end
+                    end
                 end
             end, function()
             end)
@@ -228,7 +253,22 @@ Narcos.netHandle("creatorMenu", function()
             RageUI.IsVisible(RMenu:Get(cat, sub("characterdet")), true, true, true, function()
                 tick()
                 RageUI.Separator("↓ ~g~Customisation ~s~↓")
+                print(selectedVariator)
+                print(json.encode(maxValues[selectedVariator]))
+                for i = 0, tonumber(maxValues[selectedVariator]) do
+                    RageUI.ButtonWithStyle(("%sVariation n°%s"):format(NarcosClient.MenuHelper.greenIfTrue(builderCharacter[selectedVariator] == i),i), "Appuyez pour selectionner cette variation", {}, builderCharacter[selectedVariator] ~= i, function(_,a,s)
+                        if s then
+                            builderCharacter[selectedVariator] = i
+                            NarcosClient_SkinManager.change(selectedVariator, i)
+                        end
 
+                        if a then
+                            if NarcosClient_SkinManager.Character[selectedVariator] ~= i then
+                                NarcosClient_SkinManager.change(selectedVariator, i)
+                            end
+                        end
+                    end)
+                end
             end, function()
             end)
 

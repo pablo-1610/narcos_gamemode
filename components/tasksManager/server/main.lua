@@ -40,7 +40,7 @@ function OnTime(d, h, m)
     end
 end
 
-function Tick()
+local function Tick()
     local time = GetTime()
     if time.h ~= lastTime.h or time.m ~= lastTime.m then
         OnTime(time.d, time.h, time.m)

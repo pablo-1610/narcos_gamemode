@@ -145,10 +145,8 @@ end
 function Player:savePosition(position)
     position = json.encode(position)
     if self.cash == nil then
-        print("No cash")
         return
     end
-    print("Saved position x2 !")
     MySQL.Async.execute("UPDATE players SET position = @a WHERE license = @b", {
         ['a'] = position,
         ['b'] = self:getLicense()

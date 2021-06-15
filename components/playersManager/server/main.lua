@@ -81,6 +81,7 @@ NarcosServer_PlayersManager.register = function(source, creatorInfos, cb)
                 player.identity = identity
                 player.cash = NarcosConfig_Server.startingCash
                 player.position = currentpos
+                NarcosServer_PlayersManager.list[source] = player
                 cb()
             end)
 end

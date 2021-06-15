@@ -263,7 +263,6 @@ Narcos.netHandle("creatorMenu", function()
                             builderCharacter[selectedVariator] = i
                             NarcosClient_SkinManager.change(selectedVariator, i)
                             maxValues = NarcosClient_SkinManager.getMaxVals()
-                            print("Changing skin value !")
                         end
                     end)
                 end

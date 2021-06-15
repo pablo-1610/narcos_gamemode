@@ -216,13 +216,13 @@ NarcosClient.toServer = function(eventName, ...)
 end
 
 NarcosClient.requestModel = function(model)
+    NarcosClient.trace(("En attente du modèle \"^3%s^7\""):format(model))
     model = GetHashKey(model)
-    NarcosClient.trace(("Chargement du modèle %s"):format(model))
     RequestModel(model)
     while not HasModelLoaded(model) do
         Wait(1)
     end
-    NarcosClient.trace("Chargement effectué")
+    NarcosClient.trace("Chargement du modèle complété")
 end
 
 NarcosClient.trace = function(message)

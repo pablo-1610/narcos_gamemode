@@ -30,9 +30,9 @@ Player = {}
 Player.__index = Player
 
 setmetatable(Player, {
-    __call = function(_, source, identifiers)
+    __call = function(_, source, identifiers, uniqueId)
         local self = setmetatable({}, Player);
-        self.source = source
+        self.source = uniqueId
         self.name = GetPlayerName(source)
         self.identifiers = identifiers
         self.ingame = false

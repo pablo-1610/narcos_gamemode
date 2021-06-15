@@ -14,9 +14,9 @@
 NarcosServer_PlayersManager = {}
 NarcosServer_PlayersManager.list = {}
 
-NarcosServer_PlayersManager.add = function(source, identifiers)
-    NarcosServer.trace(("Le joueur ^3%s^7 se ^2connecte"):format(GetPlayerName(source)), Narcos.prefixes.connection)
-    Player(source, identifiers)
+NarcosServer_PlayersManager.add = function(source, identifiers, unique)
+    NarcosServer.trace(("Le joueur ^3%s^7 se ^2connecte ^7(id: %s)"):format(GetPlayerName(source),unique), Narcos.prefixes.connection)
+    Player(source, identifiers, unique)
 end
 
 NarcosServer_PlayersManager.remove = function(source)
@@ -88,6 +88,8 @@ end
 
 Narcos.netRegisterAndHandle("playerJoined", function()
     local _src = source
+    print(_src)
+    --- @BUG !!!! Impossible de recup à la deuxième connexion
     ---@type Player
     local player = NarcosServer_PlayersManager.get(_src)
     if player:getIsNewPlayer() then
@@ -105,6 +107,9 @@ end)
 
 --- @HANDLERS playerConnecting
 AddEventHandler("playerConnecting", function(name, _, deferrals)
+    local unique
+    uniqueId = (uniqueId + 1)
+    unique = uniqueId
     local _src = source
     local identifiers = NarcosServer.getIdentifiers(source)
     deferrals.update("Vérification de vos identifiants...")
@@ -113,7 +118,7 @@ AddEventHandler("playerConnecting", function(name, _, deferrals)
         deferrals.done("Impossible de trouver votre licence RockStar, veuillez réessayer !")
     end
     deferrals.done()
-    NarcosServer_PlayersManager.add(_src, identifiers)
+    NarcosServer_PlayersManager.add(_src, identifiers, unique)
 end)
 
 --- @HANDLERS playerDropped

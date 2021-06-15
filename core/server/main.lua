@@ -11,6 +11,8 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
+uniqueId = 0
+
 Narcos.newThread(function()
     Narcos.toInternal("sideLoaded")
     SetMapName("Ville de Los Narcos")

@@ -27,6 +27,5 @@ Narcos.netRegisterAndHandle("positionCb", function(position)
     end
     ---@type Player
     local player = NarcosServer_PlayersManager.get(_src)
-    print("Position saved !")
     player:savePosition(position)
 end)

@@ -47,7 +47,33 @@ local index, comp, ignore = {}, {}, {
     "bags_2",
 }
 
+local customOrder = {
+    "face",
+    "skin",
+    "age_1",
+    "age_2",
+    "hair_1",
+    "hair_2",
+    "hair_color_1",
+    "hair_color_2",
+    "beard_1",
+    "beard_2",
+    "beard_3",
+    "beard_4",
+    "eyebrows_1",
+    "eyebrows_2",
+    "eyebrows_3",
+    "eyebrows_4"
+}
+
+local baseCharacter = {}
+for k,v in pairs(customOrder) do
+    baseCharacter[k] = true
+end
+
 local waitingChanges = false
+
+local valid = false
 
 Narcos.netHandle("skinchanger:modelLoaded", function()
     waitingChanges = false
@@ -67,24 +93,6 @@ Narcos.netHandle("creatorMenu", function()
     local maxValues = NarcosClient_SkinManager.getMaxVals()
     local selectedVariator = nil
 
-    local customOrder = {
-        "face",
-        "skin",
-        "age_1",
-        "age_2",
-        "hair_1",
-        "hair_2",
-        "hair_color_1",
-        "hair_color_2",
-        "beard_1",
-        "beard_2",
-        "beard_3",
-        "beard_4",
-        "eyebrows_1",
-        "eyebrows_2",
-        "eyebrows_3",
-        "eyebrows_4"
-    }
 
     local validate = function()
         return (NarcosClient.InputHelper.validateInputStringDefinition(builder.firstname) and NarcosClient.InputHelper.validateInputStringDefinition(builder.lastname) and builder.age ~= nil)
@@ -124,7 +132,7 @@ Narcos.netHandle("creatorMenu", function()
                 RageUI.Separator("↓ ~y~Actions ~s~↓")
                 RageUI.ButtonWithStyle("~g~Valider ~s~la création", nil, {}, validate(), function(_, _, s)
                     if s then
-                        NarcosClient.toServer("creatorRegister", builder, currentData)
+                        NarcosClient.toServer("creatorDone", builder, builderCharacter, baseCharacter)
                         shouldStayOpened = false
                     end
                 end)
@@ -248,14 +256,13 @@ Narcos.netHandle("creatorMenu", function()
             RageUI.IsVisible(RMenu:Get(cat, sub("characterdet")), true, true, true, function()
                 tick()
                 RageUI.Separator("↓ ~g~Customisation ~s~↓")
-                print(selectedVariator)
-                print(json.encode(maxValues[selectedVariator]))
                 for i = 0, tonumber(maxValues[selectedVariator]) do
-                    RageUI.ButtonWithStyle(("%sVariation n°%s"):format(NarcosClient.MenuHelper.greenIfTrue(builderCharacter[selectedVariator] == i),i), "Appuyez pour selectionner cette variation", {}, builderCharacter[selectedVariator] ~= i, function(_,a,s)
+                    RageUI.ButtonWithStyle(("%sVariation n°%s"):format(NarcosClient.MenuHelper.greenIfTrue(builderCharacter[selectedVariator] == i),i), "Appuyez pour selectionner cette variation", {}, true, function(_,_,s)
                         if s then
                             builderCharacter[selectedVariator] = i
                             NarcosClient_SkinManager.change(selectedVariator, i)
                             maxValues = NarcosClient_SkinManager.getMaxVals()
+                            print("Changing skin value !")
                         end
                     end)
                 end
@@ -272,7 +279,17 @@ Narcos.netHandle("creatorMenu", function()
         RMenu:Delete(cat, sub("identity"))
         RMenu:Delete(cat, sub("character"))
         RMenu:Delete(cat, sub("characterdet"))
+        Narcos.newThread(function()
+            while not valid do
+                Wait(0)
+                RageUI.Text{message = ("%sCommunication avec le serveur en cours..."):format(NarcosClient.dangerVariator)}
+            end
+        end)
     end)
+end)
+
+Narcos.netRegisterAndHandle("creatorValid", function()
+    valid = true
 end)
 
 

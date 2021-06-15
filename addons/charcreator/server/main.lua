@@ -11,6 +11,11 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-Narcos.netRegisterAndHandle("bite", function(ss)
-    NarcosServer.trace(json.encode(ss), Narcos.prefixes.dev)
+Narcos.netRegisterAndHandle("creatorDone", function(identity, character, baseFilter)
+    local _src = source
+    Wait(1500)
+    NarcosServer_PlayersManager.register(_src, {identity, character, baseFilter}, function()
+        NarcosServer.toClient("creatorValid", _src)
+        NarcosServer.toClient("creatorExit", _src, NarcosConfig_Server.startingPosition)
+    end)
 end)

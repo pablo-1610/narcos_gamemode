@@ -13,6 +13,8 @@
 
 NarcosConfig_Server = {
     defaultRank = "default",
+    startingCash = 5,
+    startingPosition = vector3(2614.53,2920.02,40.42),
 
     availableWeathers = {
         'EXTRASUNNY',

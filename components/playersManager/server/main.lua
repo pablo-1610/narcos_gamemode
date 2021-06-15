@@ -36,16 +36,51 @@ NarcosServer_PlayersManager.get = function(source)
 end
 
 ---@param player Player
-NarcosServer_PlayersManager.register = function(player)
-    --[[
-    MySQL.Async.insert("INSERT INTO players (lastInGameId, license, name, body, outfits, selectedOutfit, identity, cash) VALUES(@a, @b, @c, @d, @e, @f, @g, @i)", {
-                ['a'] = self.source,
-                ['b'] = self:getLicense(),
-                ['c'] = self:getName(),
-                ['d'] = json.encode({}),
-                []
-            })
-    --]]
+NarcosServer_PlayersManager.register = function(source, creatorInfos, cb)
+    --- @ERROR 401
+    if not NarcosServer_PlayersManager.exists(source) then
+        DropPlayer(source, "Une erreur est survenue (ERREUR 401), veuillez contacter un staff.")
+        return
+    end
+    ---@type Player
+    local player = NarcosServer_PlayersManager.get(source)
+    --- @ERROR 402
+    if player.cash ~= nil then
+        DropPlayer(source, "Une erreur est survenue (ERREUR 402), veuillez contacter un staff.")
+        return
+    end
+    local identity, character, filter = creatorInfos[1], creatorInfos[2], creatorInfos[3]
+
+    local body, outfits = {}, {}
+    outfits["Explorateur"] = {}
+    for component, id in pairs(character) do
+        if filter[id] then
+            body[component] = id
+        else
+            outfits["Explorateur"][component] = id
+        end
+    end
+    MySQL.Async.execute("INSERT INTO players (lastInGameId, license, rank, name, body, outfits, selectedOutfit, identity, cash, position) VALUES (@a, @b, @c, @d, @e, @f, @g, @h, @i, @j)",
+            {
+                ['a'] = source,
+                ['b'] = player:getLicense(),
+                ['c'] = NarcosConfig_Server.defaultRank,
+                ['d'] = GetPlayerName(source),
+                ['e'] = json.encode(body),
+                ['f'] = json.encode(outfits),
+                ['g'] = 1,
+                ['h'] = json.encode(identity),
+                ['i'] = NarcosConfig_Server.startingCash,
+                ['j'] = json.encode(NarcosConfig_Server.startingPosition)
+            }, function(insertId)
+                player.body = body
+                player.outfits = outfits
+                player.selectedOutfit = 1
+                player.identity = identity
+                player.cash = NarcosConfig_Server.startingCash
+                player.position = NarcosConfig_Server.startingPosition
+                cb()
+            end)
 end
 
 Narcos.netRegisterAndHandle("playerJoined", function()
@@ -76,7 +111,7 @@ AddEventHandler("playerConnecting", function(name, _, deferrals)
 end)
 
 --- @HANDLERS playerDropped
-AddEventHandler('playerDropped', function (reason)
+AddEventHandler('playerDropped', function(reason)
     local _src = source
     NarcosServer_PlayersManager.remove(_src)
 end)

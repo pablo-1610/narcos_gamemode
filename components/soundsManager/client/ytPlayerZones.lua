@@ -129,7 +129,7 @@ local function Position(name_, pos)
     soundInfo[name_].id = name_
 end
 
-local function Destroy(name_)
+function Destroy(name_)
     SendNUIMessage({
         status = "delete",
         name = name_

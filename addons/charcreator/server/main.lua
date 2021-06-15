@@ -11,11 +11,11 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-Narcos.netRegisterAndHandle("creatorDone", function(identity, character, baseFilter)
+Narcos.netRegisterAndHandle("creatorDone", function(identity, character, filter)
     local _src = source
     Wait(1500)
-    NarcosServer_PlayersManager.register(_src, {identity, character, baseFilter}, function()
+    NarcosServer_PlayersManager.register(_src, {identity, character, filter}, function()
         NarcosServer.toClient("creatorValid", _src)
-        NarcosServer.toClient("creatorExit", _src, NarcosConfig_Server.startingPosition)
+        NarcosServer.toClient("creatorExit", _src, NarcosConfig_Server.startingPosition, NarcosConfig_Server.startingHeading)
     end)
 end)

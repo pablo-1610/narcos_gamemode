@@ -54,12 +54,14 @@ NarcosServer_PlayersManager.register = function(source, creatorInfos, cb)
     local body, outfits = {}, {}
     outfits["Explorateur"] = {}
     for component, id in pairs(character) do
-        if filter[id] then
+        if filter[component] then
             body[component] = id
         else
             outfits["Explorateur"][component] = id
         end
     end
+
+    local currentpos = {pos = NarcosConfig_Server.startingPosition, heading = NarcosConfig_Server.startingHeading}
     MySQL.Async.execute("INSERT INTO players (lastInGameId, license, rank, name, body, outfits, selectedOutfit, identity, cash, position) VALUES (@a, @b, @c, @d, @e, @f, @g, @h, @i, @j)",
             {
                 ['a'] = source,
@@ -68,17 +70,17 @@ NarcosServer_PlayersManager.register = function(source, creatorInfos, cb)
                 ['d'] = GetPlayerName(source),
                 ['e'] = json.encode(body),
                 ['f'] = json.encode(outfits),
-                ['g'] = 1,
+                ['g'] = "Explorateur",
                 ['h'] = json.encode(identity),
                 ['i'] = NarcosConfig_Server.startingCash,
-                ['j'] = json.encode(NarcosConfig_Server.startingPosition)
+                ['j'] = json.encode(currentpos)
             }, function(insertId)
                 player.body = body
                 player.outfits = outfits
-                player.selectedOutfit = 1
+                player.selectedOutfit = "Explorateur"
                 player.identity = identity
                 player.cash = NarcosConfig_Server.startingCash
-                player.position = NarcosConfig_Server.startingPosition
+                player.position = currentpos
                 cb()
             end)
 end
@@ -90,6 +92,9 @@ Narcos.netRegisterAndHandle("playerJoined", function()
     if player:getIsNewPlayer() then
         NarcosServer.trace(("Le joueur ^3%s^7 est nouveau ! Bienvenue"):format(player.name), Narcos.prefixes.connection)
         NarcosServer.toClient("creatorInitialize", _src)
+    else
+        MySQL.Async.execute("UPDATE players SET lastInGameId = @a WHERE license = @b", {['a'] = tonumber(_src), ['b'] = player:getLicense()})
+        NarcosServer.toClient("playerSpawnBase", _src, player.position, player.body, player.outfits[player.selectedOutfit])
     end
 end)
 

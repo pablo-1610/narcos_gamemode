@@ -23,3 +23,11 @@ Narcos.newThread(function()
         end
     end
 end)
+
+-- Boucle principale 0 ms
+Narcos.newThread(function()
+    while true do
+        Wait(0)
+        SetTextChatEnabled(false)
+    end
+end)

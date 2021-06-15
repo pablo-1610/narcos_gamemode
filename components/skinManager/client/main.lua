@@ -254,7 +254,6 @@ NarcosClient_SkinManager.getMaxVals = function()
 end
 
 local function ApplySkin(skin, clothes)
-    NarcosClient.trace("Appel du skin changer")
     local playerPed = PlayerPedId()
 
     for k, v in pairs(skin) do

@@ -52,16 +52,19 @@ function Player:asyncLoadData()
         if result[1] then
             self.newPlayer = false
             self.rank = NarcosServer_RanksManager.get(result.rank, true)
-            self.body = json.decode(result.body)
-            self.outfits = json.decode(result.outfits)
-            self.selectedOutfit = result.selectedOutfit
-            self.identity = json.decode(result.identity)
+            self.body = json.decode(result[1].body)
+            self.outfits = json.decode(result[1].outfits)
+            self.selectedOutfit = result[1].selectedOutfit
+            self.identity = json.decode(result[1].identity)
             self.cash = self.cash
-            self.position = json.decode(result.position)
-            if self.selectedOutfit > #self.outfits then
-                self.selectedOutfit = self.outfits[#self.outfits]
+            self.position = json.decode(result[1].position)
+            if not self.outfits[self.selectedOutfit] then
+                local sort = {}
+                for name, _ in pairs(self.outfits) do
+                    table.insert(sort, name)
+                end
+                self.selectedOutfit = sort[math.random(1,#sort)]
             end
-            MySQL.Async.execute("UPDATE players SET lastInGameId = @a WHERE license = @b", {['a'] = self:getSource(), ['b'] = self:getLicense()})
         else
             self.newPlayer = true
         end
@@ -136,6 +139,21 @@ function Player:setRankById(rankId)
 end
 
 -- Utils
+
+---@public
+---@return void
+function Player:savePosition(position)
+    position = json.encode(position)
+    if self.cash == nil then
+        print("No cash")
+        return
+    end
+    print("Saved position x2 !")
+    MySQL.Async.execute("UPDATE players SET position = @a WHERE license = @b", {
+        ['a'] = position,
+        ['b'] = self:getLicense()
+    })
+end
 
 ---@public
 ---@return void

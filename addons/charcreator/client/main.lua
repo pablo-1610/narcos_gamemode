@@ -40,18 +40,22 @@ Narcos.netRegisterAndHandle("creatorInitialize", function()
     SetCamFov(cam, 12.0)
     FreezeEntityPosition(PlayerPedId(), true)
     TaskStartScenarioInPlace(PlayerPedId(), "WORLD_HUMAN_AA_SMOKE", -1, false)
+    NarcosClient_SyncManager.overrideTime(12,00)
+    NarcosClient_SyncManager.overrideWeather("EXTRASUNNY")
     Narcos.toInternal("rpOverride", "builder", "Créé son personnage")
     NarcosClient.trace("Démarrage du créateur de personnage")
     Narcos.toInternal("creatorMenu")
 end)
 
-Narcos.netRegisterAndHandle("creatorExit", function(start)
+Narcos.netRegisterAndHandle("creatorExit", function(start, startHd)
+    NarcosClient_SyncManager.stopOverrideBoth()
     Destroy("narcosCrea")
     RequestStreamedTextureDict("pablo")
     while not HasStreamedTextureDictLoaded("pablo") do Wait(1) end
     RenderScriptCams(0,0,0,0,0)
     NarcosClient.DrawHelper.showLoading("Bienvenue sur Los Narcos")
     PlayUrl("narcos", "https://youtu.be/4y8c1kk3gZA", 0.35, false)
+    NarcosClient.PlayerHeler.freezePlayer(PlayerId(), true)
     SwitchOutPlayer(PlayerPedId(), 0, 1)
     local run, secElapsed, fadeIn = true, 0, 0
     Narcos.newThread(function()
@@ -77,9 +81,6 @@ Narcos.netRegisterAndHandle("creatorExit", function(start)
         end
     end)
     Wait(20000)
-    RequestCollisionAtCoord(start)
-    SetEntityCoordsNoOffset(PlayerPedId(), start, false, false, false)
-    SetEntityHeading(PlayerPedId(), 57.27)
     local playerPed = PlayerPedId()
     Narcos.newThread(function()
         while fadeIn > 0 do
@@ -88,11 +89,21 @@ Narcos.netRegisterAndHandle("creatorExit", function(start)
         end
         NarcosClient.DrawHelper.showLoading(false)
         run = false
+        RequestCollisionAtCoord(start.x, start.y, start.z)
+        SetEntityCoordsNoOffset(PlayerPedId(), start.x, start.y, start.z, false, false, false, true)
+        SetEntityHeading(PlayerPedId(), startHd)
+        ClearPedTasksImmediately(PlayerPedId())
+        local time = GetGameTimer()
+        while (not HasCollisionLoadedAroundEntity(PlayerPedId()) and (GetGameTimer() - time) < 5000) do
+            Citizen.Wait(0)
+        end
+        NarcosClient.PlayerHeler.freezePlayer(PlayerId(), false)
         SwitchInPlayer(PlayerPedId())
     end)
-    Wait(1300)
+    Wait(1800)
     while getVolume("narcos") > 0.0 do
         Wait(25)
-        setVolume("narcos", (getVolume("narcos")-0.0008))
+        setVolume("narcos", (getVolume("narcos")-0.0006))
     end
+    Narcos.toInternal("setSaver", true)
 end)

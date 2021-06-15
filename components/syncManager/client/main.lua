@@ -11,22 +11,62 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
+local timeOverride, weatherOverride = nil, nil
+
+NarcosClient_SyncManager = {}
+
+NarcosClient_SyncManager.overrideTime = function(h, m)
+    timeOverride = {h,m}
+    NetworkOverrideClockTime(tonumber(timeOverride[1]), tonumber(timeOverride[2]), 00)
+end
+
+NarcosClient_SyncManager.overrideWeather = function(weather)
+    weatherOverride = weather
+    ClearOverrideWeather()
+    ClearWeatherTypePersist()
+    SetWeatherTypePersist(weatherOverride)
+    SetWeatherTypeNow(weatherOverride)
+    SetWeatherTypeNowPersist(weatherOverride)
+end
+
+NarcosClient_SyncManager.stopOverrideTime = function()
+    timeOverride = nil
+    NarcosClient.toServer("requestOneSync")
+end
+
+NarcosClient_SyncManager.stopOverrideWeather = function()
+    weatherOverride = nil
+    NarcosClient.toServer("requestOneSync")
+end
+
+NarcosClient_SyncManager.stopOverrideBoth = function()
+    timeOverride = nil
+    weatherOverride = nil
+    NarcosClient.toServer("requestOneSync")
+end
+
 Narcos.netHandle("sideLoaded", function()
     NarcosClient.toServer("requestOneSync")
 end)
 
 Narcos.netRegisterAndHandle("syncSetTime", function(time)
-    NarcosClient.trace(("Le temps est désormais ^3%s:%s"):format(tonumber(time[1]),tonumber(time[2])))
-    NetworkOverrideClockTime(tonumber(time[1]), tonumber(time[2]), 00)
+    if timeOverride ~= nil then
+        NetworkOverrideClockTime(tonumber(timeOverride[1]), tonumber(timeOverride[2]), 00)
+    else
+        NarcosClient.trace(("Le temps est désormais ^3%s:%s"):format(tonumber(time[1]),tonumber(time[2])))
+        NetworkOverrideClockTime(tonumber(time[1]), tonumber(time[2]), 00)
+    end
 end)
 
 Narcos.netRegisterAndHandle("syncSetWeather", function(weather)
-    NarcosClient.trace(("La météo est désormais ^3%s"):format(weather))
-    SetWeatherTypeOverTime(weather, 30.0)
-    Wait(Narcos.second(30))
-    ClearOverrideWeather()
-    ClearWeatherTypePersist()
-    SetWeatherTypePersist(weather)
-    SetWeatherTypeNow(weather)
-    SetWeatherTypeNowPersist(weather)
+    if weatherOverride == nil then
+        NarcosClient.trace(("La météo est désormais ^3%s"):format(weather))
+        SetWeatherTypeOverTime(weather, 30.0)
+        Wait(Narcos.second(30))
+        ClearOverrideWeather()
+        ClearWeatherTypePersist()
+        SetWeatherTypePersist(weather)
+        SetWeatherTypeNow(weather)
+        SetWeatherTypeNowPersist(weather)
+    end
 end)

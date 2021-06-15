@@ -68,8 +68,9 @@ local customOrder = {
 
 local baseCharacter = {}
 for k,v in pairs(customOrder) do
-    baseCharacter[k] = true
+    baseCharacter[v] = true
 end
+baseCharacter['sex'] = true
 
 local waitingChanges = false
 

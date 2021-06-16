@@ -1,3 +1,17 @@
+CREATE TABLE `inventories` (
+  `identifier` varchar(80) NOT NULL COMMENT 'Identifiant unique de l''inventaire',
+  `label` varchar(80) NOT NULL COMMENT 'Nom d''affichage de l''inventaire',
+  `capacity` float NOT NULL COMMENT 'Capacité totale de l''inventaire',
+  `type` int(11) NOT NULL COMMENT 'Type de l''inventaire',
+  `content` text NOT NULL COMMENT 'Contenu de l''inventaire'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `items` (
+  `name` varchar(80) NOT NULL COMMENT 'Identifiant unique de l''item',
+  `label` varchar(80) NOT NULL COMMENT 'Nom d''affichage de l''item',
+  `weight` float NOT NULL COMMENT 'Poids de l''item'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE `players` (
   `id` int(11) NOT NULL COMMENT 'Id unique du joueur (utilisé pour la boutique)',
   `lastInGameId` int(11) NOT NULL COMMENT 'Dernier id utilisé en jeu',
@@ -29,6 +43,9 @@ INSERT INTO `ranks` (`id`, `label`, `color`, `permissions`) VALUES
 ('vip', 'VIP', '^7', '[]'),
 ('vip+', 'VIP+', '^7', '[]');
 
+ALTER TABLE `items`
+  ADD PRIMARY KEY (`name`);
+
 ALTER TABLE `players`
   ADD PRIMARY KEY (`id`);
 
@@ -36,5 +53,5 @@ ALTER TABLE `ranks`
   ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `players`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id unique du joueur (utilisé pour la boutique)', AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id unique du joueur (utilisé pour la boutique)', AUTO_INCREMENT=14;
 COMMIT;

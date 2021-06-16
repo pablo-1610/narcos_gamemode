@@ -9,3 +9,8 @@ Pour les erreurs chercher
 Pour les choses à faire
 
 ``@TODO <Infos>``
+
+Types d'inventaires
+
+``1: Joueur``
+``2: Entreprise``

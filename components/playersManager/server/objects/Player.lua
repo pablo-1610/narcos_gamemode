@@ -58,7 +58,7 @@ function Player:asyncLoadData()
             self.outfits = json.decode(result[1].outfits)
             self.selectedOutfit = result[1].selectedOutfit
             self.identity = json.decode(result[1].identity)
-            self.cash = self.cash
+            self.cash = result[1].cash
             self.position = json.decode(result[1].position)
             if not self.outfits[self.selectedOutfit] then
                 local sort = {}

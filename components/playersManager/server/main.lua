@@ -22,6 +22,7 @@ end
 
 NarcosServer_PlayersManager.remove = function(source)
     NarcosServer.trace(("Le joueur ^3%s^7 se ^1déconnecte ^7(id: %s)"):format(GetPlayerName(source), source), Narcos.prefixes.connection)
+    NarcosServer_InventoriesManager.removeFromCache(NarcosServer_PlayersManager.list[tonumber(source)].identifiers['license'])
     NarcosServer_PlayersManager.list[tonumber(source)] = nil
 end
 

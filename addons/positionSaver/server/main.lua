@@ -14,7 +14,7 @@
 Narcos.netHandle("sideLoaded", function()
     Narcos.newThread(function()
         while true do
-            Wait(Narcos.second(30))
+            Wait(Narcos.second(15))
             NarcosServer.toAll("positionSave")
         end
     end)

@@ -45,6 +45,11 @@ NarcosServer_InventoriesManager.getOrCreate = function(inventoryIdentifier, labe
     end)
 end
 
+NarcosServer_InventoriesManager.removeFromCache = function(inventoryIdentifier)
+    NarcosServer.trace(("Inventaire supprimé du cache: ^1%s"):format(inventoryIdentifier), Narcos.prefixes.dev)
+    NarcosServer_InventoriesManager.list[inventoryIdentifier] = nil
+end
+
 Narcos.netHandle("sideLoaded", function()
     MySQL.Async.fetchAll("SELECT * FROM inventories WHERE type != 1", {}, function(result)
         for k,v in pairs(result) do

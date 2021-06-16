@@ -13,6 +13,9 @@
 
 NarcosConfig_Server = {
     defaultRank = "default",
+
+    bannedInstance = 666,
+
     startingCash = 5,
     startingPosition = vector3(2614.53,2920.02,40.42),
     startingHeading = 65.90,

@@ -29,5 +29,18 @@ Narcos.newThread(function()
     while true do
         Wait(0)
         SetTextChatEnabled(false)
+        ClearPlayerWantedLevel(PlayerPedId())
+        ResetPlayerStamina(PlayerPedId())
+        RestorePlayerStamina(PlayerPedId(), true)
+        DisablePlayerVehicleRewards(PlayerPedId())
+        SetGarbageTrucks(false)
+        SetRandomBoats(false)
+        SetCreateRandomCops(false)
+        SetCreateRandomCopsNotOnScenarios(false)
+        SetCreateRandomCopsOnScenarios(false)
+        for i = 1, 15 do
+            EnableDispatchService(i, false)
+            Citizen.Wait(1)
+        end
     end
 end)

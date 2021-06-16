@@ -12,13 +12,30 @@
 --]]
 
 ---@class Inventory
+---@field public identifier string
+---@field public label string
+---@field public capacity number
+---@field public type number
+---@field public content table
 Inventory = {}
 Inventory.__index = Inventory
 
 setmetatable(Inventory, {
-    __call = function(_)
+    __call = function(_, identifier, label, capacity, type, content)
         local self = setmetatable({}, Inventory);
-
+        self.identifier = identifier
+        self.label = label
+        self.capacity = capacity
+        self.type = type
+        self.content = content
+        NarcosServer_InventoriesManager.list[self.identifier] = self
         return self;
     end
 })
+
+---getContent
+---@public
+---@return table
+function Inventory:getContent()
+    return self.content
+end

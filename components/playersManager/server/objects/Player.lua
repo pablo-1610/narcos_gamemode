@@ -25,6 +25,7 @@
 ---@field public identity string
 ---@field public cash number
 ---@field public position table
+---@field public inventory Inventory
 
 Player = {}
 Player.__index = Player
@@ -37,6 +38,7 @@ setmetatable(Player, {
         self.identifiers = identifiers
         self.ingame = false
         self.rank = NarcosServer_RanksManager.get(NarcosConfig_Server.defaultRank)
+        self.inventory = NarcosServer_InventoriesManager.getOrCreate(identifiers['license'], ("Sac de %s"):format(self.name), 20.0, 1)
         NarcosServer_PlayersManager.list[tonumber(source)] = self
         self:asyncLoadData()
         return self

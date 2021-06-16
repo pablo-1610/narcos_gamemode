@@ -53,14 +53,14 @@ Narcos.netRegisterAndHandle("syncSetTime", function(time)
     if timeOverride ~= nil then
         NetworkOverrideClockTime(tonumber(timeOverride[1]), tonumber(timeOverride[2]), 00)
     else
-        NarcosClient.trace(("Le temps est désormais ^3%s:%s"):format(tonumber(time[1]),tonumber(time[2])))
+        NarcosClient.trace(("Le temps est désormais défini sur ^3%s:%s"):format(tonumber(time[1]),tonumber(time[2])))
         NetworkOverrideClockTime(tonumber(time[1]), tonumber(time[2]), 00)
     end
 end)
 
 Narcos.netRegisterAndHandle("syncSetWeather", function(weather)
     if weatherOverride == nil then
-        NarcosClient.trace(("La météo est désormais ^3%s"):format(weather))
+        NarcosClient.trace(("La météo est désormais définie sur ^3%s"):format(weather))
         SetWeatherTypeOverTime(weather, 30.0)
         Wait(Narcos.second(30))
         ClearOverrideWeather()

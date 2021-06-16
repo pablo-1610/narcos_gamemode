@@ -223,7 +223,6 @@ Narcos.newThread(function()
                     if soundExists(v.name) then
                         Resume(v.name)
                     else
-                        print("Play URL !")
                         PlayUrlPos(v.name, v.link, v.max, v.pos, true)
                         setVolumeMax(v.name, v.max)
                         Distance(v.name, v.dst)

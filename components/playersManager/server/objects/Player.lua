@@ -30,14 +30,14 @@ Player = {}
 Player.__index = Player
 
 setmetatable(Player, {
-    __call = function(_, source, identifiers, uniqueId)
+    __call = function(_, source, identifiers)
         local self = setmetatable({}, Player);
-        self.source = uniqueId
+        self.source = source
         self.name = GetPlayerName(source)
         self.identifiers = identifiers
         self.ingame = false
         self.rank = NarcosServer_RanksManager.get(NarcosConfig_Server.defaultRank)
-        NarcosServer_PlayersManager.list[#NarcosServer_PlayersManager.list+1] = self
+        NarcosServer_PlayersManager.list[tonumber(source)] = self
         self:asyncLoadData()
         return self
     end

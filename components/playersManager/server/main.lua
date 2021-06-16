@@ -13,15 +13,16 @@
 
 NarcosServer_PlayersManager = {}
 NarcosServer_PlayersManager.list = {}
+NarcosServer_PlayersManager.connecting = {}
 
-NarcosServer_PlayersManager.add = function(source, identifiers, unique)
-    NarcosServer.trace(("Le joueur ^3%s^7 se ^2connecte ^7(id: %s)"):format(GetPlayerName(source),unique), Narcos.prefixes.connection)
-    Player(source, identifiers, unique)
+NarcosServer_PlayersManager.add = function(source, identifiers)
+    NarcosServer.trace(("Le joueur ^3%s^7 se ^2connecte ^7(id: %s)"):format(GetPlayerName(source),source), Narcos.prefixes.connection)
+    Player(source, identifiers)
 end
 
 NarcosServer_PlayersManager.remove = function(source)
-    NarcosServer.trace(("Le joueur ^3%s^7 se ^1déconnecte"):format(GetPlayerName(source)), Narcos.prefixes.connection)
-    NarcosServer_PlayersManager.list[source] = nil
+    NarcosServer.trace(("Le joueur ^3%s^7 se ^1déconnecte ^7(id: %s)"):format(GetPlayerName(source), source), Narcos.prefixes.connection)
+    NarcosServer_PlayersManager.list[tonumber(source)] = nil
 end
 
 NarcosServer_PlayersManager.exists = function(source)
@@ -32,7 +33,7 @@ NarcosServer_PlayersManager.get = function(source)
     if not NarcosServer_PlayersManager.exists(source) then
         return
     end
-    return NarcosServer_PlayersManager.list[source]
+    return NarcosServer_PlayersManager.list[tonumber(source)]
 end
 
 ---@param player Player
@@ -88,8 +89,6 @@ end
 
 Narcos.netRegisterAndHandle("playerJoined", function()
     local _src = source
-    print(_src)
-    --- @BUG !!!! Impossible de recup à la deuxième connexion
     ---@type Player
     local player = NarcosServer_PlayersManager.get(_src)
     if player:getIsNewPlayer() then
@@ -101,15 +100,20 @@ Narcos.netRegisterAndHandle("playerJoined", function()
     end
 end)
 
+
 Narcos.netHandle("sideLoaded", function()
     MySQL.Async.execute("UPDATE players SET lastInGameId = 0", {})
 end)
 
+RegisterNetEvent("playerJoining")
+AddEventHandler("playerJoining", function(src)
+    local _src = source
+    local identifiers = NarcosServer.getIdentifiers(_src)
+    NarcosServer_PlayersManager.add(tonumber(_src), identifiers)
+end)
+
 --- @HANDLERS playerConnecting
 AddEventHandler("playerConnecting", function(name, _, deferrals)
-    local unique
-    uniqueId = (uniqueId + 1)
-    unique = uniqueId
     local _src = source
     local identifiers = NarcosServer.getIdentifiers(source)
     deferrals.update("Vérification de vos identifiants...")
@@ -118,7 +122,6 @@ AddEventHandler("playerConnecting", function(name, _, deferrals)
         deferrals.done("Impossible de trouver votre licence RockStar, veuillez réessayer !")
     end
     deferrals.done()
-    NarcosServer_PlayersManager.add(_src, identifiers, unique)
 end)
 
 --- @HANDLERS playerDropped

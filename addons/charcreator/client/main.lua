@@ -107,5 +107,6 @@ Narcos.netRegisterAndHandle("creatorExit", function(start, startHd)
         Wait(25)
         setVolume("narcos", (getVolume("narcos")-0.0006))
     end
+    currentState = NarcosEnums.GameStates.PLAYING
     Narcos.toInternal("setSaver", true)
 end)

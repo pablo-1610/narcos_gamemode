@@ -16,6 +16,7 @@ Narcos.netRegisterAndHandle("playerSpawnBase", function(position, body, outfit)
 
     end, function()
         Narcos.toInternal("setSaver", true)
+        currentState = NarcosEnums.GameStates.PLAYING
         NarcosClient_SkinManager.loadSkin(body)
         NarcosClient.trace("Corps chargé")
         Wait(100)

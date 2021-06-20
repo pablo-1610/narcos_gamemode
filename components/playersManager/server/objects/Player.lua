@@ -142,6 +142,11 @@ end
 
 -- Utils
 
+function Player:sendData(cb)
+    NarcosServer.toClient("updateLocalData", self.source, {player = self, inventory = NarcosServer_InventoriesManager.get(self:getLicense())})
+    cb()
+end
+
 ---@public
 ---@return void
 function Player:savePosition(position)

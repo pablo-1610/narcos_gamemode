@@ -17,6 +17,8 @@
 ---@field public capacity number
 ---@field public type number
 ---@field public content table
+---@field public weight number
+---@field public diffItems number
 Inventory = {}
 Inventory.__index = Inventory
 
@@ -25,17 +27,107 @@ setmetatable(Inventory, {
         local self = setmetatable({}, Inventory);
         self.identifier = identifier
         self.label = label
-        self.capacity = capacity
+        self.capacity = (capacity*1.00)
         self.type = type
         self.content = content
+        self.weight = self:calcWeight(self.content)
+        self.diffItems = self:getTypesCount()
         NarcosServer_InventoriesManager.list[self.identifier] = self
         return self;
     end
 })
+
+---getTypesCount
+---@public
+---@return number
+function Inventory:getTypesCount()
+    local c = 0
+    for k, v in pairs(self.content) do
+        c = c + 1
+    end
+    return c
+end
 
 ---getContent
 ---@public
 ---@return table
 function Inventory:getContent()
     return self.content
+end
+
+---calcWeight
+---@public
+---@return number
+function Inventory:calcWeight(content)
+    if not content then
+        content = self:getContent()
+    end
+    local total = 0
+    for k,v in pairs(content) do
+        local weight = NarcosServer_ItemsManager.getItemWeight(k)
+        total = (total + (weight*v))
+    end
+    return (total*1.00)
+end
+
+---saveInventory
+---@public
+---@return void
+function Inventory:saveInventory()
+    MySQL.Async.execute("UPDATE inventories SET content = @a WHERE identifier = @b", {
+        ['a'] = json.encode(self.content),
+        ['b'] = self.identifier
+    })
+end
+
+---addItem
+---@public
+---@return function
+function Inventory:addItem(item, cb, qty)
+    if qty == nil then
+        qty = 1
+    end
+    if not NarcosServer_ItemsManager.exists(item) then
+        return
+    end
+    local fakeContent = self:getContent()
+    if not fakeContent[item] then
+        fakeContent[item] = 0
+    end
+    fakeContent[item] = (fakeContent[item] + 1)
+    local fakeWeight = self:calcWeight(fakeContent)
+    if fakeWeight > self.capacity then
+        NarcosServer_ErrorsManager.die(NarcosEnums.Errors.INV_CAPACITY_EXCEEDED, self.identifier)
+    end
+    self.content = fakeContent
+    self.weight = self:calcWeight(self.content)
+    self.diffItems = self:getTypesCount()
+    self:saveInventory()
+    cb(self)
+end
+
+---removeItem
+---@public
+---@return function
+function Inventory:removeItem(item, cb, qty)
+    if qty == nil then
+        qty = 1
+    end
+    if not NarcosServer_ItemsManager.exists(item) then
+        return
+    end
+    local fakeContent = self:getContent()
+    if not fakeContent[item] then
+        NarcosServer_ErrorsManager.die(NarcosEnums.Errors.INV_NO_ITEM, ("%s - %s"):format(self.identifier, item))
+    end
+    fakeContent[item] = (fakeContent[item] - 1)
+    if fakeContent[item] == 0 then
+        fakeContent[item] = nil
+    end
+    self.content = fakeContent
+    self.weight = self:calcWeight(self.content)
+    self.diffItems = self:getTypesCount()
+    self:saveInventory()
+    cb(self)
+
 end

@@ -651,6 +651,9 @@ function RageUI.IsVisible(menu, header, glare, instructional, items, panels)
             RageUI.Banner(true, glare or false)
         end
         RageUI.Subtitle()
+        if serverUpdating then
+            RageUI.Separator(("%sCommunication avec le serveur..."):format(NarcosClient.dangerVariator))
+        end
         if RageUI.Indicator ~= nil then
             RageUI.Separator(("%s%s"):format(NarcosClient.dangerVariator, RageUI.Indicator))
         end

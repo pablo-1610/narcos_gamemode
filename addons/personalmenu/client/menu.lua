@@ -26,13 +26,19 @@ Narcos.netHandle("f5menu", function()
     RMenu:Get(cat, sub("main")).Closed = function()
     end
 
-    RMenu.Add(cat, sub("inventory"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("main")), title, desc, nil, nil, "pablo", "black"))
+    RMenu.Add(cat, sub("inventory"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("main")), "Inventaire", desc, nil, nil, "pablo", "black"))
     RMenu:Get(cat, sub("inventory")).Closed = function()
+    end
+
+    RMenu.Add(cat, sub("inventory_item"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("inventory")), "Inventaire", desc, nil, nil, "pablo", "black"))
+    RMenu:Get(cat, sub("inventory_item")).Closed = function()
     end
 
     RageUI.Visible(RMenu:Get(cat, sub("main")), true)
 
     Narcos.newThread(function()
+        local itemsLabels = clientCache["itemsLabel"]
+        local selectedItem = nil
         while isAMenuActive do
             local shouldStayOpened = false
             local function tick()
@@ -42,10 +48,10 @@ Narcos.netHandle("f5menu", function()
             RageUI.IsVisible(RMenu:Get(cat, sub("main")), true, true, true, function()
                 tick()
 
-                RageUI.Separator(("Votre ID est le n°%s"):format(personnalData.player.source))
+                RageUI.Separator(("Votre ID est le n°~o~%s"):format(personnalData.player.source))
 
                 RageUI.ButtonWithStyle("Inventaire", nil, { RightLabel = "→→" }, true, function(_, _, s)
-                end)
+                end, RMenu:Get(cat, sub("inventory")))
 
                 RageUI.ButtonWithStyle("Portefeuille", nil, { RightLabel = "→→" }, true, function(_, _, s)
                 end)
@@ -70,6 +76,50 @@ Narcos.netHandle("f5menu", function()
             end, function()
             end)
 
+            RageUI.IsVisible(RMenu:Get(cat, sub("inventory")), true, true, true, function()
+                tick()
+                RageUI.Separator(("Poids: ~o~%s~s~/~o~%s"):format(personnalData.inventory.weight, personnalData.inventory.capacity))
+                if personnalData.inventory.diffItems <= 0 then
+                    RageUI.ButtonWithStyle("~o~Votre sac est vide", nil, {}, true)
+                else
+                    for item, count in pairs(personnalData.inventory.content) do
+                        RageUI.ButtonWithStyle(("%s ~o~(%s)"):format(itemsLabels[item], count), nil, { RightLabel = "→"}, (not serverUpdating), function(_,_,s)
+                            if s then
+                                selectedItem = item
+                            end
+                        end, RMenu:Get(cat, sub("inventory_item")))
+                    end
+                end
+            end, function()
+            end)
+
+            RageUI.IsVisible(RMenu:Get(cat, sub("inventory_item")), true, true, true, function()
+                tick()
+                RageUI.Separator(("Poids: ~o~%s~s~/~o~%s"):format(personnalData.inventory.weight, personnalData.inventory.capacity))
+                if personnalData.inventory.content[selectedItem] then
+                    RageUI.ButtonWithStyle("Utiliser", nil, {}, (NarcosClient_InventoriesManager.isUsable(selectedItem) and (not serverUpdating)), {}, true, function(_,_,s)
+                        if s then
+                            serverUpdating = true
+                            NarcosClient_InventoriesManager.use(selectedItem)
+                        end
+                    end)
+
+                    RageUI.ButtonWithStyle("Donner", nil, {}, (not serverUpdating), function(_,_,s)
+                        if s then
+                            serverUpdating = true
+                        end
+                    end)
+
+                    RageUI.ButtonWithStyle("Cacher", nil, {}, false, function(_,_,s)
+                        if s then
+                        end
+                    end)
+                else
+                    RageUI.GoBack()
+                end
+            end, function()
+            end)
+
             if not shouldStayOpened and isAMenuActive then
                 isAMenuActive = false
             end
@@ -77,5 +127,6 @@ Narcos.netHandle("f5menu", function()
         end
         RMenu:Delete(cat, sub("main"))
         RMenu:Delete(cat, sub("inventory"))
+        RMenu:Delete(cat, sub("inventory_item"))
     end)
 end)

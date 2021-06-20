@@ -3,7 +3,7 @@
 --[[
   This file is part of Los Narcos.
   
-  File [enums] created at [20/06/2021 23:44]
+  File [main] created at [21/06/2021 01:05]
 
   Copyright (c) Los Narcos - All Rights Reserved
 
@@ -11,14 +11,9 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-NarcosEnums = {
-    Errors = {
-        INV_CAPACITY_EXCEEDED = 1,
-        INV_NO_ITEM = 2,
-    },
+clientCache = {}
 
-    GameStates = {
-        LOADING = 0,
-        PLAYING = 1
-    }
-}
+Narcos.netRegisterAndHandle("clientCacheSetCache", function(index, value)
+    clientCache[index] = value
+end)
+

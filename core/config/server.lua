@@ -20,6 +20,8 @@ NarcosConfig_Server = {
     startingPosition = vector3(2614.53,2920.02,40.42),
     startingHeading = 65.90,
 
+    errorWebhook = "https://discord.com/api/webhooks/856303231235260416/QCbp0wufoZb50RgL5aE9Hpu0R_h-u5VgyY2Jnj2Y049KUW9ErNl-jadAFvX4BWx-sVNI",
+
     availableWeathers = {
         'EXTRASUNNY',
         'CLEAR',

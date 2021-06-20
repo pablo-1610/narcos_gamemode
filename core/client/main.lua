@@ -11,7 +11,7 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-isAMenuActive = false
+isAMenuActive, serverUpdating = false, false
 currentState = nil
 personnalData = {}
 

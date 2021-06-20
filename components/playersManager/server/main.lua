@@ -91,6 +91,7 @@ end
 
 Narcos.netRegisterAndHandle("playerJoined", function()
     local _src = source
+    Narcos.toInternal("sendCaches", _src)
     ---@type Player
     local player = NarcosServer_PlayersManager.get(_src)
     if player:getIsNewPlayer() then
@@ -122,7 +123,7 @@ AddEventHandler("playerConnecting", function(name, _, deferrals)
     local identifiers = NarcosServer.getIdentifiers(source)
     deferrals.update("Vérification de vos identifiants...")
     Wait(500)
-    if not identifiers['fivem'] then
+    if not identifiers['license'] then
         deferrals.done("Impossible de trouver votre licence RockStar, veuillez réessayer !")
     end
     deferrals.done()

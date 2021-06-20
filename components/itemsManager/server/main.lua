@@ -25,6 +25,15 @@ NarcosServer_ItemsManager.get = function(itemName)
     return NarcosServer_ItemsManager.list[itemName]
 end
 
+NarcosServer_ItemsManager.getItemWeight = function(itemName)
+    if not NarcosServer_ItemsManager.exists(itemName) then
+        return
+    end
+    ---@type Item
+    local item = NarcosServer_ItemsManager.get(itemName)
+    return item.weight
+end
+
 Narcos.netHandle("sideLoaded", function()
     MySQL.Async.fetchAll("SELECT * FROM items", {}, function(result)
         local tot = 0

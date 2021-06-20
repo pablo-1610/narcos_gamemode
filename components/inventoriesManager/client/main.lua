@@ -10,3 +10,21 @@
   Unauthorized using, copying, modifying and/or distributing of this file,
   via any medium is strictly prohibited. This code is confidential.
 --]]
+
+NarcosClient_InventoriesManager = {}
+NarcosClient_InventoriesManager.usable = {}
+
+NarcosClient_InventoriesManager.isUsable = function(item)
+    return NarcosClient_InventoriesManager.usable[item] ~= nil
+end
+
+NarcosClient_InventoriesManager.registerUsable = function(item, onUse)
+    NarcosClient_InventoriesManager.usable[item] = onUse
+end
+
+NarcosClient_InventoriesManager.use = function(item)
+    if not NarcosClient_InventoriesManager.isUsable(item) then
+        return
+    end
+    NarcosClient_InventoriesManager.usable[item]()
+end

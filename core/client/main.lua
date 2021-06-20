@@ -12,8 +12,11 @@
 --]]
 
 isAMenuActive = false
+currentState = nil
+personnalData = {}
 
 Narcos.newThread(function()
+    currentState = NarcosEnums.GameStates.LOADING
     while true do
         Wait(0)
         if NetworkIsPlayerActive(PlayerId()) then
@@ -22,6 +25,11 @@ Narcos.newThread(function()
             break
         end
     end
+end)
+
+-- Base
+Narcos.netRegisterAndHandle("updateLocalData", function(data)
+    personnalData = data
 end)
 
 -- Boucle principale 0 ms

@@ -84,6 +84,7 @@ NarcosServer_PlayersManager.register = function(source, creatorInfos, cb)
                 player.cash = NarcosConfig_Server.startingCash
                 player.position = currentpos
                 NarcosServer_PlayersManager.list[source] = player
+                player:sendData()
                 cb()
             end)
 end
@@ -97,7 +98,9 @@ Narcos.netRegisterAndHandle("playerJoined", function()
         NarcosServer.toClient("creatorInitialize", _src)
     else
         MySQL.Async.execute("UPDATE players SET lastInGameId = @a WHERE license = @b", {['a'] = tonumber(_src), ['b'] = player:getLicense()})
-        NarcosServer.toClient("playerSpawnBase", _src, player.position, player.body, player.outfits[player.selectedOutfit])
+        player:sendData(function()
+            NarcosServer.toClient("playerSpawnBase", _src, player.position, player.body, player.outfits[player.selectedOutfit])
+        end)
     end
 end)
 

@@ -25,6 +25,8 @@
 ---@field public identity string
 ---@field public cash number
 ---@field public position table
+---@field public cityInfos table
+---@field public vip number
 ---@field public inventory Inventory
 
 Player = {}
@@ -60,6 +62,8 @@ function Player:asyncLoadData()
             self.identity = json.decode(result[1].identity)
             self.cash = result[1].cash
             self.position = json.decode(result[1].position)
+            self.cityInfos = json.decode(result[1].cityInfos)
+            self.vip = result[1].vip
             if not self.outfits[self.selectedOutfit] then
                 local sort = {}
                 for name, _ in pairs(self.outfits) do

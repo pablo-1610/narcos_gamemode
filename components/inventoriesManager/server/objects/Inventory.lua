@@ -91,13 +91,16 @@ function Inventory:canAddItem(item, qty)
     if not NarcosServer_ItemsManager.exists(item) then
         return
     end
-    local fakeContent = self.content
-    if not fakeContent[item] then
-        fakeContent[item] = 0
+    local fakeContent2 = self.content
+    if not fakeContent2[item] then
+        fakeContent2[item] = 0
     end
-    fakeContent[item] = (fakeContent[item] + qty)
-    local fakeWeight = self:calcWeight(fakeContent)
+    fakeContent2[item] = (fakeContent2[item] + qty)
+    return true
+    --[[
+    local fakeWeight = self:calcWeight(fakeContent2)
     return (fakeWeight <= self.capacity)
+    --]]
 end
 
 ---addItem

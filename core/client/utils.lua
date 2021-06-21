@@ -131,7 +131,6 @@ NarcosClient.PlayerHeler = {
     isStaff = function(precise)
         if precise == nil then
             local rank = personnalData.player.rank.id
-            print(rank)
             return (rank ~= "default" and rank ~= "vip" and rank ~= "vip+")
         else
             return (rank == precise)

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 21 juin 2021 à 04:02
+-- Généré le : lun. 21 juin 2021 à 04:22
 -- Version du serveur :  10.4.18-MariaDB
 -- Version de PHP : 8.0.3
 
@@ -75,7 +75,8 @@ CREATE TABLE `players` (
   `cash` int(11) NOT NULL COMMENT 'Argent (liquide) du joueur',
   `position` text NOT NULL COMMENT 'La dernière position du joueur',
   `vip` int(11) NOT NULL COMMENT 'Statut vip du joueur',
-  `vip_time` int(11) NOT NULL COMMENT 'Temps d''échéance du vip'
+  `vip_time` int(11) NOT NULL COMMENT 'Temps d''échéance du vip',
+  `loadout` text NOT NULL COMMENT 'Armes du joueur'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -141,7 +142,7 @@ ALTER TABLE `ranks`
 -- AUTO_INCREMENT pour la table `players`
 --
 ALTER TABLE `players`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id unique du joueur (utilisé pour la boutique)', AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id unique du joueur (utilisé pour la boutique)', AUTO_INCREMENT=20;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

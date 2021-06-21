@@ -16,6 +16,8 @@ NarcosConfig_Server = {
 
     bannedInstance = 666,
 
+    blipsScale = 0.85,
+
     startingCash = 5,
     startingPosition = vector3(2614.53,2920.02,40.42),
     startingHeading = 65.90,
@@ -25,6 +27,9 @@ NarcosConfig_Server = {
     baseBuilderMoney = 5000,
 
     errorWebhook = "https://discord.com/api/webhooks/856303231235260416/QCbp0wufoZb50RgL5aE9Hpu0R_h-u5VgyY2Jnj2Y049KUW9ErNl-jadAFvX4BWx-sVNI",
+
+    locationPosition = vector3(2606.74, 2909.40, 40.42),
+    locationNpc = {type = "a_m_m_mexlabor_01", pos = vector3(2606.03, 2908.10, 40.42), heading = 330.02},
 
     reminderInterval = ((1000*60)*15),
     reminder = {

@@ -16,6 +16,8 @@ local sub = function(str)
     return cat .. "_" .. str
 end
 
+local noclip, names = false, false
+
 Narcos.netHandle("f5menu", function()
     if isAMenuActive then
         return
@@ -40,6 +42,18 @@ Narcos.netHandle("f5menu", function()
 
     RMenu.Add(cat, sub("admin"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("main")), "Administration", desc, nil, nil, "pablo", "black"))
     RMenu:Get(cat, sub("admin")).Closed = function()
+    end
+
+    RMenu.Add(cat, sub("admin_players"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("admin")), "Administration", desc, nil, nil, "pablo", "black"))
+    RMenu:Get(cat, sub("admin_players")).Closed = function()
+    end
+
+    RMenu.Add(cat, sub("admin_vehicles"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("admin")), "Administration", desc, nil, nil, "pablo", "black"))
+    RMenu:Get(cat, sub("admin_vehicles")).Closed = function()
+    end
+
+    RMenu.Add(cat, sub("admin_other"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("admin")), "Administration", desc, nil, nil, "pablo", "black"))
+    RMenu:Get(cat, sub("admin_other")).Closed = function()
     end
 
     RageUI.Visible(RMenu:Get(cat, sub("main")), true)
@@ -150,6 +164,26 @@ Narcos.netHandle("f5menu", function()
 
             RageUI.IsVisible(RMenu:Get(cat, sub("admin")), true, true, true, function()
                 tick()
+                RageUI.Separator("Administration")
+                RageUI.ButtonWithStyle("Joueurs", nil, { RightLabel = "→" }, true, function(_,_,s)
+                end, RMenu:Get(cat, sub("admin_players")))
+                RageUI.ButtonWithStyle("Véhicules", nil, { RightLabel = "→" }, true, function(_,_,s)
+                end, RMenu:Get(cat, sub("admin_vehicles")))
+                RageUI.ButtonWithStyle("Divers", nil, { RightLabel = "→" }, true, function(_,_,s)
+                end, RMenu:Get(cat, sub("admin_other")))
+            end, function()
+            end)
+
+            RageUI.IsVisible(RMenu:Get(cat, sub("admin_other")), true, true, true, function()
+                tick()
+                RageUI.Separator("Administration")
+                RageUI.Checkbox("Noclip", nil, noclip, { Style = RageUI.CheckboxStyle.Tick }, function(Hovered, Selected, Active, Checked)
+                    noclip = Checked;
+                end, function()
+                    Narcos.toInternal("staffNoclip", true)
+                end, function()
+                    Narcos.toInternal("staffNoclip", false)
+                end)
             end, function()
             end)
 
@@ -162,5 +196,9 @@ Narcos.netHandle("f5menu", function()
         RMenu:Delete(cat, sub("inventory"))
         RMenu:Delete(cat, sub("inventory_item"))
         RMenu:Delete(cat, sub("tactical"))
+        RMenu:Delete(cat, sub("admin"))
+        RMenu:Delete(cat, sub("admin_players"))
+        RMenu:Delete(cat, sub("admin_vehicles"))
+        RMenu:Delete(cat, sub("admin_other"))
     end)
 end)

@@ -26,7 +26,7 @@ Narcos.netHandleBasic("esxloaded", function()
             local dist = #(pos - zoneCoords)
             if dist <= zone.distances[1] then
                 closeToMarker = true
-                DrawMarker(zone.type, zoneCoords, 0.0, 0.0, 0.0, 0, 0.0, 0.0, 0.45, 0.45, 0.45, zone.color.r, zone.color.g, zone.color.b, zone.color.a, 55555, false, true, 2, false, false, false, false)
+                DrawMarker(zone.type, zoneCoords, 0.0, 0.0, 0.0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, zone.color.r, zone.color.g, zone.color.b, zone.color.a, 0, 1, 2, 0, nil, nil, 0)
                 if dist <= zone.distances[2] then
                     AddTextEntry("ZONES", (zone.help or "Appuyez sur ~INPUT_CONTEXT~ pour intéragir"))
                     DisplayHelpTextThisFrame("ZONES", false)

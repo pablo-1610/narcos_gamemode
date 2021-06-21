@@ -177,6 +177,18 @@ NarcosClient.PlayerHeler = {
         end
 
         return pCloset, pClosetDst
+    end,
+
+
+    getCamDirection = function()
+        local heading = GetGameplayCamRelativeHeading() + GetEntityHeading(PlayerPedId())
+        local pitch = GetGameplayCamRelativePitch()
+        local coords = vector3(-math.sin(heading * math.pi / 180.0), math.cos(heading * math.pi / 180.0), math.sin(pitch * math.pi / 180.0))
+        local len = math.sqrt((coords.x * coords.x) + (coords.y * coords.y) + (coords.z * coords.z))
+        if len ~= 0 then
+            coords = coords / len
+        end
+        return coords
     end
 }
 

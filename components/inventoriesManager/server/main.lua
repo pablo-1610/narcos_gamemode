@@ -91,6 +91,8 @@ Narcos.netRegisterAndHandle("inventoryGiveItem", function(item, qty, targetId)
             end, qty)
         end, qty)
     else
+        NarcosServer.toClient("serverReturnedCb", _src)
+        NarcosServer.toClient("serverReturnedCb", targetId)
         player:showAdvancedNotification("Inventaire","~r~Action impossible","La personne n'a pas assez de place dans son inventaire","CHAR_ARTHUR",1)
     end
 end)

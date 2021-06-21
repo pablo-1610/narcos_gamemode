@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.6deb4+deb9u2
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
--- Client :  localhost:3306
--- Généré le :  Lun 21 Juin 2021 à 03:59
--- Version du serveur :  10.1.48-MariaDB-0+deb9u2
--- Version de PHP :  7.0.33-0+deb9u10
+-- Hôte : 127.0.0.1
+-- Généré le : lun. 21 juin 2021 à 04:02
+-- Version du serveur :  10.4.18-MariaDB
+-- Version de PHP : 8.0.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -17,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `narcos_dev_nextgen`
+-- Base de données : `narcos`
 --
 
 -- --------------------------------------------------------
@@ -34,14 +35,6 @@ CREATE TABLE `inventories` (
   `content` text NOT NULL COMMENT 'Contenu de l''inventaire'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Contenu de la table `inventories`
---
-
-INSERT INTO `inventories` (`identifier`, `label`, `capacity`, `type`, `content`) VALUES
-('license:8fc3f9bf5017c451d19593ae7d1105989d6635e0', 'Sac de pablo_1610', 1500, 1, '{\"bread\":108,\"water\":210}'),
-('license:9c4257c03d483d6f117b7b615a88fabba8f4f244', 'Sac de SpaceX', 10, 1, '{}');
-
 -- --------------------------------------------------------
 
 --
@@ -55,7 +48,7 @@ CREATE TABLE `items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Contenu de la table `items`
+-- Déchargement des données de la table `items`
 --
 
 INSERT INTO `items` (`name`, `label`, `weight`) VALUES
@@ -81,17 +74,9 @@ CREATE TABLE `players` (
   `cityInfos` text NOT NULL COMMENT 'Les informations RP du joueurs (job et orga)',
   `cash` int(11) NOT NULL COMMENT 'Argent (liquide) du joueur',
   `position` text NOT NULL COMMENT 'La dernière position du joueur',
-  `vip` int(11) NOT NULL,
-  `vip_time` int(11) NOT NULL
+  `vip` int(11) NOT NULL COMMENT 'Statut vip du joueur',
+  `vip_time` int(11) NOT NULL COMMENT 'Temps d''échéance du vip'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Contenu de la table `players`
---
-
-INSERT INTO `players` (`id`, `lastInGameId`, `license`, `rank`, `name`, `body`, `outfits`, `selectedOutfit`, `identity`, `cityInfos`, `cash`, `position`, `vip`, `vip_time`) VALUES
-(16, 2, 'license:9c4257c03d483d6f117b7b615a88fabba8f4f244', 'default', 'SpaceX', '{\"beard_1\":0,\"hair_color_2\":0,\"hair_2\":0,\"skin\":0,\"hair_color_1\":0,\"beard_4\":0,\"sex\":0,\"eyebrows_4\":0,\"eyebrows_3\":0,\"age_2\":0,\"face\":0,\"age_1\":0,\"hair_1\":0,\"eyebrows_2\":0,\"eyebrows_1\":0,\"beard_3\":0,\"beard_2\":0}', '{\"Explorateur\":{\"moles_2\":0,\"bracelets_2\":0,\"chest_2\":0,\"shoes_1\":5,\"arms_2\":0,\"makeup_2\":0,\"eye_color\":0,\"bproof_2\":0,\"tshirt_1\":2,\"bproof_1\":0,\"shoes_2\":0,\"ears_2\":0,\"chest_3\":0,\"arms\":14,\"watches_2\":0,\"blush_2\":0,\"mask_1\":0,\"decals_1\":0,\"bracelets_1\":-1,\"blush_1\":0,\"blush_3\":0,\"decals_2\":0,\"bodyb_1\":0,\"complexion_1\":0,\"sun_1\":0,\"torso_1\":49,\"makeup_1\":0,\"helmet_1\":-1,\"bags_2\":0,\"pants_2\":5,\"lipstick_2\":0,\"blemishes_1\":0,\"chest_1\":0,\"torso_2\":0,\"mask_2\":0,\"tshirt_2\":0,\"ears_1\":-1,\"sun_2\":0,\"helmet_2\":0,\"glasses_1\":0,\"bags_1\":0,\"pants_1\":110,\"makeup_4\":0,\"makeup_3\":0,\"chain_2\":0,\"lipstick_3\":0,\"chain_1\":0,\"moles_1\":0,\"bodyb_2\":0,\"lipstick_4\":0,\"glasses_2\":0,\"complexion_2\":0,\"watches_1\":-1,\"blemishes_2\":0,\"lipstick_1\":0}}', 'Explorateur', '{\"firstname\":\"Dip\",\"age\":22,\"lastname\":\"Space\"}', '', 5, '{\"heading\":321.01446533203127,\"pos\":{\"x\":2607.80517578125,\"y\":2920.695556640625,\"z\":39.68591690063476}}', 0, 0),
-(17, 1, 'license:8fc3f9bf5017c451d19593ae7d1105989d6635e0', 'default', 'pablo_1610', '{\"beard_2\":0,\"hair_color_2\":0,\"hair_2\":0,\"skin\":0,\"hair_color_1\":0,\"beard_4\":0,\"sex\":1,\"eyebrows_4\":0,\"eyebrows_3\":0,\"age_2\":0,\"face\":0,\"age_1\":0,\"hair_1\":0,\"beard_1\":0,\"eyebrows_1\":0,\"eyebrows_2\":0,\"beard_3\":0}', '{\"Explorateur\":{\"moles_2\":0,\"bracelets_2\":0,\"chest_2\":0,\"shoes_1\":5,\"arms_2\":0,\"makeup_2\":0,\"eye_color\":0,\"torso_2\":0,\"makeup_4\":0,\"bproof_1\":0,\"shoes_2\":0,\"ears_2\":0,\"torso_1\":15,\"arms\":15,\"chest_3\":0,\"bproof_2\":0,\"mask_1\":0,\"decals_1\":0,\"blush_2\":0,\"pants_2\":0,\"blush_3\":0,\"decals_2\":0,\"bodyb_1\":0,\"complexion_1\":0,\"bracelets_1\":-1,\"tshirt_1\":15,\"blush_1\":0,\"watches_2\":0,\"bags_2\":0,\"chest_1\":0,\"lipstick_2\":0,\"blemishes_1\":0,\"tshirt_2\":0,\"lipstick_3\":0,\"pants_1\":15,\"helmet_1\":-1,\"ears_1\":-1,\"sun_2\":0,\"helmet_2\":0,\"glasses_1\":0,\"bags_1\":0,\"mask_2\":0,\"lipstick_1\":0,\"makeup_3\":0,\"chain_2\":0,\"makeup_1\":0,\"chain_1\":0,\"moles_1\":0,\"bodyb_2\":0,\"lipstick_4\":0,\"glasses_2\":0,\"complexion_2\":0,\"watches_1\":-1,\"sun_1\":0,\"blemishes_2\":0}}', 'Explorateur', '{\"firstname\":\"Pablo\",\"age\":45,\"lastname\":\"Barillas\"}', '', 5, '{\"heading\":88.33209991455078,\"pos\":{\"x\":2592.93701171875,\"y\":2908.732177734375,\"z\":38.59630584716797}}', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -107,7 +92,7 @@ CREATE TABLE `ranks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Contenu de la table `ranks`
+-- Déchargement des données de la table `ranks`
 --
 
 INSERT INTO `ranks` (`id`, `label`, `color`, `permissions`) VALUES
@@ -121,7 +106,7 @@ INSERT INTO `ranks` (`id`, `label`, `color`, `permissions`) VALUES
 ('vip+', 'VIP+', '^7', '[]');
 
 --
--- Index pour les tables exportées
+-- Index pour les tables déchargées
 --
 
 --
@@ -149,7 +134,7 @@ ALTER TABLE `ranks`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT pour les tables exportées
+-- AUTO_INCREMENT pour les tables déchargées
 --
 
 --
@@ -157,6 +142,8 @@ ALTER TABLE `ranks`
 --
 ALTER TABLE `players`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id unique du joueur (utilisé pour la boutique)', AUTO_INCREMENT=18;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

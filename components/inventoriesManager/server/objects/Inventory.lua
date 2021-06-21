@@ -59,7 +59,8 @@ end
 ---@public
 ---@return number
 function Inventory:calcWeight(incomingContent)
-    if not incomingContent then
+    if incomingContent == nil then
+        print("Incoming content is nil")
         incomingContent = self.content
     end
     local total = 0
@@ -84,7 +85,6 @@ end
 ---@public
 ---@return function
 function Inventory:canAddItem(item, qty)
-    --[[
     if qty == nil then
         qty = 1
     end
@@ -92,15 +92,18 @@ function Inventory:canAddItem(item, qty)
     if not NarcosServer_ItemsManager.exists(item) then
         return
     end
-    local fakeContent2 = self.content
-    if not fakeContent2[item] then
-        fakeContent2[item] = 0
+
+    local fake = {}
+    for k, v in pairs(self.content) do
+        fake[k] = v
     end
-    fakeContent2[item] = (fakeContent2[item] + qty)
-    local fakeWeight = self:calcWeight(fakeContent2)
-    return (fakeWeight <= self.capacity)
-    --]]
-    return true
+
+    if not fake[item] then
+        fake[item] = 0
+    end
+    fake[item] = (fake[item] + qty)
+
+    return (self:calcWeight(fake) <= self.capacity)
 end
 
 ---addItem

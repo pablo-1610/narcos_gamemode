@@ -15,6 +15,12 @@ Narcos.netRegisterAndHandle("playerSpawnBase", function(position, body, outfit)
     NarcosClient.PlayerHeler.spawnPlayer({x = position.pos.x, y = position.pos.y, z = position.pos.z, heading = position.heading}, true, function()
 
     end, function()
+        if body["sex"] == 0 then
+            local model = GetHashKey("mp_f_freemode_01")
+            RequestModel(model)
+            while not HasModelLoaded(model) do Wait(1) end
+            SetPlayerModel(PlayerId(), model)
+        end
         Narcos.toInternal("setSaver", true)
         currentState = NarcosEnums.GameStates.PLAYING
         NarcosClient_SkinManager.loadSkin(body)

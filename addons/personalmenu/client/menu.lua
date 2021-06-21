@@ -44,7 +44,7 @@ Narcos.netHandle("f5menu", function()
             local closestPlayer, closestPlayerDist = NarcosClient.PlayerHeler.getClosestPlayer()
 
             local function haveClosestPlayer()
-                return (closestPlayer ~= nil) and (closestPlayerDist <= 0.6)
+                return (closestPlayer ~= nil) and (closestPlayerDist <= 1.5)
             end
 
             local function getClosestPlayerId()
@@ -120,7 +120,7 @@ Narcos.netHandle("f5menu", function()
                     RageUI.ButtonWithStyle("Donner", nil, {}, (haveClosestPlayer()) and (not serverUpdating), function(_,_,s)
                         if s then
                             local qty = NarcosClient.InputHelper.showBox("Quantité", "", 5, true)
-                            if qty ~= nil and qty > 0 then
+                            if qty ~= nil and tonumber(qty) > 0 then
                                 serverUpdating = true
                                 NarcosClient_InventoriesManager.give(selectedItem, qty, getClosestPlayerId())
                             end

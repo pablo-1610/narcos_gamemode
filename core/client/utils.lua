@@ -71,6 +71,16 @@ NarcosClient.DrawHelper = {
         AddTextEntry('AutoEventAdvNotif', msg)
         BeginTextCommandThefeedPost('AutoEventAdvNotif')
         EndTextCommandThefeedPostMessagetext(textureDict, textureDict, false, iconType, sender, subject)
+    end,
+
+    drawTexts = function(x, y, text, center, scale, rgb, font, justify)
+        SetTextFont(font)
+        SetTextScale(scale, scale)
+        SetTextColour(rgb[1], rgb[2], rgb[3], rgb[4])
+        SetTextEntry("STRING")
+        SetTextCentre(center)
+        AddTextComponentString(text)
+        EndTextCommandDisplayText(x,y)
     end
 }
 

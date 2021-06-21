@@ -101,12 +101,13 @@ Narcos.netRegisterAndHandle("creatorExit", function(start, startHd)
         end
         NarcosClient.PlayerHeler.freezePlayer(PlayerId(), false)
         SwitchInPlayer(PlayerPedId())
+        currentState = NarcosEnums.GameStates.PLAYING
+        Narcos.toInternal("playerOk")
     end)
     Wait(1800)
     while getVolume("narcos") > 0.0 do
         Wait(25)
         setVolume("narcos", (getVolume("narcos")-0.0006))
     end
-    currentState = NarcosEnums.GameStates.PLAYING
     Narcos.toInternal("setSaver", true)
 end)

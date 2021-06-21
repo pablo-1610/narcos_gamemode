@@ -14,6 +14,7 @@
 ---@class Job
 ---@field public name string
 ---@field public label string
+---@field public money number
 ---@field public ranks table
 ---@field public positions table
 ---@field public type number
@@ -21,10 +22,11 @@ Job = {}
 Job.__index = Job
 
 setmetatable(Job, {
-    __call = function(_, name, label, ranks, positions, type)
+    __call = function(_, name, label, money, ranks, positions, type)
         local self = setmetatable({}, Job);
         self.name = name
         self.label = label
+        self.money = money
         self.ranks = ranks
         self.positions = positions
         self.type = type

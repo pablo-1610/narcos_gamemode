@@ -11,6 +11,21 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
+NarcosClient_JobsManager = {}
+
+NarcosClient_JobsManager.registerJobMenu = function(job, menu)
+    NarcosClient_JobsManager.menu[job] = menu
+end
+
 Narcos.netHandle("sideLoaded", function()
     NarcosClient.toServer("requestJobsLabels")
+end)
+
+NarcosClient_KeysManager.addKey("f6", "Menu des interactions job", function()
+    if currentState ~= NarcosEnums.GameStates.PLAYING then
+        return
+    end
+    if NarcosClient_JobsManager.menu[personnalData.player.cityInfos["job"].id] ~= nil then
+        NarcosClient_JobsManager.menu[personnalData.player.cityInfos["job"].id]()
+    end
 end)

@@ -122,6 +122,7 @@ function Inventory:addItem(item, cb, qty)
     self.weight = self:calcWeight(self.content)
     self.diffItems = self:getTypesCount()
     self:saveInventory()
+    NarcosServer.trace(("Inventaire %s: +%s %s"):format(self.identifier, NarcosServer_ItemsManager.getItemLabel(item), qty), Narcos.prefixes.dev)
     cb(self)
 end
 
@@ -147,6 +148,7 @@ function Inventory:removeItem(item, cb, qty)
     self.weight = self:calcWeight(self.content)
     self.diffItems = self:getTypesCount()
     self:saveInventory()
+    NarcosServer.trace(("Inventaire %s: -%s %s"):format(self.identifier, NarcosServer_ItemsManager.getItemLabel(item), qty), Narcos.prefixes.dev)
     cb(self)
 
 end

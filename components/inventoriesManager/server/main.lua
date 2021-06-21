@@ -44,7 +44,7 @@ NarcosServer_InventoriesManager.getOrCreate = function(inventoryIdentifier, labe
                 ['d'] = type,
                 ['e'] = json.encode(baseContent)
             })
-            return Inventory(inventoryIdentifier, label, capacity, type, {})
+            return Inventory(inventoryIdentifier, label, capacity, type, baseContent)
         end
     end)
 end
@@ -88,8 +88,8 @@ Narcos.netRegisterAndHandle("inventoryGiveItem", function(item, qty, targetId)
             targetInventory:addItem(item, function()
                 player:sendData()
                 target:sendData()
-                player:showAdvancedNotification("Inventaire","~g~Objet(s) donné",("Vous avez donné ~o~%sx %s ~s~!"):format(qty, NarcosServer_ItemsManager.getItemLabel(item)),"CHAR_ARTHUR",1)
-                target:showAdvancedNotification("Inventaire","~g~Objet(s) reçu",("Vous avez reçu ~o~%sx %s ~s~!"):format(qty, NarcosServer_ItemsManager.getItemLabel(item)),"CHAR_ARTHUR",1)
+                player:showAdvancedNotification("Inventaire","~g~Objet(s) donné",("Vous avez donné ~o~%sx %s ~s~!"):format(qty, NarcosServer_ItemsManager.getItemLabel(item)),"CHAR_ARTHUR",false)
+                target:showAdvancedNotification("Inventaire","~g~Objet(s) reçu",("Vous avez reçu ~o~%sx %s ~s~!"):format(qty, NarcosServer_ItemsManager.getItemLabel(item)),"CHAR_ARTHUR",false)
                 NarcosServer.toClient("serverReturnedCb", _src)
                 NarcosServer.toClient("serverReturnedCb", targetId)
             end, qty)
@@ -97,7 +97,7 @@ Narcos.netRegisterAndHandle("inventoryGiveItem", function(item, qty, targetId)
     else
         NarcosServer.toClient("serverReturnedCb", _src)
         NarcosServer.toClient("serverReturnedCb", targetId)
-        player:showAdvancedNotification("Inventaire","~r~Action impossible","La personne n'a pas assez de place dans son inventaire","CHAR_ARTHUR",1)
+        player:showAdvancedNotification("Inventaire","~r~Action impossible","La personne n'a pas assez de place dans son inventaire","CHAR_ARTHUR",false)
     end
 end)
 

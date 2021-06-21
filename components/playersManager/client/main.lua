@@ -21,6 +21,8 @@ Narcos.netRegisterAndHandle("playerSpawnBase", function(position, body, outfit)
             while not HasModelLoaded(model) do Wait(1) end
             SetPlayerModel(PlayerId(), model)
             ClearAllPedProps(PlayerPedId())
+            Wait(1800)
+            ClearAllPedProps(PlayerPedId())
         end
         Narcos.toInternal("setSaver", true)
         currentState = NarcosEnums.GameStates.PLAYING

@@ -46,6 +46,7 @@ NarcosClient_SyncManager.stopOverrideBoth = function()
 end
 
 Narcos.netHandle("sideLoaded", function()
+    PauseClock(true)
     NarcosClient.toServer("requestOneSync")
 end)
 

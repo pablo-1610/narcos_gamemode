@@ -32,8 +32,9 @@ NarcosConfig_Server = {
     locationNpc = {type = "a_m_m_mexlabor_01", pos = vector3(2606.03, 2908.10, 40.42), heading = 330.02},
 
     locationVehicles = {
-        {title = "Moto douteuse", desc = "Cette moto peut faire l'affaire, bien qu'elle semble avoir déjà beaucoup servie...", price = 2, vip = false},
-        {title = "Voiture (presque) neuve", desc = "Une belle voiture ! Que rêver de mieux ?", price = 1, vip = false}
+        {model = "bmx", title = "Le vélo de course", desc = "Je l'ai monté moi même ! Reconditionné à neuf.", price = 0, vip = false},
+        {model = "ratbike", title = "La moto douteuse", desc = "Cette moto peut faire l'affaire, bien qu'elle semble avoir déjà beaucoup servie...", price = 10, vip = false},
+        {model = "blazer4", title = "Le quad des narcos", desc = "Très utile pour une balade dans les champs de canabis !", price = 20, vip = true}
     },
 
     reminderInterval = ((1000*60)*15),

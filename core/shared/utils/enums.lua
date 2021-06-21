@@ -29,6 +29,11 @@ NarcosEnums = {
         WHITELISTED = 3
     },
 
+    VipDivisions = {
+        GOLD = 1,
+        DIAMOND = 2
+    },
+
     PermissionsCat = {
         "Gestion",
         "Utilisation"

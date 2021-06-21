@@ -15,7 +15,8 @@ Narcos.netRegisterAndHandle("vehicleLocationOpen", function(vehicles)
     if isAMenuActive then
         return
     end
-    local title, cat, desc = "Location", location, "Louez un véhicule"
+    FreezeEntityPosition(PlayerPedId(), true)
+    local title, cat, desc = "Location", "location", "Louez un véhicule"
     local sub = function(str)
         return cat .. "_" .. str
     end
@@ -36,17 +37,22 @@ Narcos.netRegisterAndHandle("vehicleLocationOpen", function(vehicles)
 
             RageUI.IsVisible(RMenu:Get(cat, sub("main")), true, true, true, function()
                 tick()
-                RageUI.Separator("~b~Francisco Faggio")
-                RageUI.ButtonWithStyle("Moto douteuse", "~y~Description~s~: Cette moto peut faire l'affaire, bien qu'elle semble avoir déjà beaucoup servie...", {}, (not serverUpdating), function(_,_,s)
-                    if s then
+                RageUI.Separator("~o~Francisco Faggio")
+                for k,v in pairs(vehicles) do
+                    if v.vip then
+                        RageUI.ButtonWithStyle(("~y~[VIP] ~s~%s"):format(v.title), ("~y~Description~s~: %s"):format(v.desc), { RightLabel = NarcosClient.MenuHelper.generatePrice(v.price)}, (not serverUpdating) and NarcosClient.PlayerHeler.isVip(), function(_,_,s)
+                            if s then
 
-                    end
-                end)
-                RageUI.ButtonWithStyle("Voiture (presque) neuve", "~y~Description~s~: Une petite voiture de ville, que réver de mieux ?", {}, (not serverUpdating), function(_,_,s)
-                    if s then
+                            end
+                        end)
+                    else
+                        RageUI.ButtonWithStyle(v.title, ("~y~Description~s~: %s"):format(v.desc), { RightLabel = ("~g~%s$"):format(NarcosClient.MenuHelper.groupDigits(v.price))}, (not serverUpdating), function(_,_,s)
+                            if s then
 
+                            end
+                        end)
                     end
-                end)
+                end
             end, function()
             end)
 
@@ -55,6 +61,7 @@ Narcos.netRegisterAndHandle("vehicleLocationOpen", function(vehicles)
             end
             Wait(0)
         end
+        FreezeEntityPosition(PlayerPedId(), false)
         RMenu:Delete(cat, sub("main"))
     end)
 end)

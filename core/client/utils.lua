@@ -15,6 +15,14 @@ NarcosClient = {}
 
 -- MenuHelper
 NarcosClient.MenuHelper = {
+    generatePrice = function(price)
+        if price <= 0 then
+            return "~g~Gratuit"
+        else
+            return ("~g~%s$"):format(NarcosClient.MenuHelper.groupDigits(price))
+        end
+    end,
+
     alert = nil,
 
     defineLabelString = function(valueToCheck)
@@ -39,6 +47,12 @@ NarcosClient.MenuHelper = {
         else
             return "~s~"
         end
+    end,
+
+    groupDigits = function(value)
+        local left, num, right = string.match(value, '^([^%d]*%d)(%d*)(.-)$')
+
+        return left .. (num:reverse():gsub('(%d%d%d)', '%1' .. "."):reverse()) .. right
     end
 }
 
@@ -60,7 +74,7 @@ NarcosClient.DrawHelper = {
     showBasicNotification = function(message)
         SetNotificationTextEntry('STRING')
         AddTextComponentString(message)
-        DrawNotification(0,1)
+        DrawNotification(0, 1)
     end,
 
     showAdvancedNotification = function(sender, subject, msg, textureDict, iconType, sound)
@@ -80,7 +94,7 @@ NarcosClient.DrawHelper = {
         SetTextEntry("STRING")
         SetTextCentre(center)
         AddTextComponentString(text)
-        EndTextCommandDisplayText(x,y)
+        EndTextCommandDisplayText(x, y)
     end
 }
 
@@ -97,6 +111,14 @@ end)
 
 -- PlayerHelper
 NarcosClient.PlayerHeler = {
+    isVip = function(division)
+        if division == nil then
+            return (personnalData.vip ~= 0)
+        else
+            return (personnalData.vip >= division)
+        end
+    end,
+
     freezePlayer = function(id, bool)
         local player = id
         SetPlayerControl(player, not bool, false)
@@ -127,7 +149,9 @@ NarcosClient.PlayerHeler = {
 
 
     spawnPlayer = function(selectedSpawn, blind, beforeReveal, afterReveal)
-        if blind then DoScreenFadeOut(0) end
+        if blind then
+            DoScreenFadeOut(0)
+        end
         NarcosClient.PlayerHeler.freezePlayer(PlayerId(), true)
         NarcosClient.requestModel("mp_m_freemode_01")
         SetPlayerModel(PlayerId(), Narcos.hash("mp_m_freemode_01"))
@@ -157,7 +181,7 @@ NarcosClient.PlayerHeler = {
         local pCloset = nil
         local pClosetPos = nil
         local pClosetDst = nil
-        for k,v in pairs(players) do
+        for k, v in pairs(players) do
             if GetPlayerPed(v) ~= PlayerPedId() then
                 local oPed = GetPlayerPed(v)
                 local oCoords = GetEntityCoords(oPed)
@@ -250,18 +274,24 @@ NarcosClient.InputHelper = {
     end,
 
     validateInputStringDefinition = function(valueToCheck)
-        if not valueToCheck then return false end
+        if not valueToCheck then
+            return false
+        end
         return (valueToCheck ~= nil and valueToCheck ~= "")
     end,
 
     validateInputStringRegex = function(valueToCheck, regex)
-        if not valueToCheck then return false end
+        if not valueToCheck then
+            return false
+        end
         return string.match(valueToCheck, regex)
     end,
 
     validateInputIntDefinition = function(valueToCheck, positive)
         local checkPositivity = true
-        if not valueToCheck then return false end
+        if not valueToCheck then
+            return false
+        end
         if positive then
             if valueToCheck < 0 then
                 checkPositivity = false

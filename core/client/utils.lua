@@ -128,6 +128,16 @@ NarcosClient.PlayerHeler = {
         end
     end,
 
+    isStaff = function(precise)
+        if precise == nil then
+            local rank = personnalData.player.rank.id
+            print(rank)
+            return (rank ~= "default" and rank ~= "vip" and rank ~= "vip+")
+        else
+            return (rank == precise)
+        end
+    end,
+
     freezePlayer = function(id, bool)
         local player = id
         SetPlayerControl(player, not bool, false)

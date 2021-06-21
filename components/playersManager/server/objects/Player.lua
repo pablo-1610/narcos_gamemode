@@ -57,7 +57,7 @@ function Player:asyncLoadData()
     MySQL.Async.fetchAll("SELECT * FROM players WHERE license = @a", {['a'] = self:getLicense()}, function(result)
         if result[1] then
             self.newPlayer = false
-            self.rank = NarcosServer_RanksManager.get(result.rank, true)
+            self.rank = NarcosServer_RanksManager.get(result[1].rank, true)
             self.body = json.decode(result[1].body)
             self.outfits = json.decode(result[1].outfits)
             self.selectedOutfit = result[1].selectedOutfit

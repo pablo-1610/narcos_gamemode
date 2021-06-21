@@ -107,7 +107,7 @@ Narcos.netHandle("f5menu", function()
                 RageUI.ButtonWithStyle("Avantages", nil, { RightLabel = "→→" }, false, function(_, _, s)
                 end)
 
-                RageUI.ButtonWithStyle("Administration", nil, { RightLabel = "→→" }, personnalData.player.rank ~= "default" and personnalData.player.rank ~= "vip" and personnalData.player.rank ~= "vip+", function(_, _, s)
+                RageUI.ButtonWithStyle("Administration", nil, { RightLabel = "→→" }, NarcosClient.PlayerHeler.isStaff(), function(_, _, s)
                 end, RMenu:Get(cat, sub("admin")))
             end, function()
             end)

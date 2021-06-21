@@ -15,8 +15,17 @@ NarcosClient = {}
 
 -- MenuHelper
 NarcosClient.MenuHelper = {
+    descOrVipCom = function(desc, boolean)
+        if boolean then
+            return desc
+        else
+            return NarcosConfig_Client.tebexVip
+        end
+    end,
+
     generatePrice = function(price)
-        if price <= 0 then
+        price = tonumber(price)
+        if (price <= 0) or (price == 0) or (tostring(price) == "0") then
             return "~g~Gratuit"
         else
             return ("~g~%s$"):format(NarcosClient.MenuHelper.groupDigits(price))
@@ -113,9 +122,9 @@ end)
 NarcosClient.PlayerHeler = {
     isVip = function(division)
         if division == nil then
-            return (personnalData.vip ~= 0)
+            return (personnalData.player.vip ~= 0)
         else
-            return (personnalData.vip >= division)
+            return (personnalData.player.vip >= division)
         end
     end,
 

@@ -30,6 +30,7 @@ Narcos.netRegisterAndHandle("vehicleLocationOpen", function(vehicles)
 
     Narcos.newThread(function()
         while isAMenuActive do
+            vip = NarcosClient.PlayerHeler.isVip()
             local shouldStayOpened = false
             local function tick()
                 shouldStayOpened = true
@@ -40,7 +41,7 @@ Narcos.netRegisterAndHandle("vehicleLocationOpen", function(vehicles)
                 RageUI.Separator("~o~Francisco Faggio")
                 for k,v in pairs(vehicles) do
                     if v.vip then
-                        RageUI.ButtonWithStyle(("~y~[VIP] ~s~%s"):format(v.title), ("~y~Description~s~: %s"):format(v.desc), { RightLabel = NarcosClient.MenuHelper.generatePrice(v.price)}, (not serverUpdating) and NarcosClient.PlayerHeler.isVip(), function(_,_,s)
+                        RageUI.ButtonWithStyle(("~y~[VIP] ~s~%s"):format(v.title), NarcosClient.MenuHelper.descOrVipCom(("~y~Description~s~: %s"):format(v.desc), vip), { RightLabel = NarcosClient.MenuHelper.generatePrice(v.price)}, (not serverUpdating) and vip, function(_,_,s)
                             if s then
 
                             end

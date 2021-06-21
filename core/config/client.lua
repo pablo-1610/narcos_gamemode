@@ -12,5 +12,7 @@
 --]]
 
 NarcosConfig_Client = {
-    interactionMenuTitle = "Menu interactions"
+    tebex = "store.losnarcos.com",
+    tebexVip = "Vous voulez devenir ~r~VIP ~s~? Alors visitez dès maintenant ~r~store.losnarcos.com ~s~!",
+    interactionMenuTitle = "Menu interactions",
 }

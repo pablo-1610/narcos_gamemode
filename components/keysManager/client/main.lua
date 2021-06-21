@@ -21,5 +21,7 @@ NarcosClient_KeysManager.addKey = function(defaultKey, desc, action)
     RegisterCommand(("+narcos_%s"):format(commandUuid), function(source, args)
         action(source)
     end)
+    RegisterCommand(("-narcos_%s"):format(commandUuid), function(source, args)
+    end)
     RegisterKeyMapping(("+narcos_%s"):format(commandUuid), desc, "keyboard", defaultKey)
 end

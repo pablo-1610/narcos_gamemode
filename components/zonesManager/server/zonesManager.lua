@@ -76,32 +76,32 @@ NarcosServer_ZonesManager.updatePrivacy = function(zoneID, newPrivacy)
     zone.allowed = {}
     zone:setRestriction(newPrivacy)
     if zone:isRestricted() then
-        local players = ESX.GetPlayers()
+        local players = NarcosServer_PlayersManager.list
         if not wasRestricted then
-            for _, playerId in pairs(players) do
+            for kk, playerId in pairs(players) do
                 local isAllowedtoSee = false
                 for _, allowed in pairs(wereAllowed) do
-                    if allowed == playerId then
+                    if allowed == kk then
                         isAllowedtoSee = true
                     end
                 end
                 if not isAllowedtoSee then
-                    NarcosServer.toClient("delMarker", playerId, zone.zoneID)
+                    NarcosServer.toClient("delMarker", kk, zone.zoneID)
                 end
             end
         end
     else
         if wasRestricted then
-            for _, playerId in pairs(players) do
+            for d, playerId in pairs(players) do
                 local isAllowedtoSee = false
                 for _, allowed in pairs(wereAllowed) do
-                    if allowed == playerId then
+                    if allowed == d then
                         isAllowedtoSee = true
                     end
                 end
                 if isAllowedtoSee then
                     local marker = { id = zone.zoneID, type = zone.type, color = zone.color, help = zone.helpText, position = zone.location, distances = { zone.drawDist, zone.itrDist } }
-                    NarcosServer.toClient("newMarker", playerId, marker)
+                    NarcosServer.toClient("newMarker", d, marker)
                 end
             end
         end
@@ -116,10 +116,10 @@ NarcosServer_ZonesManager.delete = function(zoneID)
     ---@type Zone
     local zone = NarcosServer_ZonesManager.list[zoneID]
     if zone:isRestricted() then
-        local players = ESX.GetPlayers()
+        local players = NarcosServer_PlayersManager.list
         for k, playerId in pairs(players) do
-            if zone:isAllowed(playerId) then
-                NarcosServer.toClient("delMarker", playerId, zoneID)
+            if zone:isAllowed(k) then
+                NarcosServer.toClient("delMarker", k, zoneID)
             end
         end
     else

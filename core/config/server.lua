@@ -16,7 +16,7 @@ NarcosConfig_Server = {
 
     bannedInstance = 666,
 
-    blipsScale = 0.85,
+    blipsScale = 0.90,
 
     startingCash = 5,
     startingPosition = vector3(2614.53,2920.02,40.42),
@@ -28,8 +28,13 @@ NarcosConfig_Server = {
 
     errorWebhook = "https://discord.com/api/webhooks/856303231235260416/QCbp0wufoZb50RgL5aE9Hpu0R_h-u5VgyY2Jnj2Y049KUW9ErNl-jadAFvX4BWx-sVNI",
 
-    locationPosition = vector3(2606.74, 2909.40, 40.42),
+    locationPosition = vector3(2606.98, 2909.81, 40.42),
     locationNpc = {type = "a_m_m_mexlabor_01", pos = vector3(2606.03, 2908.10, 40.42), heading = 330.02},
+
+    locationVehicles = {
+        {title = "Moto douteuse", desc = "Cette moto peut faire l'affaire, bien qu'elle semble avoir déjà beaucoup servie...", price = 2, vip = false},
+        {title = "Voiture (presque) neuve", desc = "Une belle voiture ! Que rêver de mieux ?", price = 1, vip = false}
+    },
 
     reminderInterval = ((1000*60)*15),
     reminder = {
@@ -67,13 +72,11 @@ NarcosConfig_Server = {
     availableWeathers = {
         'EXTRASUNNY',
         'CLEAR',
-        'NEUTRAL',
         'SMOG',
         'FOGGY',
         'OVERCAST',
         'CLOUDS',
         'CLEARING',
         'RAIN',
-        'THUNDER',
     }
 }

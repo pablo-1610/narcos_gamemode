@@ -15,6 +15,7 @@ NarcosServer_BlipsManager = {}
 NarcosServer_BlipsManager.list = {}
 
 NarcosServer_BlipsManager.createPublic = function(position, sprite, color, scale, text, shortRange)
+    print(("New blip \"%s\""):format(text))
     local blip = Blip(position, sprite, color, scale, text, shortRange, false)
     NarcosServer.toAll("newBlip", blip)
     return blip.blipId
@@ -22,10 +23,10 @@ end
 
 NarcosServer_BlipsManager.createPrivate = function(position, sprite, color, scale, text, shortRange, baseAllowed)
     local blip = Blip(position, sprite, color, scale, text, shortRange, true, baseAllowed)
-    local players = ESX.GetPlayers()
+    local players = NarcosServer_PlayersManager.list
     for k, v in pairs(players) do
-        if blip:isAllowed(v) then
-            NarcosServer.toClient("newBlip", v, blip)
+        if blip:isAllowed(k) then
+            NarcosServer.toClient("newBlip", k, blip)
         end
     end
     return blip.blipId
@@ -81,10 +82,10 @@ NarcosServer_BlipsManager.delete = function(blipID)
     ---@type Zone
     local blip = NarcosServer_BlipsManager.list[blipID]
     if blip:isRestricted() then
-        local players = ESX.GetPlayers()
+        local players = NarcosServer_PlayersManager.list
         for k, playerId in pairs(players) do
-            if blip:isAllowed(playerId) then
-                NarcosServer.toClient("delBlip", playerId, blipID)
+            if blip:isAllowed(k) then
+                NarcosServer.toClient("delBlip", k, blipID)
             end
         end
     else

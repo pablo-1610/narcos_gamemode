@@ -78,18 +78,7 @@ Narcos.netRegisterAndHandle("inventoryGiveItem", function(item, qty, targetId)
     ---@type Inventory
     local targetInventory = NarcosServer_InventoriesManager.get(target:getLicense())
 
-    playerInventory:removeItem(item, function()
-        targetInventory:addItem(item, function()
-            player:sendData()
-            target:sendData()
-            player:showAdvancedNotification("Inventaire","~g~Objet(s) donné",("Vous avez donné ~o~%sx %s ~s~!"):format(qty, NarcosServer_ItemsManager.getItemLabel(item)),"CHAR_ARTHUR",1)
-            target:showAdvancedNotification("Inventaire","~g~Objet(s) reçu",("Vous avez reçu ~o~%sx %s ~s~!"):format(qty, NarcosServer_ItemsManager.getItemLabel(item)),"CHAR_ARTHUR",1)
-            NarcosServer.toClient("serverReturnedCb", _src)
-            NarcosServer.toClient("serverReturnedCb", targetId)
-        end, qty)
-    end, qty)
 
-    --[[
     if targetInventory:canAddItem(item, qty) then
         playerInventory:removeItem(item, function()
             targetInventory:addItem(item, function()
@@ -104,7 +93,6 @@ Narcos.netRegisterAndHandle("inventoryGiveItem", function(item, qty, targetId)
     else
         player:showAdvancedNotification("Inventaire","~r~Action impossible","La personne n'a pas assez de place dans son inventaire","CHAR_ARTHUR",1)
     end
-    --]]
 end)
 
 Narcos.netHandle("sideLoaded", function()

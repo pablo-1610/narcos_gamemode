@@ -58,12 +58,12 @@ end
 ---calcWeight
 ---@public
 ---@return number
-function Inventory:calcWeight(content)
-    if not content then
-        content = self:getContent()
+function Inventory:calcWeight(incomingContent)
+    if not incomingContent then
+        incomingContent = self.content
     end
     local total = 0
-    for k,v in pairs(content) do
+    for k,v in pairs(incomingContent) do
         local weight = NarcosServer_ItemsManager.getItemWeight(k)
         total = (total + (weight*v))
     end
@@ -91,7 +91,7 @@ function Inventory:canAddItem(item, qty)
     if not NarcosServer_ItemsManager.exists(item) then
         return
     end
-    local fakeContent = self:getContent()
+    local fakeContent = self.content
     if not fakeContent[item] then
         fakeContent[item] = 0
     end

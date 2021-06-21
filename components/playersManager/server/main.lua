@@ -78,7 +78,7 @@ NarcosServer_PlayersManager.register = function(source, creatorInfos, cb)
                 ['i'] = NarcosConfig_Server.startingCash,
                 ['j'] = json.encode(currentpos),
                 ['vip'] = 0,
-                ['loadout'] = {}
+                ['loadout'] = json.encode({})
             }, function(insertId)
                 player.body = body
                 player.outfits = outfits
@@ -87,6 +87,7 @@ NarcosServer_PlayersManager.register = function(source, creatorInfos, cb)
                 player.cash = NarcosConfig_Server.startingCash
                 player.position = currentpos
                 player.baseCityInfos = baseCityInfos
+                player.loadout = {}
                 NarcosServer_PlayersManager.list[source] = player
                 player:sendData()
                 cb()

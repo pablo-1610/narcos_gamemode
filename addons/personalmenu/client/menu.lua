@@ -91,7 +91,7 @@ Narcos.netHandle("f5menu", function()
                 tick()
                 RageUI.Separator(("Poids: ~o~%s~s~/~o~%s"):format(personnalData.inventory.weight, personnalData.inventory.capacity))
                 if personnalData.inventory.diffItems <= 0 then
-                    RageUI.ButtonWithStyle("~o~Votre sac est vide", nil, {}, true)
+                    RageUI.ButtonWithStyle("~r~Votre sac est vide", nil, {}, true)
                 else
                     for item, count in pairs(personnalData.inventory.content) do
                         RageUI.ButtonWithStyle(("%s ~o~(%s)"):format(itemsLabels[item], count), nil, { RightLabel = "→"}, (not serverUpdating), function(_,_,s)

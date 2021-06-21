@@ -47,7 +47,7 @@ Narcos.netRegisterAndHandle("vehicleLocationOpen", function(vehicles)
                             end
                         end)
                     else
-                        RageUI.ButtonWithStyle(v.title, ("~y~Description~s~: %s"):format(v.desc), { RightLabel = ("~g~%s$"):format(NarcosClient.MenuHelper.generatePrice(v.price))}, (not serverUpdating), function(_,_,s)
+                        RageUI.ButtonWithStyle(v.title, ("~y~Description~s~: %s"):format(v.desc), { RightLabel = NarcosClient.MenuHelper.generatePrice(v.price) }, (not serverUpdating), function(_,_,s)
                             if s then
 
                             end

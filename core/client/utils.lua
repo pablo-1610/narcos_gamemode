@@ -25,11 +25,8 @@ NarcosClient.MenuHelper = {
 
     generatePrice = function(price)
         price = tonumber(price)
-        print(price)
-        print(0)
-        print(json.encode(price == 0))
-        if (price <= 0) or (price == 0) or (tostring(price) == "0") then
-            return "~g~Gratuit"
+        if price <= 0 then
+            return "~b~Gratuit"
         else
             return ("~g~%s$"):format(NarcosClient.MenuHelper.groupDigits(price))
         end

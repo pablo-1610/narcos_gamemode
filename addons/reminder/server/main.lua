@@ -19,7 +19,7 @@ Narcos.netHandle("sideLoaded", function()
         Wait(NarcosConfig_Server.reminderInterval)
         ---@param player Player
         for k, player in pairs(NarcosServer_PlayersManager.list) do
-            player:showAdvancedNotification("Los Narcos","~o~Information",table[index],"CHAR_MP_FM_CONTACT",true)
+            player:showAdvancedNotification("Los Narcos","~o~Information",table[index],"CHAR_MP_FM_CONTACT",1,true)
         end
         index = (index + 1)
         if index > #table then

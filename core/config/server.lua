@@ -25,8 +25,7 @@ NarcosConfig_Server = {
 
     errorWebhook = "https://discord.com/api/webhooks/856303231235260416/QCbp0wufoZb50RgL5aE9Hpu0R_h-u5VgyY2Jnj2Y049KUW9ErNl-jadAFvX4BWx-sVNI",
 
-    --reminderInterval = ((1000*60)*15),
-    reminderInterval = 20000,
+    reminderInterval = ((1000*60)*15),
     reminder = {
         "Vous pouvez à tout moment cacher/afficher l'HUD avec la touche ~b~W ~s~!",
         "N'hésitez pas à rejoindre notre Discord, disponible dans le menu F5",

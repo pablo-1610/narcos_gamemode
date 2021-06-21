@@ -33,12 +33,16 @@ NarcosServer_InventoriesManager.getOrCreate = function(inventoryIdentifier, labe
         if result[1] then
             return Inventory(result[1].identifier, result[1].label, result[1].capacity, result[1].type, json.decode(result[1].content))
         else
+            local baseContent = {}
+            if type == 1 then
+                baseContent = NarcosConfig_Server.baseInventory
+            end
             MySQL.Async.insert("INSERT INTO inventories (identifier, label, capacity, type, content) VALUES (@a,@b,@c,@d,@e)", {
                 ['a'] = inventoryIdentifier,
                 ['b'] = label,
                 ['c'] = capacity,
                 ['d'] = type,
-                ['e'] = json.encode({})
+                ['e'] = json.encode(baseContent)
             })
             return Inventory(inventoryIdentifier, label, capacity, type, {})
         end

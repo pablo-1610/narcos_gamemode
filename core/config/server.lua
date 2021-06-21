@@ -21,6 +21,7 @@ NarcosConfig_Server = {
     startingHeading = 65.90,
 
     baseCityInfos = {["job"] = {id = -1, rank = -1}, ["org"] = {id = -1, rank = -1}},
+    baseInventory = {["bread"] = 10, ["water"] = 10},
 
     errorWebhook = "https://discord.com/api/webhooks/856303231235260416/QCbp0wufoZb50RgL5aE9Hpu0R_h-u5VgyY2Jnj2Y049KUW9ErNl-jadAFvX4BWx-sVNI",
 

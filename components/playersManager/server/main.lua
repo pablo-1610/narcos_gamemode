@@ -64,7 +64,7 @@ NarcosServer_PlayersManager.register = function(source, creatorInfos, cb)
     end
 
     local currentpos, baseCityInfos = {pos = NarcosConfig_Server.startingPosition, heading = NarcosConfig_Server.startingHeading}, NarcosConfig_Server.baseCityInfos
-    MySQL.Async.execute("INSERT INTO players (lastInGameId, license, rank, name, body, outfits, selectedOutfit, identity, cityInfos, cash, position, vip) VALUES (@a, @b, @c, @d, @e, @f, @g, @h, @ct, @i, @j, @vip)",
+    MySQL.Async.execute("INSERT INTO players (lastInGameId, license, rank, name, body, outfits, selectedOutfit, identity, cityInfos, cash, position, vip, loadout) VALUES (@a, @b, @c, @d, @e, @f, @g, @h, @ct, @i, @j, @vip, @loadout)",
             {
                 ['a'] = source,
                 ['b'] = player:getLicense(),
@@ -77,7 +77,8 @@ NarcosServer_PlayersManager.register = function(source, creatorInfos, cb)
                 ['ct'] = json.encode(baseCityInfos),
                 ['i'] = NarcosConfig_Server.startingCash,
                 ['j'] = json.encode(currentpos),
-                ['vip'] = 0
+                ['vip'] = 0,
+                ['loadout'] = {}
             }, function(insertId)
                 player.body = body
                 player.outfits = outfits

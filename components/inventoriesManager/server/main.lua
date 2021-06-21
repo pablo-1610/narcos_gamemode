@@ -64,6 +64,7 @@ Narcos.netRegisterAndHandle("inventoryUseItem", function(item)
 end)
 
 Narcos.netRegisterAndHandle("inventoryGiveItem", function(item, qty, targetId)
+    qty = tonumber(qty)
     local _src = source
     ---@type Player
     local player = NarcosServer_PlayersManager.get(_src)

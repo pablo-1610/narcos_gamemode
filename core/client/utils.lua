@@ -75,7 +75,15 @@ NarcosClient.DrawHelper = {
 }
 
 Narcos.netRegisterAndHandle("showNotification", showBasicNotification)
-Narcos.netRegisterAndHandle("showAdvancedNotification", showAdvancedNotification)
+Narcos.netRegisterAndHandle("showAdvancedNotification", function(sender, subject, msg, textureDict, iconType, sound)
+    if sound then
+        SetAudioFlag("LoadMPData", 1)
+        PlaySoundFrontend(-1, "Boss_Message_Orange", "GTAO_Boss_Goons_FM_Soundset", 1)
+    end
+    AddTextEntry('AutoEventAdvNotif', msg)
+    BeginTextCommandThefeedPost('AutoEventAdvNotif')
+    EndTextCommandThefeedPostMessagetext(textureDict, textureDict, false, iconType, sender, subject)
+end)
 
 -- PlayerHelper
 NarcosClient.PlayerHeler = {

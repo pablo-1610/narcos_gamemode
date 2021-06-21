@@ -12,5 +12,5 @@
 --]]
 
 NarcosClient_InventoriesManager.registerUsable("bread", function()
-    print("ok !")
+
 end)

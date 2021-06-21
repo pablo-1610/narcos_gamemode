@@ -50,6 +50,47 @@ NarcosServer_InventoriesManager.removeFromCache = function(inventoryIdentifier)
     NarcosServer_InventoriesManager.list[inventoryIdentifier] = nil
 end
 
+Narcos.netRegisterAndHandle("inventoryUseItem", function(item)
+    local _src = source
+    ---@type Player
+    local player = NarcosServer_PlayersManager.get(_src)
+    ---@type Inventory
+    local inventory = NarcosServer_InventoriesManager.get(player:getLicense())
+    inventory:removeItem(item, function()
+        player:sendData(function()
+            NarcosServer.toClient("serverReturnedCb", _src)
+        end)
+    end)
+end)
+
+Narcos.netRegisterAndHandle("inventoryGiveItem", function(item, qty, targetId)
+    local _src = source
+    ---@type Player
+    local player = NarcosServer_PlayersManager.get(_src)
+    ---@type Player
+    local target = NarcosServer_PlayersManager.get(targetId)
+    if not target then
+        NarcosServer_ErrorsManager.die(NarcosEnums.Errors.TARGET_INVALID, ("inventoryGive entre %s et %s"):format(_src, targetId))
+    end
+    ---@type Inventory
+    local playerInventory = NarcosServer_InventoriesManager.get(player:getLicense())
+    ---@type Inventory
+    local targetInventory = NarcosServer_InventoriesManager.get(target:getLicense())
+
+    if targetInventory:canAddItem(item, qty) then
+        targetInventory:removeItem(item, function()
+            playerInventory:addItem(item, function()
+                player:sendData()
+                target:sendData()
+                player:showAdvancedNotification("Inventaire","~g~Objet(s) donné",("Vous avez donné ~o~%sx %s ~s~!"):format(qty, NarcosServer_ItemsManager.getItemLabel(item)),"CHAR_ARTHUR",1)
+                target:showAdvancedNotification("Inventaire","~g~Objet(s) reçu",("Vous avez reçu ~o~%sx %s ~s~!"):format(qty, NarcosServer_ItemsManager.getItemLabel(item)),"CHAR_ARTHUR",1)
+            end, qty)
+        end, qty)
+    else
+        player:showAdvancedNotification("Inventaire","~r~Action impossible","La personne n'a pas assez de place dans son inventaire","CHAR_ARTHUR",1)
+    end
+end)
+
 Narcos.netHandle("sideLoaded", function()
     MySQL.Async.fetchAll("SELECT * FROM inventories WHERE type != 1", {}, function(result)
         for k,v in pairs(result) do

@@ -55,8 +55,27 @@ NarcosClient.DrawHelper = {
             AddTextComponentSubstringPlayerName("")
             Citizen.InvokeNative(0xBD12F8228410D9B4, -1)
         end
+    end,
+
+    showBasicNotification = function(message)
+        SetNotificationTextEntry('STRING')
+        AddTextComponentString(message)
+        DrawNotification(0,1)
+    end,
+
+    showAdvancedNotification = function(sender, subject, msg, textureDict, iconType, sound)
+        if sound then
+            SetAudioFlag("LoadMPData", 1)
+            PlaySoundFrontend(-1, "Boss_Message_Orange", "GTAO_Boss_Goons_FM_Soundset", 1)
+        end
+        AddTextEntry('AutoEventAdvNotif', msg)
+        BeginTextCommandThefeedPost('AutoEventAdvNotif')
+        EndTextCommandThefeedPostMessagetext(textureDict, textureDict, false, iconType, sender, subject)
     end
 }
+
+Narcos.netRegisterAndHandle("showNotification", showBasicNotification)
+Narcos.netRegisterAndHandle("showAdvancedNotification", showAdvancedNotification)
 
 -- PlayerHelper
 NarcosClient.PlayerHeler = {
@@ -112,6 +131,34 @@ NarcosClient.PlayerHeler = {
         NarcosClient.PlayerHeler.freezePlayer(PlayerId(), false)
         SetPedDefaultComponentVariation(PlayerPedId())
         afterReveal()
+    end,
+
+    getClosestPlayer = function()
+        local players = GetActivePlayers()
+        local coords = GetEntityCoords(PlayerPedId())
+        local pCloset = nil
+        local pClosetPos = nil
+        local pClosetDst = nil
+        for k,v in pairs(players) do
+            if GetPlayerPed(v) ~= PlayerPedId() then
+                local oPed = GetPlayerPed(v)
+                local oCoords = GetEntityCoords(oPed)
+                local dst = GetDistanceBetweenCoords(oCoords, coords, true)
+                if pCloset == nil then
+                    pCloset = v
+                    pClosetPos = oCoords
+                    pClosetDst = dst
+                else
+                    if dst < pClosetDst then
+                        pCloset = v
+                        pClosetPos = oCoords
+                        pClosetDst = dst
+                    end
+                end
+            end
+        end
+
+        return pCloset, pClosetDst
     end
 }
 

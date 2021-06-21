@@ -40,6 +40,17 @@ Narcos.netHandle("f5menu", function()
         local itemsLabels = clientCache["itemsLabel"]
         local selectedItem = nil
         while isAMenuActive do
+
+            local closestPlayer, closestPlayerDist = NarcosClient.PlayerHeler.getClosestPlayer()
+
+            local function haveClosestPlayer()
+                return (closestPlayer ~= nil) and (closestPlayerDist <= 0.6)
+            end
+
+            local function getClosestPlayerId()
+                return GetPlayerServerId(closestPlayer)
+            end
+
             local shouldStayOpened = false
             local function tick()
                 shouldStayOpened = true
@@ -97,21 +108,22 @@ Narcos.netHandle("f5menu", function()
                 tick()
                 RageUI.Separator(("Poids: ~o~%s~s~/~o~%s"):format(personnalData.inventory.weight, personnalData.inventory.capacity))
                 if personnalData.inventory.content[selectedItem] then
-                    RageUI.ButtonWithStyle("Utiliser", nil, {}, (NarcosClient_InventoriesManager.isUsable(selectedItem) and (not serverUpdating)), {}, true, function(_,_,s)
+
+                    RageUI.Separator(("Quantité: ~o~x%s"):format(personnalData.inventory.content[selectedItem]))
+                    RageUI.ButtonWithStyle("Utiliser", nil, {}, (NarcosClient_InventoriesManager.isUsable(selectedItem) and (not serverUpdating)), function(_,_,s)
                         if s then
                             serverUpdating = true
                             NarcosClient_InventoriesManager.use(selectedItem)
                         end
                     end)
 
-                    RageUI.ButtonWithStyle("Donner", nil, {}, (not serverUpdating), function(_,_,s)
+                    RageUI.ButtonWithStyle("Donner", nil, {}, (haveClosestPlayer()) and (not serverUpdating), function(_,_,s)
                         if s then
-                            serverUpdating = true
-                        end
-                    end)
-
-                    RageUI.ButtonWithStyle("Cacher", nil, {}, false, function(_,_,s)
-                        if s then
+                            local qty = NarcosClient.InputHelper.showBox("Quantité", "", 5, true)
+                            if qty ~= nil and qty > 0 then
+                                serverUpdating = true
+                                NarcosClient_InventoriesManager.give(selectedItem, qty, getClosestPlayerId())
+                            end
                         end
                     end)
                 else

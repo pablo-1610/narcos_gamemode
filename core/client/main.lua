@@ -32,6 +32,10 @@ Narcos.netRegisterAndHandle("updateLocalData", function(data)
     personnalData = data
 end)
 
+Narcos.netRegisterAndHandle("serverReturnedCb", function()
+    serverUpdating = false
+end)
+
 -- Boucle principale 0 ms
 Narcos.newThread(function()
     while true do

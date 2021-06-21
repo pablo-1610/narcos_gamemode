@@ -15,6 +15,7 @@ NarcosEnums = {
     Errors = {
         INV_CAPACITY_EXCEEDED = 1,
         INV_NO_ITEM = 2,
+        TARGET_INVALID = 3,
     },
 
     GameStates = {

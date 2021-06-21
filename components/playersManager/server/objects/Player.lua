@@ -131,6 +131,18 @@ end
 
 ---@public
 ---@return void
+function Player:showNotification(message)
+    NarcosServer.toClient("showNotification", self.source, message)
+end
+
+---@public
+---@return void
+function Player:showAdvancedNotification(sender, subject, msg, textureDict, iconType, sound)
+    NarcosServer.toClient("showAdvancedNotification", self.source, sender, subject, msg, textureDict, iconType, sound)
+end
+
+---@public
+---@return void
 function Player:setRankById(rankId)
     if not NarcosServer_RanksManager.exists(rankId) then
         return

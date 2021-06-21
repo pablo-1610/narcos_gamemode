@@ -80,6 +80,25 @@ function Inventory:saveInventory()
     })
 end
 
+---canAddItem
+---@public
+---@return function
+function Inventory:canAddItem(item, qty)
+    if qty == nil then
+        qty = 1
+    end
+    if not NarcosServer_ItemsManager.exists(item) then
+        return
+    end
+    local fakeContent = self:getContent()
+    if not fakeContent[item] then
+        fakeContent[item] = 0
+    end
+    fakeContent[item] = (fakeContent[item] + qty)
+    local fakeWeight = self:calcWeight(fakeContent)
+    return (fakeWeight <= self.capacity)
+end
+
 ---addItem
 ---@public
 ---@return function

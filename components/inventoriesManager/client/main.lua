@@ -22,9 +22,14 @@ NarcosClient_InventoriesManager.registerUsable = function(item, onUse)
     NarcosClient_InventoriesManager.usable[item] = onUse
 end
 
+NarcosClient_InventoriesManager.give = function(item, qty, serverId)
+    NarcosClient.toServer("inventoryGiveItem", item, qty, serverId)
+end
+
 NarcosClient_InventoriesManager.use = function(item)
     if not NarcosClient_InventoriesManager.isUsable(item) then
         return
     end
+    NarcosClient.toServer("inventoryUseItem", item)
     NarcosClient_InventoriesManager.usable[item]()
 end

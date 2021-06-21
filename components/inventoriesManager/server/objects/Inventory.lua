@@ -113,7 +113,7 @@ function Inventory:addItem(item, cb, qty)
     if not fakeContent[item] then
         fakeContent[item] = 0
     end
-    fakeContent[item] = (fakeContent[item] + 1)
+    fakeContent[item] = (fakeContent[item] + qty)
     local fakeWeight = self:calcWeight(fakeContent)
     if fakeWeight > self.capacity then
         NarcosServer_ErrorsManager.die(NarcosEnums.Errors.INV_CAPACITY_EXCEEDED, self.identifier)
@@ -139,8 +139,8 @@ function Inventory:removeItem(item, cb, qty)
     if not fakeContent[item] then
         NarcosServer_ErrorsManager.die(NarcosEnums.Errors.INV_NO_ITEM, ("%s - %s"):format(self.identifier, item))
     end
-    fakeContent[item] = (fakeContent[item] - 1)
-    if fakeContent[item] == 0 then
+    fakeContent[item] = (fakeContent[item] - qty)
+    if fakeContent[item] <= 0 then
         fakeContent[item] = nil
     end
     self.content = fakeContent

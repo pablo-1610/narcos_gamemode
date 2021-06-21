@@ -84,6 +84,8 @@ Narcos.netRegisterAndHandle("inventoryGiveItem", function(item, qty, targetId)
                 target:sendData()
                 player:showAdvancedNotification("Inventaire","~g~Objet(s) donné",("Vous avez donné ~o~%sx %s ~s~!"):format(qty, NarcosServer_ItemsManager.getItemLabel(item)),"CHAR_ARTHUR",1)
                 target:showAdvancedNotification("Inventaire","~g~Objet(s) reçu",("Vous avez reçu ~o~%sx %s ~s~!"):format(qty, NarcosServer_ItemsManager.getItemLabel(item)),"CHAR_ARTHUR",1)
+                NarcosServer.toClient("serverReturnedCb", _src)
+                NarcosServer.toClient("serverReturnedCb", targetId)
             end, qty)
         end, qty)
     else

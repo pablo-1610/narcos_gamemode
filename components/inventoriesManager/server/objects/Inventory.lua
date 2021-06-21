@@ -84,6 +84,7 @@ end
 ---@public
 ---@return function
 function Inventory:canAddItem(item, qty)
+    --[[
     if qty == nil then
         qty = 1
     end
@@ -96,11 +97,10 @@ function Inventory:canAddItem(item, qty)
         fakeContent2[item] = 0
     end
     fakeContent2[item] = (fakeContent2[item] + qty)
-    return true
-    --[[
     local fakeWeight = self:calcWeight(fakeContent2)
     return (fakeWeight <= self.capacity)
     --]]
+    return true
 end
 
 ---addItem

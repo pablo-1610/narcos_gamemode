@@ -156,7 +156,9 @@ end
 
 function Player:sendData(cb)
     NarcosServer.toClient("updateLocalData", self.source, {player = self, inventory = NarcosServer_InventoriesManager.get(self:getLicense())})
-    cb()
+    if cb ~= nil then
+        cb()
+    end
 end
 
 ---@public

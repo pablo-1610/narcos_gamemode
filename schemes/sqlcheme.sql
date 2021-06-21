@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 21 juin 2021 à 06:01
+-- Généré le : lun. 21 juin 2021 à 06:07
 -- Version du serveur :  10.4.18-MariaDB
 -- Version de PHP : 8.0.3
 
@@ -72,6 +72,7 @@ INSERT INTO `items` (`name`, `label`, `weight`, `vip`) VALUES
 CREATE TABLE `jobs` (
   `name` varchar(80) NOT NULL,
   `label` varchar(80) NOT NULL,
+  `money` int(11) NOT NULL,
   `ranks` text NOT NULL,
   `positions` text NOT NULL,
   `type` int(11) NOT NULL
@@ -107,7 +108,7 @@ CREATE TABLE `players` (
 --
 
 INSERT INTO `players` (`id`, `lastInGameId`, `license`, `rank`, `name`, `body`, `outfits`, `selectedOutfit`, `identity`, `cityInfos`, `cash`, `position`, `vip`, `vip_time`, `loadout`, `params`) VALUES
-(21, 1, 'license:8fc3f9bf5017c451d19593ae7d1105989d6635e0', 'default', 'pablo_1610', '{\"hair_1\":0,\"age_2\":10,\"beard_4\":0,\"eyebrows_3\":0,\"eyebrows_1\":0,\"hair_color_1\":0,\"eyebrows_4\":0,\"hair_color_2\":0,\"beard_2\":10,\"eyebrows_2\":0,\"hair_2\":0,\"age_1\":3,\"sex\":1,\"beard_3\":0,\"beard_1\":9,\"face\":42,\"skin\":41}', '{\"Explorateur\":{\"lipstick_4\":0,\"tshirt_2\":0,\"tshirt_1\":15,\"mask_1\":0,\"blemishes_1\":0,\"chest_2\":0,\"chest_3\":0,\"ears_1\":-1,\"watches_1\":-1,\"decals_2\":0,\"sun_2\":0,\"makeup_3\":0,\"blush_1\":0,\"complexion_2\":0,\"shoes_1\":5,\"bags_1\":0,\"arms\":15,\"blemishes_2\":0,\"ears_2\":0,\"makeup_1\":0,\"lipstick_3\":0,\"bracelets_2\":0,\"torso_1\":15,\"sun_1\":0,\"complexion_1\":0,\"chain_2\":0,\"bproof_2\":0,\"bracelets_1\":-1,\"moles_1\":0,\"blush_2\":0,\"bags_2\":0,\"glasses_1\":0,\"lipstick_2\":0,\"helmet_1\":-1,\"makeup_4\":0,\"glasses_2\":0,\"chain_1\":0,\"decals_1\":0,\"bproof_1\":0,\"bodyb_2\":0,\"helmet_2\":0,\"pants_1\":15,\"pants_2\":0,\"makeup_2\":0,\"mask_2\":0,\"bodyb_1\":0,\"arms_2\":0,\"watches_2\":0,\"moles_2\":0,\"lipstick_1\":0,\"blush_3\":0,\"eye_color\":0,\"torso_2\":0,\"shoes_2\":0,\"chest_1\":0}}', 'Explorateur', '{\"firstname\":\"Pablo\",\"lastname\":\"Barillas\",\"age\":45}', '{\"org\":{\"id\":-1,\"rank\":-1},\"job\":{\"id\":-1,\"rank\":-1}}', 5, '{\"heading\":107.9951171875,\"pos\":{\"x\":1214.820556640625,\"y\":-1167.29736328125,\"z\":51.16684341430664}}', 0, 0, '[]', '[]');
+(21, 1, 'license:8fc3f9bf5017c451d19593ae7d1105989d6635e0', 'default', 'pablo_1610', '{\"hair_1\":0,\"age_2\":10,\"beard_4\":0,\"eyebrows_3\":0,\"eyebrows_1\":0,\"hair_color_1\":0,\"eyebrows_4\":0,\"hair_color_2\":0,\"beard_2\":10,\"eyebrows_2\":0,\"hair_2\":0,\"age_1\":3,\"sex\":1,\"beard_3\":0,\"beard_1\":9,\"face\":42,\"skin\":41}', '{\"Explorateur\":{\"lipstick_4\":0,\"tshirt_2\":0,\"tshirt_1\":15,\"mask_1\":0,\"blemishes_1\":0,\"chest_2\":0,\"chest_3\":0,\"ears_1\":-1,\"watches_1\":-1,\"decals_2\":0,\"sun_2\":0,\"makeup_3\":0,\"blush_1\":0,\"complexion_2\":0,\"shoes_1\":5,\"bags_1\":0,\"arms\":15,\"blemishes_2\":0,\"ears_2\":0,\"makeup_1\":0,\"lipstick_3\":0,\"bracelets_2\":0,\"torso_1\":15,\"sun_1\":0,\"complexion_1\":0,\"chain_2\":0,\"bproof_2\":0,\"bracelets_1\":-1,\"moles_1\":0,\"blush_2\":0,\"bags_2\":0,\"glasses_1\":0,\"lipstick_2\":0,\"helmet_1\":-1,\"makeup_4\":0,\"glasses_2\":0,\"chain_1\":0,\"decals_1\":0,\"bproof_1\":0,\"bodyb_2\":0,\"helmet_2\":0,\"pants_1\":15,\"pants_2\":0,\"makeup_2\":0,\"mask_2\":0,\"bodyb_1\":0,\"arms_2\":0,\"watches_2\":0,\"moles_2\":0,\"lipstick_1\":0,\"blush_3\":0,\"eye_color\":0,\"torso_2\":0,\"shoes_2\":0,\"chest_1\":0}}', 'Explorateur', '{\"firstname\":\"Pablo\",\"lastname\":\"Barillas\",\"age\":45}', '{\"org\":{\"id\":-1,\"rank\":-1},\"job\":{\"id\":-1,\"rank\":-1}}', 5, '{\"heading\":166.55091857910157,\"pos\":{\"x\":1122.587646484375,\"y\":-188.04208374023438,\"z\":50.6572380065918}}', 0, 0, '[]', '[]');
 
 -- --------------------------------------------------------
 

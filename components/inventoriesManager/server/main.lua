@@ -78,8 +78,8 @@ Narcos.netRegisterAndHandle("inventoryGiveItem", function(item, qty, targetId)
     local targetInventory = NarcosServer_InventoriesManager.get(target:getLicense())
 
     if targetInventory:canAddItem(item, qty) then
-        targetInventory:removeItem(item, function()
-            playerInventory:addItem(item, function()
+        playerInventory:removeItem(item, function()
+            targetInventory:addItem(item, function()
                 player:sendData()
                 target:sendData()
                 player:showAdvancedNotification("Inventaire","~g~Objet(s) donné",("Vous avez donné ~o~%sx %s ~s~!"):format(qty, NarcosServer_ItemsManager.getItemLabel(item)),"CHAR_ARTHUR",1)

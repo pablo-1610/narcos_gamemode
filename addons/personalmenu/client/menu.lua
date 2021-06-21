@@ -34,6 +34,10 @@ Narcos.netHandle("f5menu", function()
     RMenu:Get(cat, sub("inventory_item")).Closed = function()
     end
 
+    RMenu.Add(cat, sub("tactical"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("main")), "Tactique", desc, nil, nil, "pablo", "black"))
+    RMenu:Get(cat, sub("tactical")).Closed = function()
+    end
+
     RageUI.Visible(RMenu:Get(cat, sub("main")), true)
 
     Narcos.newThread(function()
@@ -64,6 +68,9 @@ Narcos.netHandle("f5menu", function()
                 RageUI.ButtonWithStyle("Inventaire", nil, { RightLabel = "→→" }, true, function(_, _, s)
                 end, RMenu:Get(cat, sub("inventory")))
 
+                RageUI.ButtonWithStyle("Tactique", nil, { RightLabel = "→→" }, true, function(_, _, s)
+                end, RMenu:Get(cat, sub("tactical")))
+
                 RageUI.ButtonWithStyle("Portefeuille", nil, { RightLabel = "→→" }, true, function(_, _, s)
                 end)
 
@@ -76,7 +83,7 @@ Narcos.netHandle("f5menu", function()
                 RageUI.ButtonWithStyle("Autre", nil, { RightLabel = "→→" }, true, function(_, _, s)
                 end)
 
-                RageUI.ButtonWithStyle("Véhicule", nil, { RightLabel = "→→" }, true, function(_, _, s)
+                RageUI.ButtonWithStyle("Véhicule", nil, { RightLabel = "→→" }, (IsPedSittingInAnyVehicle(PlayerPedId()) and GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId(), false), -1) == PlayerPedId()), function(_, _, s)
                 end)
 
                 RageUI.ButtonWithStyle("Avantages", nil, { RightLabel = "→→" }, false, function(_, _, s)
@@ -140,5 +147,6 @@ Narcos.netHandle("f5menu", function()
         RMenu:Delete(cat, sub("main"))
         RMenu:Delete(cat, sub("inventory"))
         RMenu:Delete(cat, sub("inventory_item"))
+        RMenu:Delete(cat, sub("tactical"))
     end)
 end)

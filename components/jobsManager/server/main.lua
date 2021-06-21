@@ -29,7 +29,7 @@ Narcos.netHandle("sideLoaded", function()
         local tot = 0
         for k,v in pairs(result) do
             tot = (tot + 1)
-            Job(v.name, v.label, json.decode(v.ranks), v.type)
+            Job(v.name, v.label, json.decode(v.ranks), json.decode(v.positions), v.type)
         end
         NarcosServer.trace(("Enregistrement de ^3%s ^7jobs"):format(tot), Narcos.prefixes.dev)
     end)

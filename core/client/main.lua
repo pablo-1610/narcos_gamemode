@@ -50,6 +50,15 @@ Narcos.newThread(function()
         SetCreateRandomCops(false)
         SetCreateRandomCopsNotOnScenarios(false)
         SetCreateRandomCopsOnScenarios(false)
+        local handle, ped = FindFirstPed()
+        local finished = false
+        repeat
+            if not IsEntityDead(ped) then
+                SetPedDropsWeaponsWhenDead(ped, false)
+            end
+            finished, ped = FindNextPed(handle)
+        until not finished
+        EndFindPed(handle)
         for i = 1, 15 do
             EnableDispatchService(i, false)
             Citizen.Wait(1)

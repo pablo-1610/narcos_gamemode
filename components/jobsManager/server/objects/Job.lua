@@ -15,16 +15,18 @@
 ---@field public name string
 ---@field public label string
 ---@field public ranks table
+---@field public positions table
 ---@field public type number
 Job = {}
 Job.__index = Job
 
 setmetatable(Job, {
-    __call = function(_, name, label, ranks, type)
+    __call = function(_, name, label, ranks, positions, type)
         local self = setmetatable({}, Job);
         self.name = name
         self.label = label
         self.ranks = ranks
+        self.positions = positions
         self.type = type
         NarcosServer_JobsManager.list[name] = self
         return self;

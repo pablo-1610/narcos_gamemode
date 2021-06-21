@@ -59,15 +59,24 @@ Narcos.netRegisterAndHandle("syncSetTime", function(time)
     end
 end)
 
-Narcos.netRegisterAndHandle("syncSetWeather", function(weather)
+Narcos.netRegisterAndHandle("syncSetWeather", function(weather, first)
     if weatherOverride == nil then
         NarcosClient.trace(("La météo est désormais définie sur ^3%s"):format(weather))
-        SetWeatherTypeOverTime(weather, 30.0)
-        Wait(Narcos.second(30))
-        ClearOverrideWeather()
-        ClearWeatherTypePersist()
-        SetWeatherTypePersist(weather)
-        SetWeatherTypeNow(weather)
-        SetWeatherTypeNowPersist(weather)
+        if first then
+            ClearOverrideWeather()
+            ClearWeatherTypePersist()
+            SetWeatherTypePersist(weather)
+            SetWeatherTypeNow(weather)
+            SetWeatherTypeNowPersist(weather)
+        else
+            SetWeatherTypeOverTime(weather, 30.0)
+            Wait(Narcos.second(30))
+            ClearOverrideWeather()
+            ClearWeatherTypePersist()
+            SetWeatherTypePersist(weather)
+            SetWeatherTypeNow(weather)
+            SetWeatherTypeNowPersist(weather)
+
+        end
     end
 end)

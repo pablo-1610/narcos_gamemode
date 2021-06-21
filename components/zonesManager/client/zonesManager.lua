@@ -15,7 +15,7 @@ local zones = {}
 zones.cooldown = false
 zones.list = {}
 
-Narcos.netHandle("sideLoaded", function()
+Narcos.netHandle("playerOk", function()
     NarcosClient.toServer("requestPredefinedZones")
     while true do
         local interval = 500

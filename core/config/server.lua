@@ -18,9 +18,11 @@ NarcosConfig_Server = {
 
     blipsScale = 0.90,
 
-    startingCash = 5,
+    startingCash = 100,
     startingPosition = vector3(2614.53,2920.02,40.42),
     startingHeading = 65.90,
+
+    unemployedJobName = "Explorateur",
 
     baseCityInfos = {["job"] = {id = -1, rank = -1}, ["org"] = {id = -1, rank = -1}},
     baseInventory = {["bread"] = 10, ["water"] = 10},
@@ -29,7 +31,7 @@ NarcosConfig_Server = {
     errorWebhook = "https://discord.com/api/webhooks/856303231235260416/QCbp0wufoZb50RgL5aE9Hpu0R_h-u5VgyY2Jnj2Y049KUW9ErNl-jadAFvX4BWx-sVNI",
 
     locationPosition = vector3(2606.98, 2909.81, 40.42),
-    locationNpc = {type = "a_m_m_mexlabor_01", pos = vector3(2606.03, 2908.10, 40.42), heading = 330.02},
+    locationNpc = {type = "a_m_m_mexlabor_01", pos = vector3(2606.03, 2908.10, 40.20), heading = 330.02},
 
     locationVehicles = {
         {model = "bmx", title = "Le vélo de course", desc = "Je l'ai monté moi même ! Reconditionné à neuf.", price = 0, vip = false},

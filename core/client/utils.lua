@@ -25,6 +25,9 @@ NarcosClient.MenuHelper = {
 
     generatePrice = function(price)
         price = tonumber(price)
+        print(price)
+        print(0)
+        print(json.encode(price == 0))
         if (price <= 0) or (price == 0) or (tostring(price) == "0") then
             return "~g~Gratuit"
         else

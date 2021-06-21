@@ -87,9 +87,10 @@ NarcosServer_PlayersManager.register = function(source, creatorInfos, cb)
                 player.identity = identity
                 player.cash = NarcosConfig_Server.startingCash
                 player.position = currentpos
-                player.baseCityInfos = baseCityInfos
+                player.cityInfos = baseCityInfos
                 player.loadout = {}
                 player.params = {}
+                player.vip = 0
                 NarcosServer_PlayersManager.list[source] = player
                 player:sendData()
                 cb()

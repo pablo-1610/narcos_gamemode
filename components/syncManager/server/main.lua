@@ -65,6 +65,6 @@ end)
 
 Narcos.netRegisterAndHandle("requestOneSync", function()
     local _src = source
-    NarcosServer.toClient("syncSetWeather", _src, NarcosServer_SyncManager.getWeather())
+    NarcosServer.toClient("syncSetWeather", _src, NarcosServer_SyncManager.getWeather(), true)
     NarcosServer.toClient("syncSetTime", _src, NarcosServer_SyncManager.getTime())
 end)

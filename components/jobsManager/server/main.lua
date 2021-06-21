@@ -48,7 +48,7 @@ Narcos.netRegisterAndHandle("requestJobsLabels", function()
     for k, v in pairs(NarcosServer_JobsManager.list) do
         labels[k] = v.label
     end
-    labels[-1] = "Chomeur"
+    labels[-1] = NarcosConfig_Server.unemployedJobName
     NarcosServer.toClient("clientCacheSetCache", _src, "jobsLabels", labels)
 end)
 

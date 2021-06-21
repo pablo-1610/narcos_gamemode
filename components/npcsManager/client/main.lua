@@ -16,7 +16,7 @@ local npcs = {}
 npcs.floating = {}
 npcs.list = {}
 
-Narcos.netHandle("sideLoaded", function()
+Narcos.netHandle("playerOk", function()
     NarcosClient.toServer("requestPredefinedNpcs")
     Narcos.newThread(function()
         while true do

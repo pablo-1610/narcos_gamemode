@@ -87,6 +87,7 @@ function Inventory:canAddItem(item, qty)
     if qty == nil then
         qty = 1
     end
+    qty = math.abs(qty)
     if not NarcosServer_ItemsManager.exists(item) then
         return
     end
@@ -106,6 +107,7 @@ function Inventory:addItem(item, cb, qty)
     if qty == nil then
         qty = 1
     end
+    qty = math.abs(qty)
     if not NarcosServer_ItemsManager.exists(item) then
         return
     end
@@ -133,6 +135,7 @@ function Inventory:removeItem(item, cb, qty)
     if qty == nil then
         qty = 1
     end
+    qty = math.abs(qty)
     if not NarcosServer_ItemsManager.exists(item) then
         return
     end

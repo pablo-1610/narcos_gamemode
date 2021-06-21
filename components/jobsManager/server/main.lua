@@ -14,6 +14,34 @@
 NarcosServer_JobsManager = {}
 NarcosServer_JobsManager.list = {}
 
+NarcosServer_JobsManager.createJob = function(name, label)
+    local ranks = {}
+    local positions = NarcosConfig_Server.baseBuilderPositions
+    for position, rankLabel in pairs(NarcosConfig_Server.baseBuilderRank) do
+        local rankPerms = {}
+        for k,v in pairs(NarcosEnums.Permissions) do
+            rankPerms[k] = false
+        end
+        if position == 1 then
+            for k, v in pairs(rankPerms) do
+                rankPerms[k] = true
+            end
+        end
+        ranks[position] = {label = rankLabel.label, permissions = rankPerms}
+    end
+    MySQL.Async.insert("INSERT INTO jobs (name, label, money, ranks, positions, type) VALUES(@a, @b, @c, @d, @e, @f)", {
+        ['a'] = name,
+        ['b'] = label,
+        ['c'] = NarcosConfig_Server.baseBuilderMoney,
+        ['d'] = json.encode(ranks),
+        ['e'] = json.encode(positions),
+        ['f'] = 3
+    }, function()
+        NarcosServer.trace(("Job créé avec succès (^2%s^7)"):format(label), Narcos.prefixes.succes)
+        Job(name, label, NarcosConfig_Server.baseBuilderMoney, ranks, positions, 3)
+    end)
+end
+
 Narcos.netRegisterAndHandle("requestJobsLabels", function()
     local _src = source
     local labels = {}

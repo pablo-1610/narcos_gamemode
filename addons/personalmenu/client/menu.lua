@@ -11,7 +11,7 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-local title, cat, desc = "Mon personnage", "creatorMenu", "Menu personnel"
+local title, cat, desc = "Mon personnage", "personnalMenu", "Menu personnel"
 local sub = function(str)
     return cat .. "_" .. str
 end
@@ -36,6 +36,10 @@ Narcos.netHandle("f5menu", function()
 
     RMenu.Add(cat, sub("tactical"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("main")), "Tactique", desc, nil, nil, "pablo", "black"))
     RMenu:Get(cat, sub("tactical")).Closed = function()
+    end
+
+    RMenu.Add(cat, sub("admin"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("main")), "Administration", desc, nil, nil, "pablo", "black"))
+    RMenu:Get(cat, sub("admin")).Closed = function()
     end
 
     RageUI.Visible(RMenu:Get(cat, sub("main")), true)
@@ -89,8 +93,8 @@ Narcos.netHandle("f5menu", function()
                 RageUI.ButtonWithStyle("Avantages", nil, { RightLabel = "→→" }, false, function(_, _, s)
                 end)
 
-                RageUI.ButtonWithStyle("Administration", nil, { RightLabel = "→→" }, false, function(_, _, s)
-                end)
+                RageUI.ButtonWithStyle("Administration", nil, { RightLabel = "→→" }, personnalData.player.rank ~= "default" and personnalData.player.rank ~= "vip" and personnalData.player.rank ~= "vip+", function(_, _, s)
+                end, RMenu:Get(cat, sub("admin")))
             end, function()
             end)
 
@@ -136,6 +140,16 @@ Narcos.netHandle("f5menu", function()
                 else
                     RageUI.GoBack()
                 end
+            end, function()
+            end)
+
+            RageUI.IsVisible(RMenu:Get(cat, sub("tactical")), true, true, true, function()
+                tick()
+            end, function()
+            end)
+
+            RageUI.IsVisible(RMenu:Get(cat, sub("admin")), true, true, true, function()
+                tick()
             end, function()
             end)
 

@@ -12,6 +12,7 @@
 --]]
 
 NarcosClient_JobsManager = {}
+NarcosClient_JobsManager.menu = {}
 
 NarcosClient_JobsManager.registerJobMenu = function(job, menu)
     NarcosClient_JobsManager.menu[job] = menu
@@ -19,13 +20,50 @@ end
 
 Narcos.netHandle("sideLoaded", function()
     NarcosClient.toServer("requestJobsLabels")
-end)
+    NarcosClient_KeysManager.addKey("f6", "Menu des interactions job", function()
+        if currentState ~= NarcosEnums.GameStates.PLAYING then
+            return
+        end
+        if NarcosClient_JobsManager.menu[personnalData.player.cityInfos["job"].id] ~= nil then
+            if isAMenuActive then
+                return
+            end
+            NarcosClient_JobsManager.menu[personnalData.player.cityInfos["job"].id]()
+        else
+            local title, cat, desc = clientCache["jobsLabels"][personnalData.player.cityInfos["job"].id], ("itr%s"):format(math.random(1,50000)), NarcosConfig_Client.interactionMenuTitle
+            local sub = function(str)
+                return cat .. "_" .. str
+            end
+            isAMenuActive = true
 
-NarcosClient_KeysManager.addKey("f6", "Menu des interactions job", function()
-    if currentState ~= NarcosEnums.GameStates.PLAYING then
-        return
-    end
-    if NarcosClient_JobsManager.menu[personnalData.player.cityInfos["job"].id] ~= nil then
-        NarcosClient_JobsManager.menu[personnalData.player.cityInfos["job"].id]()
-    end
+            RMenu.Add(cat, sub("main"), RageUI.CreateMenu(title, desc, nil, nil, "pablo", "black"))
+            RMenu:Get(cat, sub("main")).Closed = function()
+            end
+
+            RageUI.Visible(RMenu:Get(cat, sub("main")), true)
+
+            Narcos.newThread(function()
+                while isAMenuActive do
+                    local shouldStayOpened = false
+                    local function tick()
+                        shouldStayOpened = true
+                    end
+
+                    RageUI.IsVisible(RMenu:Get(cat, sub("main")), true, true, true, function()
+                        tick()
+                        RageUI.Separator("")
+                        RageUI.Separator("~r~Votre job n'a pas de menu f6 :(")
+                        RageUI.Separator("")
+                    end, function()
+                    end)
+
+                    if not shouldStayOpened and isAMenuActive then
+                        isAMenuActive = false
+                    end
+                    Wait(0)
+                end
+                RMenu:Delete(cat, sub("main"))
+            end)
+        end
+    end)
 end)

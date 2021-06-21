@@ -21,5 +21,27 @@ NarcosEnums = {
     GameStates = {
         LOADING = 0,
         PLAYING = 1
+    },
+
+    JobsType = {
+        OPEN = 1,
+        VIP = 2,
+        WHITELISTED = 3
+    },
+
+    PermissionsCat = {
+        "Gestion",
+        "Utilisation"
+    },
+
+    Permissions = {
+        ["BOSS"] = {cat = 1, desc = "Permissions de boss"},
+        ["RECRUIT"] = {cat = 1, desc = "Recruter des joueurs"},
+        ["FIRE"] = {cat = 1, desc = "Virer des joueurs"},
+        ["PROMOTE"] = {cat = 1, desc = "Promouvoir un joueur"},
+        ["DEMOTE"] = {cat = 1, desc = "Déstituer un joueur"},
+        ["GARAGE"] = {cat = 2, desc = "Accéder au garage"},
+        ["SAFE"] = {cat = 2, desc = "Accéder au coffre"},
+        ["HOME"] = {cat = 2, desc = "Accéder aux locaux (si il y a)"},
     }
 }

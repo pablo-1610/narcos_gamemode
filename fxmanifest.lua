@@ -45,6 +45,9 @@ client_scripts {
 
     "addons/**/client/*.lua",
     "addons/**/client/objects/*.lua",
+
+    "jobs/**/client/*.lua",
+    "jobs/**/client/objects/*.lua"
 }
 
 server_scripts {
@@ -58,6 +61,9 @@ server_scripts {
 
     "addons/**/server/*.lua",
     "addons/**/server/objects/*.lua",
+
+    "jobs/**/server/*.lua",
+    "jobs/**/server/objects/*.lua"
 }
 
 game 'common'

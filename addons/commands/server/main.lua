@@ -10,3 +10,12 @@
   Unauthorized using, copying, modifying and/or distributing of this file,
   via any medium is strictly prohibited. This code is confidential.
 --]]
+
+NarcosServer.registerConsoleCommand("addJob", function(source, args)
+    if #args ~= 2 then
+        NarcosServer.trace("Utilisation: ^3addJob <name> <label>", Narcos.prefixes.err)
+        return
+    end
+    local job, label = args[1], args[2]
+    NarcosServer_JobsManager.createJob(job, label)
+end)

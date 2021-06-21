@@ -131,10 +131,10 @@ Narcos.netHandle("f5menu", function()
 
             RageUI.IsVisible(RMenu:Get(cat, sub("inventory_item")), true, true, true, function()
                 tick()
-                RageUI.Separator(("~o~%s~s~ | Poids: ~o~%s~s~/~o~%s"):format(itemsLabels[selectedItem], personnalData.inventory.weight, personnalData.inventory.capacity))
+                RageUI.Separator(("Poids: ~o~%s~s~/~o~%s"):format(personnalData.inventory.weight, personnalData.inventory.capacity))
                 if personnalData.inventory.content[selectedItem] then
 
-                    RageUI.Separator(("Quantité: ~o~x%s"):format(personnalData.inventory.content[selectedItem]))
+                    RageUI.Separator(("%s ~o~(x%s)"):format(itemsLabels[selectedItem], personnalData.inventory.content[selectedItem]))
                     RageUI.ButtonWithStyle("Utiliser", nil, {}, (NarcosClient_InventoriesManager.isUsable(selectedItem) and (not serverUpdating)), function(_,_,s)
                         if s then
                             serverUpdating = true

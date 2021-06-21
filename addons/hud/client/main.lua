@@ -15,8 +15,8 @@ local toggle, locked = false, false
 
 local alpha = 255
 local function drawHud()
-    NarcosClient.DrawHelper.drawTexts(0.85, 0.045, "Chomeur", false, 1.15, { 255, 255, 255, alpha }, 2, 0)
-    NarcosClient.DrawHelper.drawTexts(0.85, 0.045 + 0.055, ("%s$"):format(personnalData.player.cash), false, 1.15, { 71, 196, 69, alpha }, 4, 0)
+    NarcosClient.DrawHelper.drawTexts(0.88, 0.045, clientCache["jobsLabels"][personnalData.player.cityInfos["job"].id], false, 1.00, { 255, 255, 255, alpha }, 2, 0)
+    NarcosClient.DrawHelper.drawTexts(0.88, 0.045 + 0.047, ("%s$"):format(personnalData.player.cash), false, 1.00, { 71, 196, 69, alpha }, 4, 0)
 end
 
 NarcosClient_Hud = {}

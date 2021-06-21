@@ -26,7 +26,6 @@ setmetatable(Rank, {
         self.label = label
         self.color = color
         self.permissions = permissions
-        NarcosServer.trace(("Enregistrement du rang ^1%s ^7!"):format(self.label), Narcos.prefixes.admin)
         NarcosServer_RanksManager.list[self.id] = self
         return self;
     end

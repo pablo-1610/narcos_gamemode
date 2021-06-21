@@ -10,3 +10,7 @@
   Unauthorized using, copying, modifying and/or distributing of this file,
   via any medium is strictly prohibited. This code is confidential.
 --]]
+
+Narcos.netHandle("sideLoaded", function()
+    NarcosClient.toServer("requestJobsLabels")
+end)

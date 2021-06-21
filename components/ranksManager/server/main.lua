@@ -28,8 +28,11 @@ end
 
 Narcos.netHandle("sideLoaded", function()
     MySQL.Async.fetchAll("SELECT * FROM ranks", {}, function(result)
+        local tot = 0
         for k,v in pairs(result) do
+            tot = (tot + 1)
             Rank(v.id, v.label, v.color, json.decode(v.permissions))
         end
+        NarcosServer.trace(("Enregistrement de ^3%s ^7grades"):format(tot), Narcos.prefixes.dev)
     end)
 end)

@@ -13,3 +13,24 @@
 
 NarcosServer_JobsManager = {}
 NarcosServer_JobsManager.list = {}
+
+Narcos.netRegisterAndHandle("requestJobsLabels", function()
+    local _src = source
+    local labels = {}
+    for k, v in pairs(NarcosServer_JobsManager.list) do
+        labels[k] = v.label
+    end
+    labels[-1] = "Chomeur"
+    NarcosServer.toClient("clientCacheSetCache", _src, "jobsLabels", labels)
+end)
+
+Narcos.netHandle("sideLoaded", function()
+    MySQL.Async.fetchAll("SELECT * FROM jobs", {}, function(result)
+        local tot = 0
+        for k,v in pairs(result) do
+            tot = (tot + 1)
+            Job(v.name, v.label, json.decode(v.ranks), v.type)
+        end
+        NarcosServer.trace(("Enregistrement de ^3%s ^7jobs"):format(tot), Narcos.prefixes.dev)
+    end)
+end)

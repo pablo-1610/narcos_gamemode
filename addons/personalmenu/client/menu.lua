@@ -82,7 +82,7 @@ Narcos.netHandle("f5menu", function()
                 RageUI.ButtonWithStyle("Avantages", nil, { RightLabel = "→→" }, false, function(_, _, s)
                 end)
 
-                RageUI.ButtonWithStyle("Staff", nil, { RightLabel = "→→" }, false, function(_, _, s)
+                RageUI.ButtonWithStyle("Administration", nil, { RightLabel = "→→" }, false, function(_, _, s)
                 end)
             end, function()
             end)

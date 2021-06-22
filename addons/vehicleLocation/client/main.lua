@@ -43,13 +43,17 @@ Narcos.netRegisterAndHandle("vehicleLocationOpen", function(vehicles)
                     if v.vip then
                         RageUI.ButtonWithStyle(("~y~[VIP] ~s~%s"):format(v.title), NarcosClient.MenuHelper.descOrVipCom(("~y~Description~s~: %s"):format(v.desc), vip), { RightLabel = NarcosClient.MenuHelper.generatePrice(v.price)}, (not serverUpdating) and vip, function(_,_,s)
                             if s then
-
+                                shouldStayOpened = false
+                                serverUpdating = true
+                                NarcosClient.toServer("locationRent", k)
                             end
                         end)
                     else
                         RageUI.ButtonWithStyle(v.title, ("~y~Description~s~: %s"):format(v.desc), { RightLabel = NarcosClient.MenuHelper.generatePrice(v.price) }, (not serverUpdating), function(_,_,s)
                             if s then
-
+                                shouldStayOpened = false
+                                serverUpdating = true
+                                NarcosClient.toServer("locationRent", k)
                             end
                         end)
                     end
@@ -65,4 +69,14 @@ Narcos.netRegisterAndHandle("vehicleLocationOpen", function(vehicles)
         FreezeEntityPosition(PlayerPedId(), false)
         RMenu:Delete(cat, sub("main"))
     end)
+end)
+
+Narcos.netRegisterAndHandle("locationDone", function(model, spawn)
+    canInteractWithMarkers = false
+    RageUI.CloseAll()
+    NarcosClient.requestModel(model)
+    local vehicle = CreateVehicle(GetHashKey(model), spawn.pos, spawn.heading, true, false)
+    SetVehicleEngineOn(vehicle, true, true, false)
+    TaskWarpPedIntoVehicle(PlayerPedId(), vehicle, -1)
+    canInteractWithMarkers = true
 end)

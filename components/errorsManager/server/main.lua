@@ -20,3 +20,9 @@ NarcosServer_ErrorsManager.die = function(error, args, cb)
     end
     return
 end
+
+NarcosServer_ErrorsManager.diePlayer = function(error, args, player)
+    NarcosServer.webhook(("Erreur #%s\n\nDétails: [%s]"):format(error, args), "red", NarcosConfig_Server.errorWebhook)
+    DropPlayer(player, ("Une erreur est survenue (ERREUR %s). Veuillez contacter un staff."):format(error))
+    return
+end

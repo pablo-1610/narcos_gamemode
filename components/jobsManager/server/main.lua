@@ -14,6 +14,17 @@
 NarcosServer_JobsManager = {}
 NarcosServer_JobsManager.list = {}
 
+NarcosServer_JobsManager.exists = function(jobName)
+    return (NarcosServer_JobsManager.list[jobName] ~= nil)
+end
+
+NarcosServer_JobsManager.get = function(jobName)
+    if not NarcosServer_JobsManager.exists(jobName) then
+        return
+    end
+    return NarcosServer_JobsManager.list[jobName]
+end
+
 NarcosServer_JobsManager.createJob = function(name, label)
     local ranks = {}
     local positions = NarcosConfig_Server.baseBuilderPositions

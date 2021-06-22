@@ -187,6 +187,26 @@ end
 
 -- Utils
 
+---@param oldJobId string
+---@param newJob Job
+function Player:updateJob(oldJobId, newJob)
+    if not NarcosServer_JobsManager.exists(oldJobId) then
+        NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.MAJOR_VAR_NO_EXISTS, "oldJob n'est pas valide", self.source)
+        return
+    end
+    self.cityInfos["job"].id = newJob.name
+    self:sendData()
+end
+
+---sendSystemMessage
+---@public
+---@return void
+---@param title string
+---@param message string
+function Player:sendSystemMessage(title, message)
+    self:showAdvancedNotification("Système",title,message,"CHAR_LESTER_DEATHWISH",false)
+end
+
 ---canAfford
 ---@public
 ---@return boolean

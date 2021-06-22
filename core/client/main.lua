@@ -11,7 +11,7 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-isAMenuActive, serverUpdating = false, false
+isAMenuActive, serverUpdating, canInteractWithMarkers = false, false, true
 currentState = nil
 personnalData = {}
 

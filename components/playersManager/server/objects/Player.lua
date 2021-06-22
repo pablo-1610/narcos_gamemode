@@ -35,6 +35,8 @@ Player = {}
 Player.__index = Player
 
 setmetatable(Player, {
+    ---@param source number
+    ---@param identifiers table
     __call = function(_, source, identifiers)
         local self = setmetatable({}, Player);
         self.source = source
@@ -51,6 +53,7 @@ setmetatable(Player, {
 
 -- Getters
 
+---asyncLoadData
 ---@public
 ---@return void
 function Player:asyncLoadData()
@@ -81,42 +84,49 @@ function Player:asyncLoadData()
     end)
 end
 
+---getSource
 ---@public
 ---@return number
 function Player:getSource()
     return self.source
 end
 
+---getName
 ---@public
 ---@return string
 function Player:getName()
     return self.name
 end
 
+---getIsNewPlayer
 ---@public
 ---@return boolean
 function Player:getIsNewPlayer()
     return self.newPlayer
 end
 
+---getIdentifiers
 ---@public
 ---@return table
 function Player:getIdentifiers()
     return self.identifiers
 end
 
+---getLicense
 ---@public
 ---@return string
 function Player:getLicense()
     return self.identifiers['license']
 end
 
+---getInGame
 ---@public
 ---@return boolean
 function Player:getInGame()
     return self.ingame
 end
 
+---getRank
 ---@public
 ---@return Rank
 function Player:getRank()
@@ -125,32 +135,47 @@ end
 
 -- Setters
 
+---setInGame
 ---@public
 ---@return void
+---@param boolean boolean
 function Player:setInGame(boolean)
     self.ingame = boolean
 end
 
+---setRank
 ---@public
 ---@return void
+---@param rank string
 function Player:setRank(rank)
     self.rank = rank
 end
 
+---showNotification
 ---@public
 ---@return void
+---@param message string
 function Player:showNotification(message)
     NarcosServer.toClient("showNotification", self.source, message)
 end
 
+---showAdvancedNotification
 ---@public
 ---@return void
+---@param sender string
+---@param subject string
+---@param msg string
+---@param textureDict string
+---@param iconType number
+---@param sound boolean
 function Player:showAdvancedNotification(sender, subject, msg, textureDict, iconType, sound)
     NarcosServer.toClient("showAdvancedNotification", self.source, sender, subject, msg, textureDict, iconType, sound)
 end
 
+---setRankById
 ---@public
 ---@return void
+---@param rankId string
 function Player:setRankById(rankId)
     if not NarcosServer_RanksManager.exists(rankId) then
         return
@@ -162,6 +187,41 @@ end
 
 -- Utils
 
+---canAfford
+---@public
+---@return boolean
+---@param price number
+function Player:canAfford(price)
+    return (self.cash >= price)
+end
+
+---removeCash
+---@public
+---@return void
+---@param ammount number
+function Player:removeCash(ammount)
+    local fake = (self.cash-ammount)
+    if fake <= 0 then
+        self.cash = 0
+    else
+        self.cash = fake
+    end
+end
+
+---savePlayer
+---@public
+---@return void
+function Player:savePlayer()
+    MySQL.Async.execute("UPDATE players SET cash = @a WHERE license = @b", {
+        ['a'] = self.cash,
+        ['b'] = self:getLicense()
+    })
+end
+
+---sendData
+---@public
+---@return void
+---@param cb function
 function Player:sendData(cb)
     NarcosServer.toClient("updateLocalData", self.source, {player = self, inventory = NarcosServer_InventoriesManager.get(self:getLicense())})
     if cb ~= nil then
@@ -169,8 +229,10 @@ function Player:sendData(cb)
     end
 end
 
+---savePosition
 ---@public
 ---@return void
+---@param position table
 function Player:savePosition(position)
     position = json.encode(position)
     if self.cash == nil then
@@ -182,8 +244,10 @@ function Player:savePosition(position)
     })
 end
 
+---kick
 ---@public
 ---@return void
+---@param reason string
 function Player:kick(reason)
     DropPlayer(self.source, reason)
 end

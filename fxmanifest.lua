@@ -7,10 +7,18 @@ resource_type 'gametype' { name = 'narcos_gamemode' }
 
 ui_page 'core/web/index.html'
 
+loadscreen 'loadscreen/index.html'
+
 files {
     'core/web/index.html',
     'core/web/*.js',
-    'core/web/sounds/*.ogg'
+    'core/web/sounds/*.ogg',
+
+    'loadscreen/index.html',
+    'loadscreen/style.css',
+    'loadscreen/default.mp4',
+    'loadscreen/music.mp3',
+    'loadscreen/logo.png'
 }
 
 shared_scripts {

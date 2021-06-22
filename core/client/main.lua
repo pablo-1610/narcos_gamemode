@@ -59,6 +59,6 @@ Narcos.newThread(function()
             EnableDispatchService(i, false)
             Citizen.Wait(1)
         end
-        Wait(1500)
+        Wait(750)
     end
 end)

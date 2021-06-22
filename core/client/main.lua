@@ -41,6 +41,11 @@ Narcos.newThread(function()
     while true do
         Wait(0)
         SetTextChatEnabled(false)
+    end
+end)
+
+Narcos.newThread(function()
+    while true do
         ClearPlayerWantedLevel(PlayerPedId())
         ResetPlayerStamina(PlayerPedId())
         RestorePlayerStamina(PlayerPedId(), true)
@@ -54,5 +59,6 @@ Narcos.newThread(function()
             EnableDispatchService(i, false)
             Citizen.Wait(1)
         end
+        Wait(1500)
     end
 end)

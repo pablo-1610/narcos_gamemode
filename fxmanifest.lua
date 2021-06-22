@@ -14,6 +14,24 @@ files {
     'core/web/*.js',
     'core/web/sounds/*.ogg',
 
+    'core/web/css/index.css',
+    'core/web/js/config.default.js',
+    'core/web/js/config.js',
+    'core/web/js/App.js',
+    'core/web/js/Message.js',
+    'core/web/js/Suggestions.js',
+    'core/web/vendor/vue.2.3.3.min.js',
+    'core/web/vendor/flexboxgrid.6.3.1.min.css',
+    'core/web/vendor/animate.3.5.2.min.css',
+    'core/web/vendor/latofonts.css',
+    'core/web/vendor/fonts/LatoRegular.woff2',
+    'core/web/vendor/fonts/LatoRegular2.woff2',
+    'core/web/vendor/fonts/LatoLight2.woff2',
+    'core/web/vendor/fonts/LatoLight.woff2',
+    'core/web/vendor/fonts/LatoBold.woff2',
+    'core/web/vendor/fonts/LatoBold2.woff2',
+    'core/web/css/style.css',
+
     'loadscreen/index.html',
     'loadscreen/style.css',
     'loadscreen/default.mp4',
@@ -59,7 +77,6 @@ client_scripts {
 }
 
 server_scripts {
-    "@mysql-async/lib/MySQL.lua",
     "core/config/server.lua",
     "core/server/main.lua",
     "core/server/utils.lua",
@@ -73,6 +90,13 @@ server_scripts {
 
     "jobs/**/server/*.lua",
     "jobs/**/server/objects/*.lua"
+}
+
+chat_theme 'gtao' {
+    styleSheet = 'style.css',
+    msgTemplates = {
+        default = '<b>{0}</b><span>{1}</span>'
+    }
 }
 
 game 'common'

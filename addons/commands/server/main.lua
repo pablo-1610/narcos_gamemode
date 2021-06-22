@@ -20,7 +20,7 @@ NarcosServer.registerConsoleCommand("addJob", function(source, args)
     NarcosServer_JobsManager.createJob(job, label)
 end)
 
-NarcosServer.registerConsoleCommand("rankUpdatePerms", function(source, args)
+NarcosServer.registerConsoleCommand("rankUpdatesPerms", function(source, args)
     if #args ~= 1 then
         NarcosServer.trace("Utilisation: ^3rankUpdatePerms <rang>", Narcos.prefixes.err)
         return
@@ -60,4 +60,4 @@ NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(s
         player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Le rang de ce job n'existe pas")
     end
     player:updateJob(player.cityInfos["job"].id, job)
-end)
+end, "Utilisation: /setjob <id> <job> <grade>")

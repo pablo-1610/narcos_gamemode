@@ -263,6 +263,10 @@ end
 
 -- InputHelper
 NarcosClient.InputHelper = {
+    startsWith = function(String, Start)
+        return string.sub(String, 1, string.len(Start)) == Start
+    end,
+
     showBox = function(TextEntry, ExampleText, MaxStringLenght, isValueInt)
         AddTextEntry('FMMC_KEY_TIP1', TextEntry)
         DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP1", "", ExampleText, "", "", "", MaxStringLenght)

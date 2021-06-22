@@ -40,7 +40,6 @@ end)
 Narcos.newThread(function()
     while true do
         Wait(0)
-        SetTextChatEnabled(false)
     end
 end)
 

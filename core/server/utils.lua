@@ -34,7 +34,8 @@ NarcosServer.registerConsoleCommand = function(command, func)
     end, false)
 end
 
-NarcosServer.registerPermissionCommand = function(command, permissions, func)
+NarcosServer.registerPermissionCommand = function(command, permissions, func, help)
+    NarcosServer_Chat.setCommand(command, help)
     RegisterCommand(command, function(_src, args)
         if _src == 0 then
             func(_src, args)

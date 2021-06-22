@@ -26,12 +26,33 @@ NarcosServer.kick = function(_src, reason)
 end
 
 NarcosServer.registerConsoleCommand = function(command, func)
-    RegisterCommand(command, function(source, args)
-        if source ~= 0 then
+    RegisterCommand(command, function(_src, args)
+        if _src ~= 0 then
             return
         end
-        func(source, args)
+        func(_src, args)
     end, false)
+end
+
+NarcosServer.registerPermissionCommand = function(command, permissions, func)
+    RegisterCommand(command, function(_src, args)
+        if _src == 0 then
+            func(_src, args)
+            return
+        end
+        if not NarcosServer_PlayersManager.exists(_src) then
+            NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.PLAYER_NO_EXISTS, ("permissionCommand (%s) - %s"):format(command, _src), _src)
+        end
+        ---@type Player
+        local player = NarcosServer_PlayersManager.get(_src)
+        ---@type Rank
+        local rank = player.rank
+        if rank:havePermissions(permissions) then
+            func(_src, player, args)
+        else
+            player:sendSystemMessage("~r~Erreur","Vous n'avez pas la permission de faire cette action !")
+        end
+    end)
 end
 
 NarcosServer.getIdentifiers = function(source)
@@ -79,3 +100,4 @@ NarcosServer.webhook = function(message, color, url)
     PerformHttpRequest(DiscordWebHook, function(err, text, headers)
     end, 'POST', json.encode({ username = "Narcos Logs", embeds = embeds }), { ['Content-Type'] = 'application/json' })
 end
+

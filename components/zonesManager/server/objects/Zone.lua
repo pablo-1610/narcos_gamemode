@@ -48,7 +48,12 @@ setmetatable(Zone, {
 ---@return void
 function Zone:interact(source)
     -- @TODO -> Sécurité vis à vis de la position & du cooldown
-    self.onInteract(source)
+    if not NarcosServer_PlayersManager.exists(source) then
+        NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.PLAYER_NO_EXISTS, ("Zone interact (%s)"):format(self.zoneID), source)
+        return
+    end
+    local player = NarcosServer_PlayersManager.get(source)
+    self.onInteract(source, player)
     NarcosServer.trace(("%s a intéragit avec la zone n°%s"):format(GetPlayerName(source),self.zoneID), Narcos.prefixes.zones)
 end
 

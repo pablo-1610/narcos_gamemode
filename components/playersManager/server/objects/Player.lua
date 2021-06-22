@@ -30,6 +30,7 @@
 ---@field public loadout table
 ---@field public params table
 ---@field public inventory Inventory
+---@field public cache table
 
 Player = {}
 Player.__index = Player
@@ -40,8 +41,10 @@ setmetatable(Player, {
     __call = function(_, source, identifiers)
         local self = setmetatable({}, Player);
         self.source = source
+        self.cache = {}
         self.name = GetPlayerName(source)
         self.identifiers = identifiers
+        print(json.encode(identifiers))
         self.ingame = false
         self.rank = NarcosServer_RanksManager.get(NarcosConfig_Server.defaultRank)
         self.inventory = NarcosServer_InventoriesManager.getOrCreate(identifiers['license'], ("Sac de %s"):format(self.name), 20.0, 1)
@@ -81,6 +84,8 @@ function Player:asyncLoadData()
         else
             self.newPlayer = true
         end
+        NarcosServer.trace(json.encode(self.indentifiers), Narcos.prefixes.dev)
+        Narcos.toInternal("playerObjectLoaded", self.source)
     end)
 end
 
@@ -131,6 +136,14 @@ end
 ---@return Rank
 function Player:getRank()
     return self.rank
+end
+
+---getCache
+---@public
+---@return void
+---@param key any
+function Player:getCache(key)
+    return self.cache[key]
 end
 
 -- Setters
@@ -189,7 +202,7 @@ end
 
 ---@param oldJobId string
 ---@param newJob Job
-function Player:updateJob(oldJobId, newJob, rank)
+function Player:updateJob(oldJobId, newJob, rank, cb)
     if oldJobId ~= -1 then
         if not NarcosServer_JobsManager.exists(oldJobId) then
             NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.MAJOR_VAR_NO_EXISTS, "oldJob n'est pas valide", self.source)
@@ -198,7 +211,11 @@ function Player:updateJob(oldJobId, newJob, rank)
     end
     self.cityInfos["job"].id = newJob.name
     self.cityInfos["job"].rank = rank
-    self:sendData()
+    self:sendData(function()
+        if cb ~= nil then
+            cb()
+        end
+    end)
 end
 
 ---sendSystemMessage
@@ -208,6 +225,15 @@ end
 ---@param message string
 function Player:sendSystemMessage(title, message)
     self:showAdvancedNotification("Système",title,message,"CHAR_LESTER_DEATHWISH",false)
+end
+
+---setCache
+---@public
+---@return void
+---@param index any
+---@param value any
+function Player:setCache(index, value)
+    self.cache[index] = value
 end
 
 ---canAfford
@@ -228,6 +254,22 @@ function Player:removeCash(ammount)
         self.cash = 0
     else
         self.cash = fake
+    end
+end
+
+---pay
+---@public
+---@return void
+---@param ammount number
+---@param cb function
+function Player:pay(ammount, cb)
+    if (self.cash < ammount) then
+        cb(false)
+    else
+        self.cash = (self.cash-ammount)
+        self:sendData(function()
+            cb(true)
+        end)
     end
 end
 

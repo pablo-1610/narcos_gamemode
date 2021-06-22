@@ -39,3 +39,7 @@ RegisterCommand("car", function(source, args)
     local car = CreateVehicle(model, GetEntityCoords(PlayerPedId()), GetEntityHeading(PlayerPedId()), true, false)
     TaskWarpPedIntoVehicle(PlayerPedId(), car, -1)
 end)
+
+RegisterCommand("revive", function()
+    NetworkResurrectLocalPlayer(GetEntityCoords(PlayerPedId()), 0.0, -1, 0)
+end)

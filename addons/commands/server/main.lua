@@ -59,5 +59,7 @@ NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(s
         player:sendSystemMessage(NarcosEnums.Prefixes.ERR, ("Le rang de ce job n'existe pas (%s max)"):format(#job.ranks))
         return
     end
-    player:updateJob(player.cityInfos["job"].id, job, rankId)
+    player:updateJob(player.cityInfos["job"].id, job, rankId, function()
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, ("Le job du joueur est désormais ~y~%s ~s~(~r~%s~s~)"):format(job.name, rankId))
+    end)
 end, "Utilisation: /setjob <id> <job> <grade>")

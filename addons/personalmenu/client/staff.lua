@@ -18,7 +18,13 @@ local function NoClipToggle(bool)
     if noclip then
         Narcos.newThread(function()
             while noclip do
-                Wait(1)
+                Wait(0)
+                HideHudComponentThisFrame(19)
+            end
+        end)
+        Narcos.newThread(function()
+            while noclip do
+                Wait(0)
                 local pCoords = GetEntityCoords(PlayerPedId(), false)
                 local camCoords = NarcosClient.PlayerHeler.getCamDirection()
                 SetEntityVelocity(PlayerPedId(), 0.01, 0.01, 0.01)

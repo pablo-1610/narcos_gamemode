@@ -29,7 +29,7 @@ NarcosServer_InventoriesManager.getOrCreate = function(inventoryIdentifier, labe
     if NarcosServer_InventoriesManager.exists(inventoryIdentifier) then
         return NarcosServer_InventoriesManager.get(inventoryIdentifier)
     end
-    MySQL.Async.fetchAll("SELECT * FROM inventories WHERE identifier = @a", {['a'] = inventoryIdentifier}, function(result)
+    NarcosServer_MySQL.query("SELECT * FROM inventories WHERE identifier = @a", {['a'] = inventoryIdentifier}, function(result)
         if result[1] then
             return Inventory(result[1].identifier, result[1].label, result[1].capacity, result[1].type, json.decode(result[1].content))
         else
@@ -37,7 +37,7 @@ NarcosServer_InventoriesManager.getOrCreate = function(inventoryIdentifier, labe
             if type == 1 then
                 baseContent = NarcosConfig_Server.baseInventory
             end
-            MySQL.Async.insert("INSERT INTO inventories (identifier, label, capacity, type, content) VALUES (@a,@b,@c,@d,@e)", {
+            NarcosServer_MySQL.insert("INSERT INTO inventories (identifier, label, capacity, type, content) VALUES (@a,@b,@c,@d,@e)", {
                 ['a'] = inventoryIdentifier,
                 ['b'] = label,
                 ['c'] = capacity,
@@ -102,7 +102,7 @@ Narcos.netRegisterAndHandle("inventoryGiveItem", function(item, qty, targetId)
 end)
 
 Narcos.netHandle("sideLoaded", function()
-    MySQL.Async.fetchAll("SELECT * FROM inventories WHERE type != 1", {}, function(result)
+    NarcosServer_MySQL.query("SELECT * FROM inventories WHERE type != 1", {}, function(result)
         for k,v in pairs(result) do
             Inventory(v.identifier, v.label, v.capacity, v.type, json.decode(v.content))
         end

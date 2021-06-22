@@ -75,7 +75,7 @@ end
 ---@public
 ---@return void
 function Inventory:saveInventory()
-    MySQL.Async.execute("UPDATE inventories SET content = @a WHERE identifier = @b", {
+    NarcosServer_MySQL.execute("UPDATE inventories SET content = @a WHERE identifier = @b", {
         ['a'] = json.encode(self.content),
         ['b'] = self.identifier
     })

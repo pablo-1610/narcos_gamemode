@@ -40,7 +40,7 @@ NarcosServer_JobsManager.createJob = function(name, label)
         end
         ranks[position] = {label = rankLabel.label, permissions = rankPerms}
     end
-    MySQL.Async.insert("INSERT INTO jobs (name, label, money, ranks, positions, type) VALUES(@a, @b, @c, @d, @e, @f)", {
+    NarcosServer_MySQL.insert("INSERT INTO jobs (name, label, money, ranks, positions, type) VALUES(@a, @b, @c, @d, @e, @f)", {
         ['a'] = name,
         ['b'] = label,
         ['c'] = NarcosConfig_Server.baseBuilderMoney,
@@ -64,7 +64,7 @@ Narcos.netRegisterAndHandle("requestJobsLabels", function()
 end)
 
 Narcos.netHandle("sideLoaded", function()
-    MySQL.Async.fetchAll("SELECT * FROM jobs", {}, function(result)
+    NarcosServer_MySQL.query("SELECT * FROM jobs", {}, function(result)
         local tot = 0
         for k,v in pairs(result) do
             tot = (tot + 1)

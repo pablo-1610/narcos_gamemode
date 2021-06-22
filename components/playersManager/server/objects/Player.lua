@@ -57,7 +57,7 @@ setmetatable(Player, {
 ---@public
 ---@return void
 function Player:asyncLoadData()
-    MySQL.Async.fetchAll("SELECT * FROM players WHERE license = @a", {['a'] = self:getLicense()}, function(result)
+    NarcosServer_MySQL.query("SELECT * FROM players WHERE license = @a", {['a'] = self:getLicense()}, function(result)
         if result[1] then
             self.newPlayer = false
             self.rank = NarcosServer_RanksManager.get(result[1].rank, true)
@@ -232,7 +232,7 @@ end
 ---@public
 ---@return void
 function Player:savePlayer()
-    MySQL.Async.execute("UPDATE players SET cash = @a WHERE license = @b", {
+    NarcosServer_MySQL.execute("UPDATE players SET cash = @a WHERE license = @b", {
         ['a'] = self.cash,
         ['b'] = self:getLicense()
     })
@@ -258,7 +258,7 @@ function Player:savePosition(position)
     if self.cash == nil then
         return
     end
-    MySQL.Async.execute("UPDATE players SET position = @a WHERE license = @b", {
+    NarcosServer_MySQL.execute("UPDATE players SET position = @a WHERE license = @b", {
         ['a'] = position,
         ['b'] = self:getLicense()
     })

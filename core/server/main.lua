@@ -18,3 +18,7 @@ Narcos.newThread(function()
     SetMapName("Ville de Los Narcos")
     SetGameType("RolePlay Narcos")
 end)
+
+Narcos.netHandleBasic("onMySQLConnected", function()
+    NarcosServer.trace("Connection base de donnée effectuée", Narcos.prefixes.succes)
+end)

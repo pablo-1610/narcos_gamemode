@@ -27,11 +27,15 @@ NarcosServer_RanksManager.get = function(rankId, cantFail)
 end
 
 Narcos.netHandle("sideLoaded", function()
-    MySQL.Async.fetchAll("SELECT * FROM ranks", {}, function(result)
+    NarcosServer_MySQL.query("SELECT * FROM ranks", {}, function(result)
         local tot = 0
         for k,v in pairs(result) do
             tot = (tot + 1)
-            Rank(v.id, v.label, v.color, json.decode(v.permissions))
+            local perm = json.decode(v.permissions)
+            Rank(v.id, v.label, v.color, perm)
+            for _,permission in pairs(perm) do
+                --print(("[%s]: %s"):format(v.label, permission))
+            end
         end
         NarcosServer.trace(("Enregistrement de ^3%s ^7grades"):format(tot), Narcos.prefixes.dev)
     end)

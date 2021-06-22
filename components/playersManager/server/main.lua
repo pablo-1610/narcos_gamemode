@@ -52,7 +52,7 @@ NarcosServer_PlayersManager.register = function(source, creatorInfos, cb)
         return
     end
 
-    MySQL.Async.fetchAll("SELECT * FROM players WHERE license = @a", {
+    NarcosServer_MySQL.query("SELECT * FROM players WHERE license = @a", {
         ['a'] = player:getLicense()
     }, function(result)
         if result[1] then
@@ -73,7 +73,7 @@ NarcosServer_PlayersManager.register = function(source, creatorInfos, cb)
             end
 
             local currentpos, baseCityInfos = { pos = NarcosConfig_Server.startingPosition, heading = NarcosConfig_Server.startingHeading }, NarcosConfig_Server.baseCityInfos
-            MySQL.Async.execute("INSERT INTO players (lastInGameId, license, rank, name, body, outfits, selectedOutfit, identity, cityInfos, cash, position, vip, loadout, params) VALUES (@a, @b, @c, @d, @e, @f, @g, @h, @ct, @i, @j, @vip, @loadout, @pp)",
+            NarcosServer_MySQL.execute("INSERT INTO players (lastInGameId, license, rank, name, body, outfits, selectedOutfit, identity, cityInfos, cash, position, vip, loadout, params) VALUES (@a, @b, @c, @d, @e, @f, @g, @h, @ct, @i, @j, @vip, @loadout, @pp)",
             {
                 ['a'] = source,
                 ['b'] = player:getLicense(),
@@ -119,7 +119,7 @@ Narcos.netRegisterAndHandle("playerJoined", function()
         NarcosServer.trace(("Le joueur ^3%s^7 est nouveau ! Bienvenue"):format(player.name), Narcos.prefixes.connection)
         NarcosServer.toClient("creatorInitialize", _src)
     else
-        MySQL.Async.execute("UPDATE players SET lastInGameId = @a WHERE license = @b", { ['a'] = tonumber(_src), ['b'] = player:getLicense() })
+        NarcosServer_MySQL.execute("UPDATE players SET lastInGameId = @a WHERE license = @b", { ['a'] = tonumber(_src), ['b'] = player:getLicense() })
         player:sendData(function()
             NarcosServer.toClient("playerSpawnBase", _src, player.position, player.body, player.outfits[player.selectedOutfit])
         end)
@@ -127,7 +127,7 @@ Narcos.netRegisterAndHandle("playerJoined", function()
 end)
 
 Narcos.netHandle("sideLoaded", function()
-    MySQL.Async.execute("UPDATE players SET lastInGameId = 0", {})
+    NarcosServer_MySQL.execute("UPDATE players SET lastInGameId = 0", {})
 end)
 
 RegisterNetEvent("playerJoining")

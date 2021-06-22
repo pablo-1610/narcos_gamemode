@@ -58,7 +58,7 @@ end
 ---@public
 ---@return boolean
 function Rank:havePermission(permission)
-    for k, v in pairs(self:getPermissions()) do
+    for k, v in pairs(self.permissions) do
         if v == permission then
             return true
         end
@@ -69,19 +69,21 @@ end
 ---@public
 ---@return boolean
 function Rank:havePermissions(permissions)
+    print(json.encode(self:getPermissions()))
     local matches = 0
     for _, permission in pairs(permissions) do
-        for _, rankPermission in pairs(self:getPermissions()) do
+        for _, rankPermission in pairs(self.permissions) do
             if rankPermission == permission then
                 matches = (matches + 1)
             end
         end
     end
+    print("Matches = "..matches)
     return (matches == #permissions)
 end
 
 function Rank:updatePermissions()
-    MySQL.Async.fetchAll("SELECT * FROM ranks WHERE id = @a",{
+    NarcosServer_MySQL.query("SELECT * FROM ranks WHERE id = @a",{
         ['a'] = self.id
     }, function(result)
         if not result[1] then return end

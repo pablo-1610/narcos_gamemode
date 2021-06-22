@@ -44,7 +44,7 @@ NarcosServer_ItemsManager.getItemLabel = function(itemName)
 end
 
 Narcos.netHandle("sideLoaded", function()
-    MySQL.Async.fetchAll("SELECT * FROM items", {}, function(result)
+    NarcosServer_MySQL.query("SELECT * FROM items", {}, function(result)
         local tot = 0
         for k,v in pairs(result) do
             tot = (tot + 1)

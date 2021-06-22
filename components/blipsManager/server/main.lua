@@ -15,7 +15,6 @@ NarcosServer_BlipsManager = {}
 NarcosServer_BlipsManager.list = {}
 
 NarcosServer_BlipsManager.createPublic = function(position, sprite, color, scale, text, shortRange)
-    print(("New blip \"%s\""):format(text))
     local blip = Blip(position, sprite, color, scale, text, shortRange, false)
     NarcosServer.toAll("newBlip", blip)
     return blip.blipId

@@ -63,6 +63,7 @@ server_scripts {
     "core/config/server.lua",
     "core/server/main.lua",
     "core/server/utils.lua",
+    "core/sql_connector/server/mysql-async.js",
 
     "components/**/server/*.lua",
     "components/**/server/objects/*.lua",

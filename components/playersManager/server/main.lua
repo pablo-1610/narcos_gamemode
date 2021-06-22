@@ -16,7 +16,7 @@ NarcosServer_PlayersManager.list = {}
 NarcosServer_PlayersManager.connecting = {}
 
 NarcosServer_PlayersManager.add = function(source, identifiers)
-    NarcosServer.trace(("Le joueur ^3%s^7 se ^2connecte ^7(id: %s)"):format(GetPlayerName(source),source), Narcos.prefixes.connection)
+    NarcosServer.trace(("Le joueur ^3%s^7 se ^2connecte ^7(id: %s)"):format(GetPlayerName(source), source), Narcos.prefixes.connection)
     Player(source, identifiers)
 end
 
@@ -51,20 +51,29 @@ NarcosServer_PlayersManager.register = function(source, creatorInfos, cb)
         DropPlayer(source, "Une erreur est survenue (ERREUR 402), veuillez contacter un staff.")
         return
     end
-    local identity, character, filter = creatorInfos[1], creatorInfos[2], creatorInfos[3]
 
-    local body, outfits = {}, {}
-    outfits["Explorateur"] = {}
-    for component, id in pairs(character) do
-        if filter[component] then
-            body[component] = id
+    MySQL.Async.fetchAll("SELECT * FROM players WHERE license = @a", {
+        ['a'] = player:getLicense()
+    }, function(result)
+        if result[1] then
+            --- @ERROR 403
+            DropPlayer(source, "Une erreur est survenue (ERREUR 403), veuillez contacter un staff.")
+            NarcosServer_ErrorsManager.die(NarcosEnums.Errors.LICENSE_EXIST, ("license: %s"):format(player:getLicense()))
         else
-            outfits["Explorateur"][component] = id
-        end
-    end
+            local identity, character, filter = creatorInfos[1], creatorInfos[2], creatorInfos[3]
 
-    local currentpos, baseCityInfos = {pos = NarcosConfig_Server.startingPosition, heading = NarcosConfig_Server.startingHeading}, NarcosConfig_Server.baseCityInfos
-    MySQL.Async.execute("INSERT INTO players (lastInGameId, license, rank, name, body, outfits, selectedOutfit, identity, cityInfos, cash, position, vip, loadout, params) VALUES (@a, @b, @c, @d, @e, @f, @g, @h, @ct, @i, @j, @vip, @loadout, @pp)",
+            local body, outfits = {}, {}
+            outfits["Explorateur"] = {}
+            for component, id in pairs(character) do
+                if filter[component] then
+                    body[component] = id
+                else
+                    outfits["Explorateur"][component] = id
+                end
+            end
+
+            local currentpos, baseCityInfos = { pos = NarcosConfig_Server.startingPosition, heading = NarcosConfig_Server.startingHeading }, NarcosConfig_Server.baseCityInfos
+            MySQL.Async.execute("INSERT INTO players (lastInGameId, license, rank, name, body, outfits, selectedOutfit, identity, cityInfos, cash, position, vip, loadout, params) VALUES (@a, @b, @c, @d, @e, @f, @g, @h, @ct, @i, @j, @vip, @loadout, @pp)",
             {
                 ['a'] = source,
                 ['b'] = player:getLicense(),
@@ -95,6 +104,8 @@ NarcosServer_PlayersManager.register = function(source, creatorInfos, cb)
                 player:sendData()
                 cb()
             end)
+        end
+    end)
 end
 
 Narcos.netRegisterAndHandle("playerJoined", function()
@@ -103,16 +114,16 @@ Narcos.netRegisterAndHandle("playerJoined", function()
     ---@type Player
     local player = NarcosServer_PlayersManager.get(_src)
     if player:getIsNewPlayer() then
+        NarcosServer_InstancesManager.setInstance(_src, (NarcosConfig_Server.instancesRanges.creator + _src))
         NarcosServer.trace(("Le joueur ^3%s^7 est nouveau ! Bienvenue"):format(player.name), Narcos.prefixes.connection)
         NarcosServer.toClient("creatorInitialize", _src)
     else
-        MySQL.Async.execute("UPDATE players SET lastInGameId = @a WHERE license = @b", {['a'] = tonumber(_src), ['b'] = player:getLicense()})
+        MySQL.Async.execute("UPDATE players SET lastInGameId = @a WHERE license = @b", { ['a'] = tonumber(_src), ['b'] = player:getLicense() })
         player:sendData(function()
             NarcosServer.toClient("playerSpawnBase", _src, player.position, player.body, player.outfits[player.selectedOutfit])
         end)
     end
 end)
-
 
 Narcos.netHandle("sideLoaded", function()
     MySQL.Async.execute("UPDATE players SET lastInGameId = 0", {})

@@ -52,6 +52,11 @@ NarcosConfig_Server = {
         [3] = {label = "Débutant"}
     },
 
+    -- Ne pas toucher
+    instancesRanges = {
+        creator = 100
+    },
+
     baseBuilderPositions = {
         ["GARAGE"] = {
             location = vector3(0,0,0),

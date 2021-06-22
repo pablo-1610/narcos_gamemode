@@ -12,16 +12,6 @@
 --]]
 
 Narcos.netRegisterAndHandle("playerSpawnBase", function(position, body, outfit)
-    PlayerPedId()
-    local inCinematic = true
-    local cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 0)
-    SetCamActive(cam, true)
-    SetCamCoord(cam, 0,0,0)
-    RenderScriptCams(0, 0,0,0,0)
-    SetFocusPosAndVel(0, 0,0,0,0,0)
-    PlayUrl("enter", "https://youtu.be/qfIAXqpr5ZM", 0.5, false)
-
-    --[[
     NarcosClient.PlayerHeler.spawnPlayer({x = position.pos.x, y = position.pos.y, z = position.pos.z, heading = position.heading}, true, function()
 
     end, function()

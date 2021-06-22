@@ -126,3 +126,10 @@ function Npc:playSpeech(speech, param)
         NarcosServer.toAll("npcPlaySound", self.id, speech, param)
     end
 end
+
+---playSpeechForPlayer
+---@public
+---@return void
+function Npc:playSpeechForPlayer(speech, param, source)
+    NarcosServer.toClient("npcPlaySound", source, self.id, speech, param)
+end

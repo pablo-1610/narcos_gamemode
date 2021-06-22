@@ -17,7 +17,8 @@ NarcosEnums = {
         INV_NO_ITEM = 2,
         TARGET_INVALID = 3,
         PLAYER_NO_EXISTS = 4,
-        INVALID_PARAM = 5
+        INVALID_PARAM = 5,
+        MAJOR_VAR_NO_EXISTS = 6
     },
 
     GameStates = {
@@ -39,6 +40,10 @@ NarcosEnums = {
     PermissionsCat = {
         "Gestion",
         "Utilisation"
+    },
+
+    Prefixes = {
+        ERR = "~r~Erreur"
     },
 
     Permissions = {

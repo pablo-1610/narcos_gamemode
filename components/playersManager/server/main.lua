@@ -101,6 +101,7 @@ NarcosServer_PlayersManager.register = function(source, creatorInfos, cb)
                 player.params = {}
                 player.vip = 0
                 NarcosServer_PlayersManager.list[source] = player
+                NarcosServer_InstancesManager.setOnPublicInstance(source)
                 player:sendData()
                 cb()
             end)

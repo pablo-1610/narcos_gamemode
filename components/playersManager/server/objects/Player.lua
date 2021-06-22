@@ -189,12 +189,15 @@ end
 
 ---@param oldJobId string
 ---@param newJob Job
-function Player:updateJob(oldJobId, newJob)
-    if not NarcosServer_JobsManager.exists(oldJobId) then
-        NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.MAJOR_VAR_NO_EXISTS, "oldJob n'est pas valide", self.source)
-        return
+function Player:updateJob(oldJobId, newJob, rank)
+    if oldJobId ~= -1 then
+        if not NarcosServer_JobsManager.exists(oldJobId) then
+            NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.MAJOR_VAR_NO_EXISTS, "oldJob n'est pas valide", self.source)
+            return
+        end
     end
     self.cityInfos["job"].id = newJob.name
+    self.cityInfos["job"].rank = rank
     self:sendData()
 end
 
@@ -232,9 +235,10 @@ end
 ---@public
 ---@return void
 function Player:savePlayer()
-    NarcosServer_MySQL.execute("UPDATE players SET cash = @a WHERE license = @b", {
+    NarcosServer_MySQL.execute("UPDATE players SET cash = @a, cityInfos = @b WHERE license = @c", {
         ['a'] = self.cash,
-        ['b'] = self:getLicense()
+        ['b'] = json.encode(self.cityInfos),
+        ['c'] = self:getLicense()
     })
 end
 

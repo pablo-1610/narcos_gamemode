@@ -40,7 +40,6 @@ end)
 ---@param args table
 NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(source, player, args)
     if #args ~= 3 then
-        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Utilisation: ~y~setjob <id> <job> <rang>")
         return
     end
     local targetId = tonumber(args[1])
@@ -56,8 +55,9 @@ NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(s
     end
     local job = NarcosServer_JobsManager.get(jobId)
     local rankId = tonumber(args[3])
-    if not job.ranks[rankId] then
-        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Le rang de ce job n'existe pas")
+    if job.ranks[rankId] == nil then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, ("Le rang de ce job n'existe pas (%s max)"):format(#job.ranks))
+        return
     end
-    player:updateJob(player.cityInfos["job"].id, job)
+    player:updateJob(player.cityInfos["job"].id, job, rankId)
 end, "Utilisation: /setjob <id> <job> <grade>")

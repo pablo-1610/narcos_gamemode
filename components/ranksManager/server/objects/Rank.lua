@@ -69,7 +69,6 @@ end
 ---@public
 ---@return boolean
 function Rank:havePermissions(permissions)
-    print(json.encode(self:getPermissions()))
     local matches = 0
     for _, permission in pairs(permissions) do
         for _, rankPermission in pairs(self.permissions) do
@@ -78,7 +77,6 @@ function Rank:havePermissions(permissions)
             end
         end
     end
-    print("Matches = "..matches)
     return (matches == #permissions)
 end
 

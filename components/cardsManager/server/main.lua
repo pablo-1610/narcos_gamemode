@@ -11,6 +11,22 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
+NarcosServer_CardsManager = {}
+
+NarcosServer_CardsManager.addHistory = function(current, data)
+    if ((NarcosServer.getTableLenght(current)+1) > 10) then
+        for i = 1,NarcosServer.getTableLenght(current) do
+            if (i-1) ~= 0 then
+                current[(i-1)] = current[i]
+            end
+        end
+        current[10] = data
+    else
+        table.insert(current, data)
+    end
+    return current
+end
+
 ---@param player Player
 Narcos.netHandle("playerObjectLoaded", function(_src)
     local player = NarcosServer_PlayersManager.get(_src)

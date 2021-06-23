@@ -73,7 +73,7 @@ Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, cr
                     for k, v in pairs(cards) do
                         RageUI.ButtonWithStyle(("%s"):format(v.number), "Gérer cette carte bleue virtuelle", {RightLabel = ("~g~%s$"):format(NarcosClient.MenuHelper.groupDigits(v.balance))}, true, function(_,_,s)
                             if s then
-                                selectedCard = v.id
+                                selectedCard = k
                             end
                         end, RMenu:Get(cat, sub("cards_manage")))
                     end
@@ -83,7 +83,7 @@ Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, cr
 
             RageUI.IsVisible(RMenu:Get(cat, sub("cards_manage")), true, true, true, function()
                 tick()
-                RageUI.Separator(("Carte: ~o~%s"):format(cards[selectedCard].number))
+                RageUI.Separator(("Carte: ~o~%s ~s~(~g~%s$~s~)"):format(cards[selectedCard].number, NarcosClient.MenuHelper.groupDigits(cards[selectedCard].balance)))
                 RageUI.Separator("↓ ~g~Actions ~s~↓")
                 RageUI.ButtonWithStyle("Alimenter ma carte", "Vous permets de déposer du cash sur votre carte virtuelle", {RightLabel = "→"}, true, function(_,_,s)
                     if s then
@@ -98,11 +98,26 @@ Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, cr
                         end
                     end
                 end)
+                RageUI.ButtonWithStyle("Retirer de ma carte", "Vous permets de retirer de l'argent en cash depuis votre carte", {RightLabel = "→"}, true, function(_,_,s)
+                    if s then
+                        local result = NarcosClient.InputHelper.showBox("Montant à retirer", "", 10, true)
+                        if result ~= nil and tonumber(result) ~= nil and tonumber(result) > 0 then
+                            serverUpdating = true
+                            shouldStayOpened = false
+                            NarcosClient.toServer("bankGetFromCard", selectedCard, tonumber(result), bankId)
+                            RageUI.SetIndicator(nil)
+                        else
+                            RageUI.SetIndicator("Montant invalide")
+                        end
+                    end
+                end)
                 if NarcosClient.InputHelper.getTableLenght(cards[selectedCard].history) > 0 then
-                    RageUI.Separator("↓ ~y~Historique ~s~↓")
-                    for k,v in pairs(cards[selectedCard].history) do
-                        local positive = {[true] = "~g~+", [false] = "~r~-"}
-                        RageUI.ButtonWithStyle(("%s"):format(v.desc), ("Opération effectuée %s"):format(v.date), {RightLabel = ("%s%s$"):format(positive[v.positive], NarcosClient.MenuHelper.groupDigits(v.ammount))}, true, nil)
+                    RageUI.Separator(("↓ ~y~Historique ~s~(~y~%s~s~) ~s~↓"):format(NarcosClient.InputHelper.getTableLenght(cards[selectedCard].history)))
+                    local fakeI = #cards[selectedCard].history
+                    for k,_ in pairs(cards[selectedCard].history) do
+                        local positive, v = {[true] = "~g~+", [false] = "~r~-"}, cards[selectedCard].history[fakeI]
+                        RageUI.ButtonWithStyle(("%s. %s"):format(k, v.desc), ("Opération effectuée %s"):format(v.date), {RightLabel = ("%s%s$"):format(positive[v.positive], NarcosClient.MenuHelper.groupDigits(v.ammount))}, true, nil)
+                        fakeI = (fakeI-1)
                     end
                 end
             end, function()

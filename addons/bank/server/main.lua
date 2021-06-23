@@ -46,6 +46,34 @@ for k, v in pairs(bankers) do
     bankers[k].npc = npc
 end
 
+Narcos.netRegisterAndHandle("bankGetFromCard", function(id, ammount, bankId)
+    local _src = source
+    if not NarcosServer_PlayersManager.exists(_src) then
+        NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.PLAYER_NO_EXISTS, ("bankCreateCard (%s)"):format(_src), _src)
+    end
+    ---@type Player
+    local player = NarcosServer_PlayersManager.get(_src)
+    local cache = player:getCache("cards")
+    local card = cache[id]
+    if not card then
+        NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.MAJOR_VAR_NO_EXISTS, ("bankAlimCard (%s)"):format(_src), _src)
+    end
+    if card.balance < ammount then
+        player:showAdvancedNotification("Banque centrale","~r~Erreur","Vous ne pouvez pas retirer une somme supérieure à ce que vous possédez sur la carte !","CHAR_BANK_FLEECA",1,false)
+        bankers[bankId].npc:playSpeechForPlayer("GENERIC_INSULT_HIGH", "SPEECH_PARAMS_FORCE_NORMAL_CLEAR", _src)
+        NarcosServer.toClient("serverReturnedCb", _src)
+        return
+    end
+    cache[id].balance = (cache[id].balance - ammount)
+    cache[id].history = NarcosServer_CardsManager.addHistory(cache[id].history, {desc = "Retrait physique", positive = false, ammount = ammount, date = ("le %s à %s:%s par %s"):format(os.date("%m/%d/%Y",os.time()), os.date("%H", os.time()), os.date("%M", os.time()), player:getFullName())})
+    --table.insert(cache[id].history, {desc = "Retrait physique", positive = false, ammount = ammount, date = ("le %s à %s:%s par %s"):format(os.date("%m/%d/%Y",os.time()), os.date("%H", os.time()), os.date("%M", os.time()), player:getFullName())})
+    player:addCash(ammount)
+    player:setCache("cards", cache)
+    player:showAdvancedNotification("Banque centrale","~g~Succès",("Les ~g~%s$ ~s~ont correctement été retirés de votre carte bleue, merci pour votre confiance"):format(NarcosServer.groupDigits(ammount)),"CHAR_BANK_FLEECA",1,false)
+    bankers[bankId].npc:playSpeechForPlayer("GENERIC_THANKS", "SPEECH_PARAMS_FORCE_NORMAL_CLEAR", _src)
+    NarcosServer.toClient("serverReturnedCb", _src)
+end)
+
 Narcos.netRegisterAndHandle("bankAlimCard", function(id, ammount, bankId)
     local _src = source
     if not NarcosServer_PlayersManager.exists(_src) then
@@ -66,7 +94,8 @@ Narcos.netRegisterAndHandle("bankAlimCard", function(id, ammount, bankId)
             return
         else
             cache[id].balance = (cache[id].balance + ammount)
-            table.insert(cache[id].history, {desc = "Dépôt physique", positive = true, ammount = ammount, date = ("le %s à %s:%s par %s"):format(os.date("%m/%d/%Y",os.time()), os.date("%H", os.time()), os.date("%M", os.time()), player:getFullName())})
+            cache[id].history = NarcosServer_CardsManager.addHistory(cache[id].history, {desc = "Dépôt physique", positive = true, ammount = ammount, date = ("le %s à %s:%s par %s"):format(os.date("%m/%d/%Y",os.time()), os.date("%H", os.time()), os.date("%M", os.time()), player:getFullName())})
+            --table.insert(cache[id].history, {desc = "Dépôt physique", positive = true, ammount = ammount, date = ("le %s à %s:%s par %s"):format(os.date("%m/%d/%Y",os.time()), os.date("%H", os.time()), os.date("%M", os.time()), player:getFullName())})
             player:setCache("cards", cache)
             player:showAdvancedNotification("Banque centrale","~g~Succès",("Les ~g~%s$ ~s~ont correctement été déposés sur votre carte bleue, merci pour votre confiance"):format(NarcosServer.groupDigits(ammount)),"CHAR_BANK_FLEECA",1,false)
             bankers[bankId].npc:playSpeechForPlayer("GENERIC_THANKS", "SPEECH_PARAMS_FORCE_NORMAL_CLEAR", _src)

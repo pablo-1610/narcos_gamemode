@@ -272,6 +272,16 @@ function Player:removeCash(ammount)
     else
         self.cash = fake
     end
+    self:sendData()
+end
+
+---addCash
+---@public
+---@return void
+---@param ammount number
+function Player:addCash(ammount)
+    self.cash = (self.cash + ammount)
+    self:sendData()
 end
 
 ---pay

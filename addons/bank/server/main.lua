@@ -20,19 +20,19 @@ local blip = NarcosServer_BlipsManager.createPublic(vector3(-114.50, 6468.57, 31
 
 local function generateCardNum()
     local sb = ""
-    for i = 1,3 do
-        local nums = {math.random(1,9),math.random(1,9),math.random(1,9)}
-        if i == 3 then
-            sb = sb..("%s%s%s%s"):format(nums[1],nums[2],nums[3])
+    for i = 1,4 do
+        local nums = {math.random(1,9),math.random(1,9),math.random(1,9),math.random(1,9)}
+        if i == 4 then
+            sb = sb..("%s%s%s%s"):format(nums[1],nums[2],nums[3],nums[4])
         else
-            sb = sb..("%s%s%s%s "):format(nums[1],nums[2],nums[3])
+            sb = sb..("%s%s%s%s "):format(nums[1],nums[2],nums[3],nums[4])
         end
     end
     return sb
 end
 
 local function openBankMenu(_src, player)
-    NarcosServer.toClient("bankOpenMenu", _src, player:getCache("cards"), generateCardNum())
+    NarcosServer.toClient("bankOpenMenu", _src, player:getCache("cards"), generateCardNum(), NarcosConfig_Server.cardCreationCost)
 end
 
 for k, v in pairs(bankers) do

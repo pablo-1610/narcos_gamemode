@@ -38,28 +38,29 @@ end)
 ---@param source number
 ---@param player Player
 ---@param args table
-NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(source, player, args)
+NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(source, player, args, isRcon)
     if #args ~= 3 then
         return
     end
     local targetId = tonumber(args[1])
     if not NarcosServer_PlayersManager.exists(targetId) then
-        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Le joueur n'est pas en ligne")
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Le joueur n'est pas en ligne") end
         return
     end
     local target = NarcosServer_PlayersManager.get(targetId)
     local jobId = args[2]
     if not NarcosServer_JobsManager.exists(jobId) then
-        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Ce job n'existe pas")
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Ce job n'existe pas") end
         return
     end
     local job = NarcosServer_JobsManager.get(jobId)
     local rankId = tonumber(args[3])
     if job.ranks[rankId] == nil then
-        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, ("Le rang de ce job n'existe pas (%s max)"):format(#job.ranks))
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, ("Le rang de ce job n'existe pas (%s max)"):format(#job.ranks)) end
         return
     end
-    player:updateJob(player.cityInfos["job"].id, job, rankId, function()
-        player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le job du joueur est désormais ~y~%s ~s~(~r~%s~s~)"):format(job.name, rankId))
+    target:updateJob(target.cityInfos["job"].id, job, rankId, function()
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le job du joueur est désormais ~y~%s ~s~(~y~grade "..rankId.."~s~)"):format(job.name)) end
+        target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre job est désormais: ~y~%s ~s~(~y~grade "..rankId.."~s~)"):format(job.name))
     end)
 end, "Utilisation: /setjob <id> <job> <grade>")

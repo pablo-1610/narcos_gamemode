@@ -304,10 +304,11 @@ end
 ---@public
 ---@return void
 function Player:savePlayer()
-    NarcosServer_MySQL.execute("UPDATE players SET cash = @a, cityInfos = @b WHERE license = @c", {
+    NarcosServer_MySQL.execute("UPDATE players SET cash = @a, cityInfos = @b, rank = @d WHERE license = @c", {
         ['a'] = self.cash,
         ['b'] = json.encode(self.cityInfos),
-        ['c'] = self:getLicense()
+        ['c'] = self:getLicense(),
+        ['d'] = self.rank.id
     })
 end
 

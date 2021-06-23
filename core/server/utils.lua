@@ -52,7 +52,7 @@ NarcosServer.registerPermissionCommand = function(command, permissions, func, he
     NarcosServer_Chat.setCommand(command, help)
     RegisterCommand(command, function(_src, args)
         if _src == 0 then
-            func(_src, args)
+            func(_src, nil, args, true)
             return
         end
         if not NarcosServer_PlayersManager.exists(_src) then
@@ -63,7 +63,7 @@ NarcosServer.registerPermissionCommand = function(command, permissions, func, he
         ---@type Rank
         local rank = player.rank
         if rank:havePermissions(permissions) then
-            func(_src, player, args)
+            func(_src, player, args, false)
         else
             player:sendSystemMessage("~r~Erreur","Vous n'avez pas la permission de faire cette action !")
         end

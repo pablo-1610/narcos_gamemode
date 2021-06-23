@@ -14,6 +14,8 @@
 --[[
     Commandes console
 --]]
+---@param source number
+---@param args table
 NarcosServer.registerConsoleCommand("addJob", function(source, args)
     if #args ~= 2 then
         NarcosServer.trace("Utilisation: ^3addJob <name> <label>", Narcos.prefixes.err)
@@ -45,7 +47,7 @@ end)
 ---@param player Player
 ---@param args table
 ---@param isRcon boolean
-NarcosServer.registerPermissionCommand("givemoney", {"commands.setmoney"}, function(source, player, args, isRcon)
+NarcosServer.registerPermissionCommand("givemoney", {"commands.givemoney"}, function(source, player, args, isRcon)
     if #args ~= 2 then
         return
     end

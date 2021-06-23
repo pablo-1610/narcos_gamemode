@@ -34,6 +34,8 @@ NarcosConfig_Server = {
     locationNpc = {type = "a_m_m_mexlabor_01", pos = vector3(2606.03, 2908.10, 40.20), heading = 330.02},
     locationOut = {pos = vector3(2600.62, 2914.49, 39.63), heading = 147.93},
 
+    cardCreationCost = 150,
+
     locationVehicles = {
         {model = "bmx", title = "Le vélo de course", desc = "Je l'ai monté moi même ! Reconditionné à neuf.", price = 0, vip = false},
         {model = "ratbike", title = "La moto douteuse", desc = "Cette moto peut faire l'affaire, bien qu'elle semble avoir déjà beaucoup servie...", price = 10, vip = false},

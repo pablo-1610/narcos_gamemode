@@ -81,7 +81,7 @@ Narcos.netHandle("f5menu", function()
             RageUI.IsVisible(RMenu:Get(cat, sub("main")), true, true, true, function()
                 tick()
 
-                RageUI.Separator(("ID: ~o~%s | Grade: ~o~%s"):format(personnalData.player.source, personnalData.player.rank.label))
+                RageUI.Separator(("ID: ~o~%s~s~ | Rang: ~o~%s"):format(personnalData.player.source, personnalData.player.rank.label))
 
                 RageUI.ButtonWithStyle("Inventaire", nil, { RightLabel = "→→" }, true, function(_, _, s)
                 end, RMenu:Get(cat, sub("inventory")))

@@ -67,7 +67,7 @@ Narcos.netRegisterAndHandle("bankAlimCard", function(id, ammount, bankId)
         else
             cache[id].balance = (cache[id].balance + ammount)
             local an = NarcosServer.getTableLenght(cache[id].history)
-            cache[id].history[(an-1)] = {desc = "Dépôt physique", positive = true, ammount = ammount, date = ("le %s à %s:%s"):format(os.date("%m/%d/%Y",os.time()), os.date("%H", os.time()), os.date("%M", os.time()))}
+            cache[id].history[(an-1)] = {desc = "Dépôt physique", positive = true, ammount = ammount, date = ("le %s à %s:%s par %s"):format(os.date("%m/%d/%Y",os.time()), os.date("%H", os.time()), os.date("%M", os.time()), player:getFullName())}
             player:setCache("cards", cache)
             player:showAdvancedNotification("Banque centrale","~g~Succès",("Les ~g~%s$ ~s~ont correctement été déposés sur votre carte bleue, merci pour votre confiance"):format(NarcosServer.groupDigits(ammount)),"CHAR_BANK_FLEECA",1,false)
             bankers[bankId].npc:playSpeechForPlayer("GENERIC_THANKS", "SPEECH_PARAMS_FORCE_NORMAL_CLEAR", _src)

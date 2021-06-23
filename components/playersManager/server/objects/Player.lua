@@ -144,6 +144,10 @@ function Player:getCache(key)
     return self.cache[key].data
 end
 
+function Player:getFullName()
+    return ("%s %s"):format(self.identity.firstname, self.identity.lastname:upper())
+end
+
 -- Setters
 
 ---setInGame

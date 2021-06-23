@@ -19,8 +19,12 @@ CREATE TABLE `items` (
   `name` varchar(80) NOT NULL COMMENT 'Identifiant unique de l''item',
   `label` varchar(80) NOT NULL COMMENT 'Nom d''affichage de l''item',
   `weight` float NOT NULL COMMENT 'Poids de l''item',
-  `vip` int(11) NOT NULL DEFAULT 0 COMMENT 'Détermine si l''objet est reservé aux VIPs'
+  `vip` int(11) NOT NULL DEFAULT '0' COMMENT 'Détermine si l''objet est reservé aux VIPs'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `items` (`name`, `label`, `weight`, `vip`) VALUES
+('bread', 'Pain', 0.2, 0),
+('water', 'Bouteille d\'eau', 0.45, 0);
 
 CREATE TABLE `jobs` (
   `name` varchar(80) NOT NULL,
@@ -63,7 +67,7 @@ INSERT INTO `ranks` (`id`, `label`, `color`, `permissions`) VALUES
 ('helper', 'Assistant', '^7', '[]'),
 ('moderator', 'Modérateur', '^7', '[]'),
 ('moderator+', 'Modérateur+', '^7', '[]'),
-('owner', 'Propriétaire', '^7', '{\"commands.setjob\"}'),
+('owner', 'Propriétaire', '^7', '{\"commands.setjob\", \"commands.setgroup\", \"commands.setmoney\", \"commands.givemoney\"}'),
 ('vip', 'VIP', '^7', '[]'),
 ('vip+', 'VIP+', '^7', '[]');
 
@@ -86,9 +90,7 @@ ALTER TABLE `ranks`
   ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `cards`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 ALTER TABLE `players`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id unique du joueur (utilisé pour la boutique)', AUTO_INCREMENT=26;
-COMMIT;
-
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id unique du joueur (utilisé pour la boutique)', AUTO_INCREMENT=39;

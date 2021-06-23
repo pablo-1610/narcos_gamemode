@@ -71,7 +71,9 @@ Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, cr
                     RageUI.Separator("↓ ~g~Mes cartes ~s~↓")
                     for k, v in pairs(cards) do
                         RageUI.ButtonWithStyle(("%s"):format(v.number), "Gérer cette carte bleue virtuelle", {RightLabel = ("~g~%s$"):format(NarcosClient.MenuHelper.groupDigits(v.balance))}, true, function(_,_,s)
-                            selectedCard = k
+                            if s then
+                                selectedCard = v.id
+                            end
                         end, RMenu:Get(cat, sub("cards_manage")))
                     end
                 end
@@ -80,6 +82,7 @@ Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, cr
 
             RageUI.IsVisible(RMenu:Get(cat, sub("cards_manage")), true, true, true, function()
                 tick()
+                RageUI.Separator(("Carte: ~o~%s"):format(cards[selectedCard].number))
                 RageUI.Separator("↓ ~g~Actions ~s~↓")
                 RageUI.ButtonWithStyle("Alimenter ma carte", "Vous permets de déposer du cash sur votre carte virtuelle", {RightLabel = "→"}, true, function(_,_,s)
                     if s then
@@ -98,7 +101,7 @@ Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, cr
                     RageUI.Separator("↓ ~y~Historique ~s~↓")
                     for k,v in pairs(cards[selectedCard].history) do
                         local positive = {[true] = "~g~+", [false] = "~r~-"}
-                        RageUI.ButtonWithStyle(("%s"):format(v.desc), nil, {RightLabel = ("%s%s$"):format(positive[v.positive], NarcosClient.MenuHelper.groupDigits(v.ammount))}, true, nil)
+                        RageUI.ButtonWithStyle(("%s"):format(v.desc), ("~y~Opération effectuée %s"):format(v.date), {RightLabel = ("%s%s$"):format(positive[v.positive], NarcosClient.MenuHelper.groupDigits(v.ammount))}, true, nil)
                     end
                 end
             end, function()

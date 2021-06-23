@@ -44,7 +44,8 @@ NarcosEnums = {
 
     Prefixes = {
         ERR = "~r~Erreur",
-        SUC = "~g~Succès"
+        SUC = "~g~Succès",
+        INF = "~b~Information"
     },
 
     Permissions = {

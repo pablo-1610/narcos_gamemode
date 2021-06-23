@@ -35,6 +35,10 @@ NarcosConfig_Server = {
     locationOut = {pos = vector3(2600.62, 2914.49, 39.63), heading = 147.93},
 
     cardCreationCost = 150,
+    cardsByVip = function(vipLevel)
+        local levels = {[1] = 2, [2] = 3}
+        return (levels[vipLevel] or 1)
+    end,
 
     locationVehicles = {
         {model = "bmx", title = "Le vélo de course", desc = "Je l'ai monté moi même ! Reconditionné à neuf.", price = 0, vip = false},

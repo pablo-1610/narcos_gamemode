@@ -47,7 +47,6 @@ end)
 ---@param suggestions table
 NarcosClient_Chat.addSuggestions = function(suggestions)
     for _, suggestion in ipairs(suggestions) do
-        print(("Adding suggestion %s"):format(json.encode(suggestion)))
         SendNUIMessage({
             type = 'ON_SUGGESTION_ADD',
             suggestion = suggestion
@@ -71,7 +70,6 @@ end
 NarcosClient_Chat.refreshCommands = function()
     local suggestions = {}
     for command, v in pairs(NarcosClient_Chat.commands) do
-        print(command)
         table.insert(suggestions, { name = '/' .. command, help = (v.help or '') })
     end
     NarcosClient_Chat.addSuggestions(suggestions)

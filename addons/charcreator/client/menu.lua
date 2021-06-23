@@ -128,8 +128,8 @@ Narcos.netHandle("creatorMenu", function()
             RageUI.IsVisible(RMenu:Get(cat, sub("main")), true, true, true, function()
                 tick()
                 RageUI.Separator("↓ ~g~Customisation ~s~↓")
-                RageUI.ButtonWithStyle("Mon identité", nil, { RightLabel = "→→" }, true, nil, RMenu:Get(cat, sub("identity")))
-                RageUI.ButtonWithStyle("Mon personnage", nil, { RightLabel = "→→" }, true, nil, RMenu:Get(cat, sub("character")))
+                RageUI.ButtonWithStyle("Mon identité", nil, { RightLabel = "→" }, true, nil, RMenu:Get(cat, sub("identity")))
+                RageUI.ButtonWithStyle("Mon personnage", nil, { RightLabel = "→" }, true, nil, RMenu:Get(cat, sub("character")))
                 RageUI.Separator("↓ ~y~Actions ~s~↓")
                 RageUI.ButtonWithStyle("~g~Valider ~s~la création", nil, {}, validate(), function(_, _, s)
                     if s then
@@ -244,7 +244,7 @@ Narcos.netHandle("creatorMenu", function()
                     end)
                     RageUI.Separator("↓ ~o~Customisation ~s~↓")
                     for k, component in pairs(customOrder) do
-                        RageUI.ButtonWithStyle(("%s"):format(NarcosClient_SkinManager.trad[component] or "inconnue"), nil, { RightLabel = "→→" }, true, function(_, _, s)
+                        RageUI.ButtonWithStyle(("%s"):format(NarcosClient_SkinManager.trad[component] or "inconnue"), nil, { RightLabel = "→" }, true, function(_, _, s)
                             if s then
                                 selectedVariator = component
                             end

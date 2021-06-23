@@ -152,6 +152,10 @@ end)
 --- @HANDLERS playerDropped
 AddEventHandler('playerDropped', function(reason)
     local _src = source
-    NarcosServer_PlayersManager.get(_src):savePlayer()
+    local player = NarcosServer_PlayersManager.get(_src)
+    for k,v in pairs(player.cache) do
+        v.disconnect(v.data)
+    end
+    player:savePlayer()
     NarcosServer_PlayersManager.remove(_src)
 end)

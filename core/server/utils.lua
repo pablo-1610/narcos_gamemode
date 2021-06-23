@@ -25,6 +25,12 @@ NarcosServer.kick = function(_src, reason)
     DropPlayer(_src, ("[Los Narcos] Vous venez de vous faire expulser du serveur: \"%s\" !"):format(reason))
 end
 
+NarcosServer.groupDigits = function(value)
+    local left, num, right = string.match(value, '^([^%d]*%d)(%d*)(.-)$')
+
+    return left .. (num:reverse():gsub('(%d%d%d)', '%1' .. "."):reverse()) .. right
+end
+
 NarcosServer.registerConsoleCommand = function(command, func)
     RegisterCommand(command, function(_src, args)
         if _src ~= 0 then

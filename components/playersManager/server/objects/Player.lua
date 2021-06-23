@@ -83,7 +83,6 @@ function Player:asyncLoadData()
         else
             self.newPlayer = true
         end
-        NarcosServer.trace(json.encode(self.indentifiers), Narcos.prefixes.dev)
         Narcos.toInternal("playerObjectLoaded", self.source)
     end)
 end
@@ -142,7 +141,7 @@ end
 ---@return void
 ---@param key any
 function Player:getCache(key)
-    return self.cache[key]
+    return self.cache[key].data
 end
 
 -- Setters
@@ -232,7 +231,22 @@ end
 ---@param index any
 ---@param value any
 function Player:setCache(index, value)
-    self.cache[index] = value
+    if self.cache[index] == nil then
+        self.cache[index] = {}
+    end
+    self.cache[index].data = value
+end
+
+---setCacheDisconnectRule
+---@public
+---@return void
+---@param index any
+---@param value any
+function Player:setCacheDisconnectRule(index, value)
+    if self.cache[index] == nil then
+        self.cache[index] = {}
+    end
+    self.cache[index].disconnect = value
 end
 
 ---canAfford
@@ -263,7 +277,7 @@ end
 ---@param cb function
 function Player:pay(ammount, cb)
     if (self.cash < ammount) then
-        cb(false)
+        cb(false, (ammount-self.cash))
     else
         self.cash = (self.cash-ammount)
         self:sendData(function()

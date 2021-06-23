@@ -19,6 +19,7 @@ local SettingsButton = {
 function RageUI.Button(Label, Description, Enabled, Callback, Submenu)
     local CurrentMenu = RageUI.CurrentMenu
     if CurrentMenu ~= nil and CurrentMenu() then
+        Enabled = (Enabled and (not serverUpdating))
         ---@type number
         local Option = RageUI.Options + 1
 
@@ -76,6 +77,7 @@ end
 function RageUI.ButtonWithStyle(Label, Description, Style, Enabled, Callback, Submenu)
     local CurrentMenu = RageUI.CurrentMenu
     if CurrentMenu ~= nil and CurrentMenu() then
+        Enabled = (Enabled and (not serverUpdating))
         ---@type number
         local Option = RageUI.Options + 1
 

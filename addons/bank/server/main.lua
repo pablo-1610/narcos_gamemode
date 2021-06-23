@@ -31,8 +31,8 @@ local function generateCardNum()
     return sb
 end
 
-local function openBankMenu(_src, player)
-    NarcosServer.toClient("bankOpenMenu", _src, player:getCache("cards"), generateCardNum(), NarcosConfig_Server.cardCreationCost)
+local function openBankMenu(_src, player, bId)
+    NarcosServer.toClient("bankOpenMenu", _src, player:getCache("cards"), generateCardNum(), NarcosConfig_Server.cardCreationCost, bId)
 end
 
 for k, v in pairs(bankers) do
@@ -41,7 +41,70 @@ for k, v in pairs(bankers) do
     npc:setDisplayInfos({name = "Banquier", range = 5.5, color = 0})
     bankers[k].zone = NarcosServer_ZonesManager.createPublic(v.zoneLoc, 20, { r = 255, g = 255, b = 255, a = 130 }, function(_src, player)
         bankers[k].npc:playSpeechForPlayer("GENERIC_HI", "SPEECH_PARAMS_FORCE_NORMAL_CLEAR", _src)
-        openBankMenu(_src, player)
+        openBankMenu(_src, player, k)
     end, "Appuyez sur ~INPUT_CONTEXT~ pour parler au banquier", 20.0, 1.0)
     bankers[k].npc = npc
 end
+
+Narcos.netRegisterAndHandle("bankAlimCard", function(id, ammount, bankId)
+    local _src = source
+    if not NarcosServer_PlayersManager.exists(_src) then
+        NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.PLAYER_NO_EXISTS, ("bankCreateCard (%s)"):format(_src), _src)
+    end
+    ---@type Player
+    local player = NarcosServer_PlayersManager.get(_src)
+    local cache = player.getCache("cards")
+    local card = cache[id]
+    if not card then
+        NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.MAJOR_VAR_NO_EXISTS, ("bankAlimCard (%s)"):format(_src), _src)
+    end
+    player:pay(ammount, function(success, missing)
+        if not success then
+            player:showAdvancedNotification("Banque centrale","~r~Erreur","Vous ne pouvez pas déposer une somme supérieure à ce que vous possédez en cash !","CHAR_BANK_FLEECA",1,false)
+            NarcosServer.toClient("serverReturnedCb", _src)
+            return
+        else
+            cache[id].balance = (cache[id].balance + ammount)
+            player:setCache("cards", cache)
+            player:showAdvancedNotification("Banque centrale","~g~Succès",("Les ~g~%s$ ~s~ont correctement été déposés sur votre carte bleue, merci pour votre confiance"):format(NarcosServer.groupDigits(ammount)),"CHAR_BANK_FLEECA",1,false)
+            bankers[bankId].npc:playSpeechForPlayer("GENERIC_THANKS", "SPEECH_PARAMS_FORCE_NORMAL_CLEAR", _src)
+            NarcosServer.toClient("serverReturnedCb", _src)
+        end
+    end)
+end)
+
+Narcos.netRegisterAndHandle("bankCreateCard", function(pin, num, bankId)
+    local _src = source
+    if not NarcosServer_PlayersManager.exists(_src) then
+        NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.PLAYER_NO_EXISTS, ("bankCreateCard (%s)"):format(_src), _src)
+    end
+    ---@type Player
+    local player = NarcosServer_PlayersManager.get(_src)
+    local maxCards = NarcosConfig_Server.cardsByVip(player.vip)
+    if (#player:getCache("cards")) == maxCards then
+        player:showAdvancedNotification("Banque centrale","~r~Erreur",("Vous avez trop de cartes bleues (~y~%s max~s~). Passez à un rang supérieur pour en débloquer davantage !"):format(maxCards),"CHAR_BANK_FLEECA",1,false)
+        NarcosServer.toClient("serverReturnedCb", _src)
+        return
+    end
+    player:pay(NarcosConfig_Server.cardCreationCost, function(success, missing)
+        if not success then
+            player:showAdvancedNotification("Banque centrale","~r~Erreur",("Vous n'avez pas assez d'argent pour créer une carte, manquant: ~g~%s"):format(NarcosServer.groupDigits(missing)),"CHAR_BANK_FLEECA",1,false)
+            NarcosServer.toClient("serverReturnedCb", _src)
+        else
+            NarcosServer_MySQL.insert("INSERT INTO cards (owner, number, pin, balance, history) VALUES(@a, @b, @c, @d, @e)", {
+                ['a'] = player:getLicense(),
+                ['b'] = num,
+                ['c'] = pin,
+                ['d'] = 0,
+                ['e'] = json.encode({})
+            }, function(insrtId)
+                local oldCache = player:getCache("cards")
+                oldCache[insrtId] = {id = insrtId, owner = player:getLicense(), number = num, pin = pin, balance = 0, history = {}}
+                player:setCache("cards", oldCache)
+                player:showAdvancedNotification("Banque centrale","~g~Succès",("Création de la carte ~y~%s ~s~effectuée, n'hésitez pas à venir régulièrement pour consulter son activité"):format(num),"CHAR_BANK_FLEECA",1,false)
+                bankers[bankId].npc:playSpeechForPlayer("GENERIC_THANKS", "SPEECH_PARAMS_FORCE_NORMAL_CLEAR", _src)
+                NarcosServer.toClient("serverReturnedCb", _src)
+            end)
+        end
+    end)
+end)

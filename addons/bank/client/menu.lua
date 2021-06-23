@@ -11,7 +11,7 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, creationPrice)
+Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, creationPrice, bankId)
     if isAMenuActive then
         return
     end
@@ -66,14 +66,36 @@ Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, cr
 
             RageUI.IsVisible(RMenu:Get(cat, sub("cards")), true, true, true, function()
                 tick()
-                RageUI.ButtonWithStyle("Créer une carte bleue", "Créez une carte bleue virtuelle", {RightLabel = "→"}, true, nil, RMenu:Get(cat, sub("cards_build")))
+                RageUI.ButtonWithStyle("Créer une carte bleue", "Créez une carte bleue virtuelle", {RightLabel = "→"}, (not serverUpdating), nil, RMenu:Get(cat, sub("cards_build")))
                 if #cards > 0 then
                     RageUI.Separator("↓ ~g~Mes cartes ~s~↓")
                     for k, v in pairs(cards) do
-                        RageUI.ButtonWithStyle(("%s"):format(v.number), "Gérer cette carte bleue virtuelle", {RightLabel = "→"}, true, function(_,_,s)
+                        RageUI.ButtonWithStyle(("%s"):format(v.number), "Gérer cette carte bleue virtuelle", {RightLabel = ("~g~%s$"):format(NarcosClient.MenuHelper.groupDigits(v.balance))}, true, function(_,_,s)
                             selectedCard = k
                         end, RMenu:Get(cat, sub("cards_manage")))
                     end
+                end
+            end, function()
+            end)
+
+            RageUI.IsVisible(RMenu:Get(cat, sub("cards_manage")), true, true, true, function()
+                tick()
+                RageUI.Separator("↓ ~g~Actions ~s~↓")
+                RageUI.ButtonWithStyle("Alimenter ma carte", "Vous permets de déposer du cash sur votre carte virtuelle", {RightLabel = "→"}, true, function(_,_,s)
+                    if s then
+                        local result = NarcosClient.InputHelper.showBox("Montant à déposer", "", 10, true)
+                        if result ~= nil and tonumber(result) ~= nil then
+                            serverUpdating = true
+                            shouldStayOpened = false
+                            NarcosClient.toServer("bankAlimCard", selectedCard, tonumber(result), bankId)
+                            RageUI.SetIndicator(nil)
+                        else
+                            RageUI.SetIndicator("Montant invalide")
+                        end
+                    end
+                end)
+                if #cards[selectedCard].history > 0 then
+                    RageUI.Separator("↓ ~y~Historique ~s~↓")
                 end
             end, function()
             end)
@@ -99,11 +121,11 @@ Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, cr
                     end
                 end)
                 RageUI.Separator("↓ ~y~Validation ~s~↓")
-                RageUI.ButtonWithStyle("Créer ma carte bleue", nil, {RightLabel = NarcosClient.MenuHelper.generatePrice(creationPrice)}, cardpin ~= nil, function(_,_,s)
+                RageUI.ButtonWithStyle("Créer ma carte bleue", nil, {RightLabel = NarcosClient.MenuHelper.generatePrice(creationPrice)}, (cardpin ~= nil) and (not serverUpdating), function(_,_,s)
                     if s then
                         shouldStayOpened = false
                         serverUpdating = true
-                        RageUI.CloseAll()
+                        NarcosClient.toServer("bankCreateCard", cardpin, availableCardNum, (personnalData.player.identity.lastname:upper().." "..personnalData.player.identity.firstname), bankId)
                     end
                 end)
             end, function()

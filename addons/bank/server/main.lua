@@ -60,12 +60,14 @@ Narcos.netRegisterAndHandle("bankAlimCard", function(id, ammount, bankId)
     end
     player:pay(ammount, function(success, missing)
         if not success then
+            bankers[bankId].npc:playSpeechForPlayer("GENERIC_INSULT_HIGH", "SPEECH_PARAMS_FORCE_NORMAL_CLEAR", _src)
             player:showAdvancedNotification("Banque centrale","~r~Erreur","Vous ne pouvez pas déposer une somme supérieure à ce que vous possédez en cash !","CHAR_BANK_FLEECA",1,false)
             NarcosServer.toClient("serverReturnedCb", _src)
             return
         else
             cache[id].balance = (cache[id].balance + ammount)
-            table.insert(cache[id].history, {desc = "Dépôt physique", positive = true, ammount = ammount})
+            local an = NarcosServer.getTableLenght(cache[id].history)
+            cache[id].history[(an-1)] = {desc = "Dépôt physique", positive = true, ammount = ammount, date = ("Le %s à %s:%s"):format(os.date("%m/%d/%Y",os.time()), os.date("%H", os.time()), os.date("%M", os.time()))}
             player:setCache("cards", cache)
             player:showAdvancedNotification("Banque centrale","~g~Succès",("Les ~g~%s$ ~s~ont correctement été déposés sur votre carte bleue, merci pour votre confiance"):format(NarcosServer.groupDigits(ammount)),"CHAR_BANK_FLEECA",1,false)
             bankers[bankId].npc:playSpeechForPlayer("GENERIC_THANKS", "SPEECH_PARAMS_FORCE_NORMAL_CLEAR", _src)
@@ -82,7 +84,8 @@ Narcos.netRegisterAndHandle("bankCreateCard", function(pin, num, name, bankId)
     ---@type Player
     local player = NarcosServer_PlayersManager.get(_src)
     local maxCards = NarcosConfig_Server.cardsByVip(player.vip)
-    if (#player:getCache("cards")) == maxCards then
+    print(("max: %s"):format(json.encode(maxCards)))
+    if (#player:getCache("cards")) >= maxCards then
         player:showAdvancedNotification("Banque centrale","~r~Erreur",("Vous avez trop de cartes bleues (~y~%s max~s~). Passez à un rang supérieur pour en débloquer davantage !"):format(maxCards),"CHAR_BANK_FLEECA",1,false)
         NarcosServer.toClient("serverReturnedCb", _src)
         return
@@ -90,6 +93,7 @@ Narcos.netRegisterAndHandle("bankCreateCard", function(pin, num, name, bankId)
     player:pay(NarcosConfig_Server.cardCreationCost, function(success, missing)
         if not success then
             player:showAdvancedNotification("Banque centrale","~r~Erreur",("Vous n'avez pas assez d'argent pour créer une carte (~g~%s$ ~s~manquants)"):format(NarcosServer.groupDigits(missing)),"CHAR_BANK_FLEECA",1,false)
+            bankers[bankId].npc:playSpeechForPlayer("GENERIC_INSULT_HIGH", "SPEECH_PARAMS_FORCE_NORMAL_CLEAR", _src)
             NarcosServer.toClient("serverReturnedCb", _src)
         else
             NarcosServer_MySQL.insert("INSERT INTO cards (owner, number, pin, balance, history) VALUES(@a, @b, @c, @d, @e)", {

@@ -28,7 +28,7 @@ Narcos.netHandle("playerObjectLoaded", function(_src)
         ['a'] = player:getLicense()
     }, function(result)
         for k,v in pairs(result) do
-            cards[k] = {id = v.id, owner = v.owner, number = v.number, pin = v.pin, balance = v.balance, history = json.decode(v.history)}
+            cards[tonumber(v.id)] = {id = v.id, owner = v.owner, number = v.number, pin = v.pin, balance = v.balance, history = json.decode(v.history)}
         end
         player:setCache("cards", cards)
     end)

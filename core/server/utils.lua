@@ -25,6 +25,14 @@ NarcosServer.kick = function(_src, reason)
     DropPlayer(_src, ("[Los Narcos] Vous venez de vous faire expulser du serveur: \"%s\" !"):format(reason))
 end
 
+NarcosServer.getTableLenght = function(table)
+    local tot = 0
+    for k,v in pairs(table) do
+        tot = (tot + 1)
+    end
+    return tonumber(tot)
+end
+
 NarcosServer.groupDigits = function(value)
     local left, num, right = string.match(value, '^([^%d]*%d)(%d*)(.-)$')
 

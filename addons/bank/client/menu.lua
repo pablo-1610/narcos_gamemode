@@ -67,7 +67,7 @@ Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, cr
             RageUI.IsVisible(RMenu:Get(cat, sub("cards")), true, true, true, function()
                 tick()
                 RageUI.ButtonWithStyle("Créer une carte bleue", "Créez une carte bleue virtuelle", {RightLabel = "→"}, (not serverUpdating), nil, RMenu:Get(cat, sub("cards_build")))
-                if #cards > 0 then
+                if NarcosClient.InputHelper.getTableLenght(cards) > 0 then
                     RageUI.Separator("↓ ~g~Mes cartes ~s~↓")
                     for k, v in pairs(cards) do
                         RageUI.ButtonWithStyle(("%s"):format(v.number), "Gérer cette carte bleue virtuelle", {RightLabel = ("~g~%s$"):format(NarcosClient.MenuHelper.groupDigits(v.balance))}, true, function(_,_,s)
@@ -94,8 +94,12 @@ Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, cr
                         end
                     end
                 end)
-                if #cards[selectedCard].history > 0 then
+                if NarcosClient.InputHelper.getTableLenght(cards[selectedCard].history) > 0 then
                     RageUI.Separator("↓ ~y~Historique ~s~↓")
+                    for k,v in pairs(cards[selectedCard].history) do
+                        local positive = {[true] = "~g~+", [false] = "~r~-"}
+                        RageUI.ButtonWithStyle(("%s"):format(v.desc), nil, {RightLabel = ("%s%s$"):format(positive[v.positive], NarcosClient.MenuHelper.groupDigits(v.ammount))}, true, nil)
+                    end
                 end
             end, function()
             end)

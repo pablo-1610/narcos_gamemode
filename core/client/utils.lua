@@ -288,7 +288,7 @@ NarcosClient.InputHelper = {
         for k,v in pairs(table) do
             tot = (tot + 1)
         end
-        return tonumber(tot-1)
+        return tonumber(tot)
     end,
 
     showBox = function(TextEntry, ExampleText, MaxStringLenght, isValueInt)

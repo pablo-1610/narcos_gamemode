@@ -101,7 +101,7 @@ Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, cr
                     RageUI.Separator("↓ ~y~Historique ~s~↓")
                     for k,v in pairs(cards[selectedCard].history) do
                         local positive = {[true] = "~g~+", [false] = "~r~-"}
-                        RageUI.ButtonWithStyle(("%s"):format(v.desc), ("~y~Opération effectuée %s"):format(v.date), {RightLabel = ("%s%s$"):format(positive[v.positive], NarcosClient.MenuHelper.groupDigits(v.ammount))}, true, nil)
+                        RageUI.ButtonWithStyle(("%s"):format(v.desc), ("Opération effectuée %s"):format(v.date), {RightLabel = ("%s%s$"):format(positive[v.positive], NarcosClient.MenuHelper.groupDigits(v.ammount))}, true, nil)
                     end
                 end
             end, function()

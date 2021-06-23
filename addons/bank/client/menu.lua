@@ -50,6 +50,7 @@ Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, cr
 
     Narcos.newThread(function()
         local selectedCard, cardpin = false, nil, nil
+        table.sort(cards, function(a,b) return a.balance>b.balance end)
         while isAMenuActive do
             local shouldStayOpened
             local function tick()

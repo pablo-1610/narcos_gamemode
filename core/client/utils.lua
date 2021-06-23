@@ -15,6 +15,14 @@ NarcosClient = {}
 
 -- MenuHelper
 NarcosClient.MenuHelper = {
+    defineOrValue = function(value)
+        if value == nil then
+            return "Définir"
+        else
+            return value
+        end
+    end,
+
     descOrVipCom = function(desc, boolean)
         if boolean then
             return desc
@@ -265,6 +273,22 @@ end
 NarcosClient.InputHelper = {
     startsWith = function(String, Start)
         return string.sub(String, 1, string.len(Start)) == Start
+    end,
+
+    split = function(s, delimiter)
+        result = {};
+        for match in (s..delimiter):gmatch("(.-)"..delimiter) do
+            table.insert(result, match);
+        end
+        return result;
+    end,
+
+    getTableLenght = function(table)
+        local tot = 0
+        for k,v in pairs(table) do
+            tot = (tot + 1)
+        end
+        return tonumber(tot-1)
     end,
 
     showBox = function(TextEntry, ExampleText, MaxStringLenght, isValueInt)

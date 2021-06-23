@@ -112,7 +112,7 @@ Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, cr
                 RageUI.Separator("↓ ~g~Définition ~s~↓")
                 RageUI.ButtonWithStyle(("Titulaire: ~g~%s %s"):format(personnalData.player.identity.lastname:upper(), personnalData.player.identity.firstname), nil, {}, true, nil)
                 RageUI.ButtonWithStyle(("Numéro: ~y~%s"):format(availableCardNum), nil, {}, true, nil)
-                RageUI.ButtonWithStyle(("Pin: %s"):format(cardpin == nil and "~r~Définir" or ("~r~%s"):format(cardpin)), nil, {}, true, function(_,_,s)
+                RageUI.ButtonWithStyle(("Pin: %s"):format(cardpin == nil and "~r~Définir" or ("~r~%s"):format(cardpin)), nil, {RightLabel = "→"}, true, function(_,_,s)
                     if s then
                         local result = NarcosClient.InputHelper.showBox("Code secret à quatre chiffres", "", 4, true)
                         if result ~= nil and tonumber(result) ~= nil then

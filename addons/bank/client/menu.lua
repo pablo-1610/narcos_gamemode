@@ -11,7 +11,7 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum)
+Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, creationPrice)
     if isAMenuActive then
         return
     end
@@ -49,8 +49,9 @@ Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum)
     RageUI.Visible(RMenu:Get(cat, sub("main")), true)
 
     Narcos.newThread(function()
+        local selectedCard, cardpin = false, nil, nil
         while isAMenuActive do
-            local shouldStayOpened, selectedCard = false
+            local shouldStayOpened
             local function tick()
                 shouldStayOpened = true
             end
@@ -79,8 +80,32 @@ Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum)
 
             RageUI.IsVisible(RMenu:Get(cat, sub("cards_build")), true, true, true, function()
                 tick()
+                RageUI.Separator("↓ ~g~Définition ~s~↓")
                 RageUI.ButtonWithStyle(("Titulaire: ~g~%s %s"):format(personnalData.player.identity.lastname:upper(), personnalData.player.identity.firstname), nil, {}, true, nil)
-                RageUI.ButtonWithStyle(("Numéro: ~y~%s %s"):format(availableCardNum), nil, {}, true, nil)
+                RageUI.ButtonWithStyle(("Numéro: ~y~%s"):format(availableCardNum), nil, {}, true, nil)
+                RageUI.ButtonWithStyle(("Pin: %s"):format(cardpin == nil and "~r~Définir" or ("~r~%s"):format(cardpin)), nil, {}, true, function(_,_,s)
+                    if s then
+                        local result = NarcosClient.InputHelper.showBox("Code secret à quatre chiffres", "", 4, true)
+                        if result ~= nil and tonumber(result) ~= nil then
+                            if tonumber(result) > 999 then
+                                cardpin = result
+                                RageUI.SetIndicator(nil)
+                            else
+                                RageUI.SetIndicator("Ce code n'est pas à 4 chiffres")
+                            end
+                        else
+                            RageUI.SetIndicator("Aucun code indiqué")
+                        end
+                    end
+                end)
+                RageUI.Separator("↓ ~y~Validation ~s~↓")
+                RageUI.ButtonWithStyle("Créer ma carte bleue", nil, {RightLabel = NarcosClient.MenuHelper.generatePrice(creationPrice)}, cardpin ~= nil, function(_,_,s)
+                    if s then
+                        shouldStayOpened = false
+                        serverUpdating = true
+                        RageUI.CloseAll()
+                    end
+                end)
             end, function()
             end)
 

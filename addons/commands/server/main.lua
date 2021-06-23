@@ -56,7 +56,7 @@ NarcosServer.registerPermissionCommand("setmoney", {"commands.setmoney"}, functi
     end
     local target = NarcosServer_PlayersManager.get(targetId)
     local ammount = tonumber(args[2])
-    if ammount == nil then
+    if ammount == nil or ammount < 0 then
         if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Montant invalide") end
         return
     end

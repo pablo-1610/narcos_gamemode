@@ -60,7 +60,7 @@ NarcosServer.registerPermissionCommand("setmoney", {"commands.setmoney"}, functi
         if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Montant invalide") end
         return
     end
-    target.setCash(ammount)
+    target:setCash(ammount)
     if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le joueur a désormais ~g~%s$"):format(NarcosClient.MenuHelper.groupDigits(ammount))) end
     target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre argent a été définie à: ~g~%s$"):format(NarcosClient.MenuHelper.groupDigits(ammount)))
 end, "Utilisation: /setmoney <id> <montant>")

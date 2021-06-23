@@ -90,11 +90,9 @@ window.APP = {
       }
 
       if (this.removedSuggestions.find(a => a.name == suggestion.name)) {
-        console.log(this.removedSuggestions.indexOf(suggestion.name))
         this.removedSuggestions.splice(this.removedSuggestions.indexOf(suggestion.name), 1)
       }
 
-      console.log('Adding Command Suggestion: ' + suggestion.name + ' ' + suggestion.help);
       this.backingSuggestions.push(suggestion);
     },
     ON_SUGGESTION_REMOVE({ name }) {
@@ -103,7 +101,6 @@ window.APP = {
       }
     },
     ON_COMMANDS_RESET() {
-      console.log('Resetting Command Suggestions');
       this.removedSuggestions = [];
       this.backingSuggestions = [];
     },

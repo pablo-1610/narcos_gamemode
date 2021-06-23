@@ -84,7 +84,7 @@ Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, cr
                 RageUI.ButtonWithStyle("Alimenter ma carte", "Vous permets de déposer du cash sur votre carte virtuelle", {RightLabel = "→"}, true, function(_,_,s)
                     if s then
                         local result = NarcosClient.InputHelper.showBox("Montant à déposer", "", 10, true)
-                        if result ~= nil and tonumber(result) ~= nil then
+                        if result ~= nil and tonumber(result) ~= nil and tonumber(result) > 0 then
                             serverUpdating = true
                             shouldStayOpened = false
                             NarcosClient.toServer("bankAlimCard", selectedCard, tonumber(result), bankId)

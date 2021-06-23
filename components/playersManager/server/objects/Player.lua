@@ -166,6 +166,18 @@ function Player:setRank(rank)
     self.rank = rank
 end
 
+---setRankFromId
+---@public
+---@return void
+---@param rankId string
+function Player:setRankFromId(rankId, cb)
+    if not NarcosServer_RanksManager.exists(rankId) then
+        return
+    end
+    self.rank = NarcosServer_RanksManager.get(rankId)
+    cb(self.rank)
+end
+
 ---showNotification
 ---@public
 ---@return void

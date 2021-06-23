@@ -11,6 +11,9 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
+--[[
+    Commandes console
+--]]
 NarcosServer.registerConsoleCommand("addJob", function(source, args)
     if #args ~= 2 then
         NarcosServer.trace("Utilisation: ^3addJob <name> <label>", Narcos.prefixes.err)
@@ -20,7 +23,7 @@ NarcosServer.registerConsoleCommand("addJob", function(source, args)
     NarcosServer_JobsManager.createJob(job, label)
 end)
 
-NarcosServer.registerConsoleCommand("rankUpdatesPerms", function(source, args)
+NarcosServer.registerConsoleCommand("refreshPerms", function(source, args)
     if #args ~= 1 then
         NarcosServer.trace("Utilisation: ^3rankUpdatePerms <rang>", Narcos.prefixes.err)
         return
@@ -35,9 +38,40 @@ NarcosServer.registerConsoleCommand("rankUpdatesPerms", function(source, args)
     rank:updatePermissions()
 end)
 
+--[[
+    Commandes IG
+--]]
 ---@param source number
 ---@param player Player
 ---@param args table
+---@param isRcon boolean
+NarcosServer.registerPermissionCommand("setgroup", {"commands.setgroup"}, function(source, player, args, isRcon)
+    if #args ~= 2 then
+        return
+    end
+    local targetId = tonumber(args[1])
+    if not NarcosServer_PlayersManager.exists(targetId) then
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Le joueur n'est pas en ligne") end
+        return
+    end
+    local target = NarcosServer_PlayersManager.get(targetId)
+    local rankId = args[2]
+    if not NarcosServer_RanksManager.exists(rankId) then
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Ce rang n'existe pas") end
+        return
+    end
+    target:setRankFromId(rankId, function(rank)
+        target:sendData(function()
+            if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le rang du joueur est désormais ~o~%s"):format(rank.label)) end
+            target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre rang est désormais: ~o~%s"):format(rank.label))
+        end)
+    end)
+end, "Utilisation: /setrank <id> <rang>")
+
+---@param source number
+---@param player Player
+---@param args table
+---@param isRcon boolean
 NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(source, player, args, isRcon)
     if #args ~= 3 then
         return
@@ -63,4 +97,4 @@ NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(s
         if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le job du joueur est désormais ~y~%s ~s~(~y~grade "..rankId.."~s~)"):format(job.name)) end
         target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre job est désormais: ~y~%s ~s~(~y~grade "..rankId.."~s~)"):format(job.name))
     end)
-end, "Utilisation: /setjob <id> <job> <grade>")
+end, "Utilisation: /setjob <id> <job> <rang>")

@@ -74,7 +74,7 @@ Narcos.netRegisterAndHandle("bankAlimCard", function(id, ammount, bankId)
     end)
 end)
 
-Narcos.netRegisterAndHandle("bankCreateCard", function(pin, num, bankId)
+Narcos.netRegisterAndHandle("bankCreateCard", function(pin, num, name, bankId)
     local _src = source
     if not NarcosServer_PlayersManager.exists(_src) then
         NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.PLAYER_NO_EXISTS, ("bankCreateCard (%s)"):format(_src), _src)

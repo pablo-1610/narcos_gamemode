@@ -17,9 +17,10 @@ Narcos.netHandle("playerObjectLoaded", function(_src)
     local cards = {}
     player:setCacheDisconnectRule("cards", function(cards)
         for k,v in pairs(cards) do
-            NarcosServer_MySQL.execute("UPDATE cards SET balance = @a, history = @b", {
+            NarcosServer_MySQL.execute("UPDATE cards SET balance = @a, history = @b WHERE id = @c", {
                 ['a'] = v.balance,
-                ['b'] = json.encode(v.history)
+                ['b'] = json.encode(v.history),
+                ['c'] = k
             })
         end
     end)

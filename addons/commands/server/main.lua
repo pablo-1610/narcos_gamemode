@@ -47,6 +47,48 @@ end)
 ---@param player Player
 ---@param args table
 ---@param isRcon boolean
+NarcosServer.registerPermissionCommand("giveitem", {"commands.giveitem"}, function(source, player, args, isRcon)
+    if #args ~= 3 then
+        return
+    end
+    local targetId = tonumber(args[1])
+    if not NarcosServer_PlayersManager.exists(targetId) then
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Le joueur n'est pas en ligne") end
+        return
+    end
+    ---@type Player
+    local target = NarcosServer_PlayersManager.get(targetId)
+    local itemId = args[2]
+    if not NarcosServer_ItemsManager.exists(itemId) then
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Cet item n'existe pas !") end
+        return
+    end
+    local ammount = tonumber(args[3])
+    if ammount == nil or ammount <= 0 then
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Montant invalide") end
+        return
+    end
+    ---@type Item
+    local item = NarcosServer_ItemsManager.get(itemId)
+    ---@type Inventory
+    local inventory = target:getInventory()
+    if inventory:canAddItem(itemId, ammount) then
+        inventory:addItem(itemId, function()
+            target:sendData(function()
+                if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Don de ~o~%s %s~s~ à %s effectué"):format(ammount, item.label, target.name)) end
+                target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Un membre du staff vous a fait don de ~o~%s %s"):format(ammount, item.label))
+            end)
+        end, tonumber(ammount))
+    else
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, ("Le joueur n'a pas assez de place pour accueillir ~o~%s %s"):format(ammount, item.label)) end
+        return
+    end
+end, "Utilisation: /giveitem <id> <item> <quantité>")
+
+---@param source number
+---@param player Player
+---@param args table
+---@param isRcon boolean
 NarcosServer.registerPermissionCommand("givemoney", {"commands.givemoney"}, function(source, player, args, isRcon)
     if #args ~= 2 then
         return

@@ -144,6 +144,17 @@ function Player:getCache(key)
     return self.cache[key].data
 end
 
+
+---getInventory
+---@public
+---@return Inventory
+function Player:getInventory()
+    return NarcosServer_InventoriesManager.get(self:getLicense())
+end
+
+---getFullName
+---@public
+---@return string
 function Player:getFullName()
     return ("%s %s"):format(self.identity.firstname, self.identity.lastname:upper())
 end

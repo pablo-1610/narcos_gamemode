@@ -166,6 +166,15 @@ function Player:setRank(rank)
     self.rank = rank
 end
 
+---setCash
+---@public
+---@return void
+---@param cash number
+function Player:setCash(cash)
+    self.cash = cash
+    self:sendData()
+end
+
 ---setRankFromId
 ---@public
 ---@return void

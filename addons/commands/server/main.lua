@@ -45,6 +45,30 @@ end)
 ---@param player Player
 ---@param args table
 ---@param isRcon boolean
+NarcosServer.registerPermissionCommand("setmoney", {"commands.setmoney"}, function(source, player, args, isRcon)
+    if #args ~= 2 then
+        return
+    end
+    local targetId = tonumber(args[1])
+    if not NarcosServer_PlayersManager.exists(targetId) then
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Le joueur n'est pas en ligne") end
+        return
+    end
+    local target = NarcosServer_PlayersManager.get(targetId)
+    local ammount = tonumber(args[2])
+    if ammount == nil then
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Montant invalide") end
+        return
+    end
+    target.setCash(ammount)
+    if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le joueur a désormais ~g~%s$"):format(NarcosClient.MenuHelper.groupDigits(ammount))) end
+    target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre argent a été définie à: ~g~%s$"):format(NarcosClient.MenuHelper.groupDigits(ammount)))
+end, "Utilisation: /setmoney <id> <montant>")
+
+---@param source number
+---@param player Player
+---@param args table
+---@param isRcon boolean
 NarcosServer.registerPermissionCommand("setgroup", {"commands.setgroup"}, function(source, player, args, isRcon)
     if #args ~= 2 then
         return

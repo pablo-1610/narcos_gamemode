@@ -66,7 +66,7 @@ NarcosServer.registerPermissionCommand("setgroup", {"commands.setgroup"}, functi
             target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre rang est désormais: ~o~%s"):format(rank.label))
         end)
     end)
-end, "Utilisation: /setrank <id> <rang>")
+end, "Utilisation: /setgroup <id> <rang>")
 
 ---@param source number
 ---@param player Player

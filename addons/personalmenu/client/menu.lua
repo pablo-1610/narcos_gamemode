@@ -18,6 +18,54 @@ end
 
 local noclip, names = false, false
 
+local NoClipSpeed = 1
+
+local function NoClipToggle(bool)
+    noclip = bool
+    if noclip then
+        Narcos.newThread(function()
+            while noclip do
+                Wait(0)
+                HideHudComponentThisFrame(19)
+            end
+        end)
+        Narcos.newThread(function()
+            while noclip do
+                Wait(0)
+                local pCoords = GetEntityCoords(PlayerPedId(), false)
+                local camCoords = NarcosClient.PlayerHeler.getCamDirection()
+                SetEntityVelocity(PlayerPedId(), 0.01, 0.01, 0.01)
+                SetEntityCollision(PlayerPedId(), 0, 1)
+                FreezeEntityPosition(PlayerPedId(), true)
+
+                if IsControlPressed(0, 32) then
+                    pCoords = pCoords + (NoClipSpeed * camCoords)
+                end
+
+                if IsControlPressed(0, 269) then
+                    pCoords = pCoords - (NoClipSpeed * camCoords)
+                end
+
+                if IsDisabledControlJustPressed(1, 15) then
+                    NoClipSpeed = NoClipSpeed + 0.3
+                end
+                if IsDisabledControlJustPressed(1, 14) then
+                    NoClipSpeed = NoClipSpeed - 0.3
+                    if NoClipSpeed < 0 then
+                        NoClipSpeed = 0
+                    end
+                end
+                SetEntityCoordsNoOffset(PlayerPedId(), pCoords, true, true, true)
+                SetEntityVisible(PlayerPedId(), 0, 0)
+
+            end
+            FreezeEntityPosition(PlayerPedId(), false)
+            SetEntityVisible(PlayerPedId(), 1, 0)
+            SetEntityCollision(PlayerPedId(), 1, 1)
+        end)
+    end
+end
+
 Narcos.netHandle("f5menu", function()
     if isAMenuActive then
         return
@@ -180,9 +228,9 @@ Narcos.netHandle("f5menu", function()
                 RageUI.Checkbox("Noclip", nil, noclip, { Style = RageUI.CheckboxStyle.Tick }, function(Hovered, Selected, Active, Checked)
                     noclip = Checked;
                 end, function()
-                    Narcos.toInternal("staffNoclip", true)
+                    NoClipToggle(noclip)
                 end, function()
-                    Narcos.toInternal("staffNoclip", false)
+                    NoClipToggle(noclip)
                 end)
             end, function()
             end)

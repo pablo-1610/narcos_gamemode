@@ -44,7 +44,6 @@ setmetatable(Player, {
         self.cache = {}
         self.name = GetPlayerName(source)
         self.identifiers = identifiers
-        print(json.encode(identifiers))
         self.ingame = false
         self.rank = NarcosServer_RanksManager.get(NarcosConfig_Server.defaultRank)
         self.inventory = NarcosServer_InventoriesManager.getOrCreate(identifiers['license'], ("Sac de %s"):format(self.name), 20.0, 1)

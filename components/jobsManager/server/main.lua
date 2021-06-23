@@ -50,6 +50,12 @@ NarcosServer_JobsManager.createJob = function(name, label)
     }, function()
         NarcosServer.trace(("Job créé avec succès (^2%s^7)"):format(label), Narcos.prefixes.succes)
         Job(name, label, NarcosConfig_Server.baseBuilderMoney, ranks, positions, 3)
+        local labels = {}
+        for k, v in pairs(NarcosServer_JobsManager.list) do
+            labels[k] = v.label
+        end
+        labels[-1] = NarcosConfig_Server.unemployedJobName
+        NarcosServer.toAll("clientCacheSetCache", "jobsLabels", labels)
     end)
 end
 

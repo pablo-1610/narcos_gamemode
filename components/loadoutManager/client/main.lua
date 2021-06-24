@@ -13,12 +13,12 @@
 
 Narcos.netRegisterAndHandle("receiveLoadouts", function(loadouts)
     for k,v in pairs(loadouts) do
-        GiveWeaponToPed(PlayerPedId(), v.model, v.ammo, false, false)
+        GiveWeaponToPed(PlayerPedId(), GetHashKey(k), tonumber(v), false, false)
     end
 end)
 
 Narcos.netRegisterAndHandle("receiveLoadout", function(loadout)
-    GiveWeaponToPed(PlayerPedId(), loadout.model, loadout.ammo, false, false)
+    GiveWeaponToPed(PlayerPedId(), GetHashKey(loadout.model), loadout.ammo, false, false)
 end)
 
 Narcos.netRegisterAndHandle("clearLoadout", function()

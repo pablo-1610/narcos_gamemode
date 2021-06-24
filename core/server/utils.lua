@@ -52,6 +52,7 @@ NarcosServer.registerPermissionCommand = function(command, permissions, func, he
     NarcosServer_Chat.setCommand(command, help)
     RegisterCommand(command, function(_src, args)
         if _src == 0 then
+            NarcosServer.webhook(("Console: /%s %s"):format(command:lower(),json.encode(args)), "orange", NarcosConfig_Server.staffWebhook)
             func(_src, nil, args, true)
             return
         end
@@ -63,6 +64,7 @@ NarcosServer.registerPermissionCommand = function(command, permissions, func, he
         ---@type Rank
         local rank = player.rank
         if rank:havePermissions(permissions) then
+            NarcosServer.webhook(("[%s] %s: /%s %s"):format(player.id, player.name, command:lower(),json.encode(args)), "grey", NarcosConfig_Server.staffWebhook)
             func(_src, player, args, false)
         else
             player:sendSystemMessage("~r~Erreur","Vous n'avez pas la permission de faire cette action !")

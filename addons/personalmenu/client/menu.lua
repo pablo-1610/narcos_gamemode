@@ -131,31 +131,31 @@ Narcos.netHandle("f5menu", function()
 
                 RageUI.Separator(("ID: ~o~%s~s~ | Rang: ~o~%s"):format(personnalData.player.source, personnalData.player.rank.label))
 
-                RageUI.ButtonWithStyle("Inventaire", nil, { RightLabel = "→→" }, true, function(_, _, s)
+                RageUI.ButtonWithStyle("Inventaire", nil, { RightLabel = "→" }, true, function(_, _, s)
                 end, RMenu:Get(cat, sub("inventory")))
 
-                RageUI.ButtonWithStyle("Tactique", nil, { RightLabel = "→→" }, true, function(_, _, s)
+                RageUI.ButtonWithStyle("Tactique", nil, { RightLabel = "→" }, true, function(_, _, s)
                 end, RMenu:Get(cat, sub("tactical")))
 
-                RageUI.ButtonWithStyle("Portefeuille", nil, { RightLabel = "→→" }, true, function(_, _, s)
+                RageUI.ButtonWithStyle("Portefeuille", nil, { RightLabel = "→" }, true, function(_, _, s)
                 end)
 
-                RageUI.ButtonWithStyle("Habits", nil, { RightLabel = "→→" }, true, function(_, _, s)
+                RageUI.ButtonWithStyle("Habits", nil, { RightLabel = "→" }, true, function(_, _, s)
                 end)
 
-                RageUI.ButtonWithStyle("Animations", nil, { RightLabel = "→→" }, true, function(_, _, s)
+                RageUI.ButtonWithStyle("Animations", nil, { RightLabel = "→" }, true, function(_, _, s)
                 end)
 
-                RageUI.ButtonWithStyle("Autre", nil, { RightLabel = "→→" }, true, function(_, _, s)
+                RageUI.ButtonWithStyle("Autre", nil, { RightLabel = "→" }, true, function(_, _, s)
                 end)
 
-                RageUI.ButtonWithStyle("Véhicule", nil, { RightLabel = "→→" }, (IsPedSittingInAnyVehicle(PlayerPedId()) and GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId(), false), -1) == PlayerPedId()), function(_, _, s)
+                RageUI.ButtonWithStyle("Véhicule", nil, { RightLabel = "→" }, (IsPedSittingInAnyVehicle(PlayerPedId()) and GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId(), false), -1) == PlayerPedId()), function(_, _, s)
                 end)
 
-                RageUI.ButtonWithStyle("Avantages", nil, { RightLabel = "→→" }, false, function(_, _, s)
+                RageUI.ButtonWithStyle("Avantages", nil, { RightLabel = "→" }, false, function(_, _, s)
                 end)
 
-                RageUI.ButtonWithStyle("Administration", nil, { RightLabel = "→→" }, NarcosClient.PlayerHeler.isStaff(), function(_, _, s)
+                RageUI.ButtonWithStyle("Administration", nil, { RightLabel = "→" }, NarcosClient.PlayerHeler.isStaff(), function(_, _, s)
                 end, RMenu:Get(cat, sub("admin")))
             end, function()
             end)

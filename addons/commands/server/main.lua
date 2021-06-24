@@ -47,6 +47,60 @@ end)
 ---@param player Player
 ---@param args table
 ---@param isRcon boolean
+NarcosServer.registerPermissionCommand("clearloadout", {"commands.clearloadout"}, function(source, player, args, isRcon)
+    if #args ~= 1 then
+        return
+    end
+    local targetId = tonumber(args[1])
+    if not NarcosServer_PlayersManager.exists(targetId) then
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Le joueur n'est pas en ligne") end
+        return
+    end
+    ---@type Player
+    local target = NarcosServer_PlayersManager.get(targetId)
+    target:clearWeapons(function()
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, "Clear des armes effectué") end
+        target:sendSystemMessage(NarcosEnums.Prefixes.INF, "Un membre du staff a supprimé vos armes")
+    end)
+end, "Utilisation: /clearloadout <id>")
+
+---@param source number
+---@param player Player
+---@param args table
+---@param isRcon boolean
+NarcosServer.registerPermissionCommand("giveweapon", {"commands.giveweapon"}, function(source, player, args, isRcon)
+    if #args ~= 3 then
+        return
+    end
+    local targetId = tonumber(args[1])
+    if not NarcosServer_PlayersManager.exists(targetId) then
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Le joueur n'est pas en ligne") end
+        return
+    end
+    ---@type Player
+    local target = NarcosServer_PlayersManager.get(targetId)
+    local weapon = args[2]:upper()
+    local found = false
+    for _,v in pairs(NarcosConfig_Server.availableWeapons) do
+        if v == weapon then
+            found = true
+        end
+    end
+    if not found then
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Cette arme n'existe pas !") end
+        return
+    end
+    local ammount = (tonumber(args[3]) or 200)
+    target:addWeapon(weapon, ammount, function()
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, "Don de l'arme effectuée") end
+        target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Un membre du staff vous a fait don d'une arme (~o~%s~s~) avec ~o~%s ~s~balles"):format(weapon, ammount))
+    end)
+end, "Utilisation: /giveweapon <id> <arme> <munitions>")
+
+---@param source number
+---@param player Player
+---@param args table
+---@param isRcon boolean
 NarcosServer.registerPermissionCommand("giveitem", {"commands.giveitem"}, function(source, player, args, isRcon)
     if #args ~= 3 then
         return

@@ -323,9 +323,9 @@ end
 ---@param cb function
 function Player:addWeapon(weapon, ammount, cb)
     if not self.loadout[weapon] then
-        self.loadout[weapon] = 0
+        self.loadout[weapon] = {ammo = 0}
     end
-    self.loadout[weapon] = (self.loadout[weapon] + ammount)
+    self.loadout[weapon].ammo = (self.loadout[weapon].ammo + ammount)
     NarcosServer.toClient("receiveLoadout", self.source, {model = weapon, ammo = ammount})
     if cb ~= nil then
         cb()

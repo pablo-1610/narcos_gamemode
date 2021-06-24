@@ -13,7 +13,7 @@
 
 Narcos.netRegisterAndHandle("receiveLoadouts", function(loadouts)
     for k,v in pairs(loadouts) do
-        GiveWeaponToPed(PlayerPedId(), GetHashKey(k), tonumber(v), false, false)
+        GiveWeaponToPed(PlayerPedId(), GetHashKey(k), tonumber(v.ammo), false, false)
     end
 end)
 

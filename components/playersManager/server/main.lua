@@ -121,7 +121,7 @@ Narcos.netRegisterAndHandle("playerJoined", function()
     else
         NarcosServer_MySQL.execute("UPDATE players SET lastInGameId = @a WHERE license = @b", { ['a'] = tonumber(_src), ['b'] = player:getLicense() })
         player:sendData(function()
-            NarcosServer.toClient("playerSpawnBase", _src, player.position, player.body, player.outfits[player.selectedOutfit])
+            NarcosServer.toClient("playerSpawnBase", _src, player.position, player.body, player.outfits[player.selectedOutfit], player.loadout)
         end)
     end
 end)

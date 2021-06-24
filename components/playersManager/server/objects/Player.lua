@@ -59,7 +59,7 @@ setmetatable(Player, {
 ---@public
 ---@return void
 function Player:asyncLoadData()
-    NarcosServer_MySQL.query("SELECT * FROM players WHERE license = @a", {['a'] = self:getLicense()}, function(result)
+    NarcosServer_MySQL.query("SELECT * FROM players WHERE license = @a", { ['a'] = self:getLicense() }, function(result)
         if result[1] then
             self.newPlayer = false
             self.rank = NarcosServer_RanksManager.get(result[1].rank, true)
@@ -78,7 +78,7 @@ function Player:asyncLoadData()
                 for name, _ in pairs(self.outfits) do
                     table.insert(sort, name)
                 end
-                self.selectedOutfit = sort[math.random(1,#sort)]
+                self.selectedOutfit = sort[math.random(1, #sort)]
             end
         else
             self.newPlayer = true
@@ -143,7 +143,6 @@ end
 function Player:getCache(key)
     return self.cache[key].data
 end
-
 
 ---getInventory
 ---@public
@@ -258,7 +257,7 @@ end
 ---@param title string
 ---@param message string
 function Player:sendSystemMessage(title, message)
-    self:showAdvancedNotification("Système",title,message,"CHAR_LESTER_DEATHWISH",false)
+    self:showAdvancedNotification("Système", title, message, "CHAR_LESTER_DEATHWISH", false)
 end
 
 ---setCache
@@ -298,7 +297,7 @@ end
 ---@return void
 ---@param ammount number
 function Player:removeCash(ammount)
-    local fake = (self.cash-ammount)
+    local fake = (self.cash - ammount)
     if fake <= 0 then
         self.cash = 0
     else
@@ -316,6 +315,35 @@ function Player:addCash(ammount)
     self:sendData()
 end
 
+---addWeapon
+---@public
+---@return void
+---@param weapon string
+---@param ammount number
+---@param cb function
+function Player:addWeapon(weapon, ammount, cb)
+    if not self.loadout[weapon] then
+        self.loadout[weapon] = 0
+    end
+    self.loadout[weapon] = (self.loadout[weapon] + ammount)
+    NarcosServer.toClient("receiveLoadout", self.source, {model = weapon, ammo = ammount})
+    if cb ~= nil then
+        cb()
+    end
+end
+
+---clearWeapons
+---@public
+---@return void
+---@param cb function
+function Player:clearWeapons(cb)
+    self.loadout = {}
+    NarcosServer.toClient("clearLoadout", self.source)
+    if cb ~= nil then
+        cb()
+    end
+end
+
 ---pay
 ---@public
 ---@return void
@@ -323,9 +351,9 @@ end
 ---@param cb function
 function Player:pay(ammount, cb)
     if (self.cash < ammount) then
-        cb(false, (ammount-self.cash))
+        cb(false, (ammount - self.cash))
     else
-        self.cash = (self.cash-ammount)
+        self.cash = (self.cash - ammount)
         self:sendData(function()
             cb(true)
         end)
@@ -336,11 +364,12 @@ end
 ---@public
 ---@return void
 function Player:savePlayer()
-    NarcosServer_MySQL.execute("UPDATE players SET cash = @a, cityInfos = @b, rank = @d WHERE license = @c", {
+    NarcosServer_MySQL.execute("UPDATE players SET cash = @a, cityInfos = @b, rank = @d, loadout = @e WHERE license = @c", {
         ['a'] = self.cash,
         ['b'] = json.encode(self.cityInfos),
         ['c'] = self:getLicense(),
-        ['d'] = self.rank.id
+        ['d'] = self.rank.id,
+        ['e'] = json.encode(self.loadout)
     })
 end
 
@@ -349,7 +378,7 @@ end
 ---@return void
 ---@param cb function
 function Player:sendData(cb)
-    NarcosServer.toClient("updateLocalData", self.source, {player = self, inventory = NarcosServer_InventoriesManager.get(self:getLicense())})
+    NarcosServer.toClient("updateLocalData", self.source, { player = self, inventory = NarcosServer_InventoriesManager.get(self:getLicense()) })
     if cb ~= nil then
         cb()
     end

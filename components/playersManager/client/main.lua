@@ -11,7 +11,7 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-Narcos.netRegisterAndHandle("playerSpawnBase", function(position, body, outfit)
+Narcos.netRegisterAndHandle("playerSpawnBase", function(position, body, outfit, ld)
     NarcosClient.PlayerHeler.spawnPlayer({x = position.pos.x, y = position.pos.y, z = position.pos.z, heading = position.heading}, true, function()
 
     end, function()
@@ -31,6 +31,7 @@ Narcos.netRegisterAndHandle("playerSpawnBase", function(position, body, outfit)
         Wait(100)
         NarcosClient_SkinManager.loadSkin(outfit)
         NarcosClient.trace("Tenue chargée")
+        Narcos.toInternal("receiveLoadouts", ld)
         DoScreenFadeIn(1000)
         Wait(1000)
         Narcos.toInternal("playerOk")

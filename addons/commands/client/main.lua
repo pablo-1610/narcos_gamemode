@@ -42,4 +42,6 @@ end)
 
 RegisterCommand("revive", function()
     NetworkResurrectLocalPlayer(GetEntityCoords(PlayerPedId()), 0.0, -1, 0)
+    ClearPedBloodDamage(PlayerPedId())
+
 end)

@@ -49,8 +49,8 @@ NarcosConfig_Server = {
     reminderInterval = ((1000*60)*15),
     reminder = {
         "Vous pouvez à tout moment cacher/afficher l'HUD avec la touche ~b~W ~s~!",
-        "N'hésitez pas à rejoindre notre Discord, disponible dans le menu F5",
-        "Vous êtes victime de joueurs toxics ? Utilisez le menu F5 pour appeller un staff."
+        "N'hésitez pas à rejoindre notre Discord, disponible dans le menu personnel",
+        "Vous êtes victime de joueurs toxics ? Utilisez la commande ~b~/report~s~ !"
     },
 
     baseBuilderRank = {

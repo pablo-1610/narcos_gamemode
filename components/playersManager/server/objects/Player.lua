@@ -327,9 +327,11 @@ function Player:addWeapon(weapon, ammount, cb)
     end
     self.loadout[weapon].ammo = (self.loadout[weapon].ammo + ammount)
     NarcosServer.toClient("receiveLoadout", self.source, {model = weapon, ammo = ammount})
-    if cb ~= nil then
-        cb()
-    end
+    self:sendData(function()
+        if cb ~= nil then
+            cb()
+        end
+    end)
 end
 
 ---clearWeapons
@@ -339,9 +341,11 @@ end
 function Player:clearWeapons(cb)
     self.loadout = {}
     NarcosServer.toClient("clearLoadout", self.source)
-    if cb ~= nil then
-        cb()
-    end
+    self:sendData(function()
+        if cb ~= nil then
+            cb()
+        end
+    end)
 end
 
 ---pay

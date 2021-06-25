@@ -58,6 +58,10 @@ Narcos.newThread(function()
             EnableDispatchService(i, false)
             Citizen.Wait(1)
         end
-        Wait(750)
+        if GetPlayerWantedLevel(playerId) ~= 0 then
+            SetPlayerWantedLevel(playerId, 0, false)
+            SetPlayerWantedLevelNow(playerId, false)
+        end
+        Wait(0)
     end
 end)

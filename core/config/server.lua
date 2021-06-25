@@ -12,6 +12,8 @@
 --]]
 
 NarcosConfig_Server = {
+    populationEnabled = false,
+
     defaultRank = "owner",
 
     bannedInstance = 666,

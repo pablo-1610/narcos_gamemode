@@ -13,6 +13,8 @@
 
 uniqueId = 0
 
+SetRoutingBucketPopulationEnabled(0, NarcosConfig_Server.populationEnabled)
+
 Narcos.newThread(function()
     Narcos.toInternal("sideLoaded")
     SetMapName("Ville de Los Narcos")

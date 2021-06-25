@@ -15,4 +15,8 @@ NarcosConfig_Client = {
     tebex = "store.los-narcos.com",
     tebexVip = "Vous voulez devenir ~r~VIP ~s~? Alors visitez dès maintenant ~r~store.los-narcos.com ~s~!",
     interactionMenuTitle = "Menu interactions",
+
+    weaponsLabel = {
+        ["WEAPON_PISTOL"] = "Pistolet"
+    }
 }

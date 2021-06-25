@@ -27,6 +27,7 @@ local function NoClipToggle(bool)
             while noclip do
                 Wait(0)
                 HideHudComponentThisFrame(19)
+                HideHudComponentThisFrame(20)
             end
         end)
         Narcos.newThread(function()

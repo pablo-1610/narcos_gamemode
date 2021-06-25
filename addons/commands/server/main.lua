@@ -261,6 +261,11 @@ NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(_
         if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, ("Le rang de ce job n'existe pas (%s max)"):format(#job.ranks)) end
         return
     end
+    if oldJob ~= -1 then
+        print("Oldjob is not unemployed")
+        local jobObject = NarcosServer_JobsManager.get(oldJob)
+        jobObject:handlePlayerLeft(_src, player)
+    end
     target:updateJob(target.cityInfos["job"].id, job, rankId, function()
         if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le job du joueur est désormais ~y~%s ~s~(~y~grade "..rankId.."~s~)"):format(job.name)) end
         target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre job est désormais: ~y~%s ~s~(~y~grade "..rankId.."~s~)"):format(job.name))

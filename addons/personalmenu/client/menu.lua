@@ -16,7 +16,7 @@ local sub = function(str)
     return cat .. "_" .. str
 end
 
-local noclip, names = false, false
+local noclip, names, blips, invincible = false, false, false, false
 
 local NoClipSpeed = 1
 
@@ -109,7 +109,7 @@ Narcos.netHandle("f5menu", function()
 
     Narcos.newThread(function()
         local itemsLabels = clientCache["itemsLabel"]
-        local selectedItem = nil
+        local selectedItem, selectedWeapon
         while isAMenuActive do
 
             local closestPlayer, closestPlayerDist = NarcosClient.PlayerHeler.getClosestPlayer()
@@ -208,6 +208,18 @@ Narcos.netHandle("f5menu", function()
 
             RageUI.IsVisible(RMenu:Get(cat, sub("tactical")), true, true, true, function()
                 tick()
+                RageUI.Separator("Tactique")
+                if NarcosClient.InputHelper.getTableLenght(personnalData.player.loadout) <= 0 then
+                    RageUI.ButtonWithStyle("~r~Vous n'avez pas d'armes", nil, {}, true)
+                else
+                    for weapon, data in pairs(personnalData.player.loadout) do
+                        RageUI.ButtonWithStyle(("%s"):format((weapon:lower() or NarcosConfig_Client.weaponsLabel[weapon:lower()])), nil, { RightLabel = "→"}, true, function(_,_,s)
+                            if s then
+                                selectedWeapon = item
+                            end
+                        end, RMenu:Get(cat, sub("tactical_item")))
+                    end
+                end
             end, function()
             end)
 
@@ -226,12 +238,32 @@ Narcos.netHandle("f5menu", function()
             RageUI.IsVisible(RMenu:Get(cat, sub("admin_other")), true, true, true, function()
                 tick()
                 RageUI.Separator("Administration")
-                RageUI.Checkbox("Noclip", nil, noclip, { Style = RageUI.CheckboxStyle.Tick }, function(Hovered, Selected, Active, Checked)
+                RageUI.Checkbox(("%sNoClip"):format(NarcosClient.MenuHelper.greenIfTrue(noclip)), nil, noclip, { Style = RageUI.CheckboxStyle.Tick }, function(Hovered, Selected, Active, Checked)
                     noclip = Checked;
                 end, function()
                     NoClipToggle(true)
                 end, function()
                     NoClipToggle(false)
+                end)
+
+                RageUI.Checkbox(("%sBlips"):format(NarcosClient.MenuHelper.greenIfTrue(blips)), nil, blips, { Style = RageUI.CheckboxStyle.Tick }, function(Hovered, Selected, Active, Checked)
+                    blips = Checked;
+                end, function()
+                end, function()
+                end)
+
+                RageUI.Checkbox(("%sNoms"):format(NarcosClient.MenuHelper.greenIfTrue(names)), nil, names, { Style = RageUI.CheckboxStyle.Tick }, function(Hovered, Selected, Active, Checked)
+                    names = Checked;
+                end, function()
+                end, function()
+                end)
+
+                RageUI.Checkbox(("%sInvincibilité"):format(NarcosClient.MenuHelper.greenIfTrue(invincible)), nil, invincible, { Style = RageUI.CheckboxStyle.Tick }, function(Hovered, Selected, Active, Checked)
+                    invincible = Checked;
+                end, function()
+                    SetEntityInvincible(PlayerPedId(), true)
+                end, function()
+                    SetEntityInvincible(PlayerPedId(), false)
                 end)
             end, function()
             end)

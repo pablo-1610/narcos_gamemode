@@ -24,10 +24,10 @@ Narcos.netHandle("sideLoaded", function()
         if currentState ~= NarcosEnums.GameStates.PLAYING then
             return
         end
+        if isAMenuActive then
+            return
+        end
         if NarcosClient_JobsManager.menu[personnalData.player.cityInfos["job"].id] ~= nil then
-            if isAMenuActive then
-                return
-            end
             NarcosClient_JobsManager.menu[personnalData.player.cityInfos["job"].id]()
         else
             local title, cat, desc = clientCache["jobsLabels"][personnalData.player.cityInfos["job"].id], ("itr%s"):format(math.random(1,50000)), NarcosConfig_Client.interactionMenuTitle

@@ -16,7 +16,10 @@ NarcosConfig_Client = {
     tebexVip = "Vous voulez devenir ~r~VIP ~s~? Alors visitez dès maintenant ~r~store.los-narcos.com ~s~!",
     interactionMenuTitle = "Menu interactions",
 
-    weaponsLabel = {
-        ["WEAPON_PISTOL"] = "Pistolet"
-    }
+    getWeaponLabel = function(wp)
+        local weaponsLabel = {
+            ["WEAPON_PISTOL"] = "Pistolet"
+        }
+        return (weaponsLabel[wp:upper()] or wp)
+    end,
 }

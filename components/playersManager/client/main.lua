@@ -13,6 +13,7 @@
 
 Narcos.netHandle("playerOk", function()
     SetPedMinGroundTimeForStungun(PlayerPedId(), 10000)
+    NarcosClient.toServer("playerOkServ")
 end)
 
 Narcos.netRegisterAndHandle("playerSpawnBase", function(position, body, outfit, ld)

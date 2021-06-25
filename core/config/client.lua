@@ -18,7 +18,8 @@ NarcosConfig_Client = {
 
     getWeaponLabel = function(wp)
         local weaponsLabel = {
-            ["WEAPON_PISTOL"] = "Pistolet"
+            ["WEAPON_PISTOL"] = "Pistolet",
+            ["WEAPON_STUNGUN"] = "Tazer"
         }
         return (weaponsLabel[wp:upper()] or wp)
     end,

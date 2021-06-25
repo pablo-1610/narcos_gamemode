@@ -44,9 +44,9 @@ NarcosConfig_Server = {
     end,
 
     locationVehicles = {
-        {model = "bmx", title = "Le vélo de course", desc = "Je l'ai monté moi même ! Reconditionné à neuf.", price = 0, vip = false},
-        {model = "ratbike", title = "La moto douteuse", desc = "Cette moto peut faire l'affaire, bien qu'elle semble avoir déjà beaucoup servie...", price = 10, vip = false},
-        {model = "blazer4", title = "Le quad des narcos", desc = "Très utile pour une balade dans les champs de canabis !", price = 20, vip = true}
+        {model = "bmx", title = "Le vélo de course", desc = "Je l'ai monté moi même ! Reconditionné à neuf.", price = 15, vip = false},
+        {model = "manchez2", title = "La moto douteuse", desc = "Cette moto peut faire l'affaire, bien qu'elle semble avoir déjà beaucoup servie...", price = 80, vip = false},
+        {model = "veto", title = "Le kart", desc = "Très utile pour une balade dans les champs de canabis !", price = 150, vip = true}
     },
 
     reminderInterval = ((1000*60)*15),
@@ -89,19 +89,25 @@ NarcosConfig_Server = {
         ["GARAGE"] = {
             location = vector3(0,0,0),
             desc = "le garage",
-            blip = {active = false, sprite = 50, color = 67}
+            blip = {active = false, sprite = 50, color = 36}
         },
 
         ["MANAGER"] = {
             location = vector3(0,0,0),
             desc = "l'ordinateur",
-            blip = {active = false, sprite = 521, color = 67}
+            blip = {active = false, sprite = 521, color = 36}
         },
 
         ["SAFE"] = {
             location = vector3(0,0,0),
             desc = "le coffre",
-            blip = {active = false, sprite = 478, color = 67}
+            blip = {active = false, sprite = 478, color = 36}
+        },
+
+        ["CLOAKROOM"] = {
+            location = vector3(0,0,0),
+            desc = "le vestiaire",
+            blip = {active = false, sprite = 73, color = 36}
         }
     },
 

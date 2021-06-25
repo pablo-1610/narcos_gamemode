@@ -87,27 +87,35 @@ NarcosConfig_Server = {
 
     baseBuilderPositions = {
         ["GARAGE"] = {
-            location = vector3(0,0,0),
+            location = vector3(150,0,0),
+            label = "Garage de l'entreprise",
             desc = "le garage",
-            blip = {active = false, sprite = 50, color = 36}
+            perm = "GARAGE",
+            blip = {active = true, sprite = 50, color = 36}
         },
 
         ["MANAGER"] = {
-            location = vector3(0,0,0),
+            location = vector3(150,0,0),
+            label = "Gestion de l'entreprise",
             desc = "l'ordinateur",
-            blip = {active = false, sprite = 521, color = 36}
+            perm = "MANAGE",
+            blip = {active = true, sprite = 521, color = 36}
         },
 
         ["SAFE"] = {
-            location = vector3(0,0,0),
+            location = vector3(150,0,0),
+            label = "Stockage de l'entreprise",
             desc = "le coffre",
-            blip = {active = false, sprite = 478, color = 36}
+            perm = "SAFE",
+            blip = {active = true, sprite = 478, color = 36}
         },
 
         ["CLOAKROOM"] = {
-            location = vector3(0,0,0),
+            location = vector3(150,0,0),
+            label = "Vestiaires de l'entreprise",
             desc = "le vestiaire",
-            blip = {active = false, sprite = 73, color = 36}
+            perm = "CLOAKROOM",
+            blip = {active = true, sprite = 73, color = 36}
         }
     },
 

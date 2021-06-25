@@ -25,3 +25,10 @@ setmetatable(JobRank, {
         return self;
     end
 })
+
+---hasPermission
+---@public
+---@param permission string
+function JobRank:hasPermission(permission)
+    return (self.permissions[permission] or false)
+end

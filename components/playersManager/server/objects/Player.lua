@@ -158,6 +158,13 @@ function Player:getFullName()
     return ("%s %s"):format(self.identity.firstname, self.identity.lastname:upper())
 end
 
+---getJobName
+---@public
+---@return string
+function Player:getJobName()
+    return self.cityInfos["job"].id
+end
+
 -- Setters
 
 ---setInGame

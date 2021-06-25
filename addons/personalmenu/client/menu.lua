@@ -89,6 +89,10 @@ Narcos.netHandle("f5menu", function()
     RMenu:Get(cat, sub("tactical")).Closed = function()
     end
 
+    RMenu.Add(cat, sub("tactical_item"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("tactical")), "Tactique", desc, nil, nil, "pablo", "black"))
+    RMenu:Get(cat, sub("tactical_item")).Closed = function()
+    end
+
     RMenu.Add(cat, sub("admin"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("main")), "Administration", desc, nil, nil, "pablo", "black"))
     RMenu:Get(cat, sub("admin")).Closed = function()
     end
@@ -215,10 +219,26 @@ Narcos.netHandle("f5menu", function()
                     for weapon, data in pairs(personnalData.player.loadout) do
                         RageUI.ButtonWithStyle(("%s"):format(NarcosConfig_Client.getWeaponLabel(weapon)), nil, { RightLabel = "→"}, true, function(_,_,s)
                             if s then
-                                selectedWeapon = item
+                                selectedWeapon = weapon
                             end
                         end, RMenu:Get(cat, sub("tactical_item")))
                     end
+                end
+            end, function()
+            end)
+
+            RageUI.IsVisible(RMenu:Get(cat, sub("tactical_item")), true, true, true, function()
+                tick()
+                RageUI.Separator("Tactique")
+                if not personnalData.player.loadout[selectedWeapon] then
+                    RageUI.GoBack()
+                else
+                    RageUI.Separator(NarcosConfig_Client.getWeaponLabel(selectedWeapon))
+                    RageUI.ButtonWithStyle("Donner", nil, {}, (haveClosestPlayer()) and (not serverUpdating), function(_,_,s)
+                        if s then
+                            -- TODO > Give weapon
+                        end
+                    end)
                 end
             end, function()
             end)
@@ -277,6 +297,7 @@ Narcos.netHandle("f5menu", function()
         RMenu:Delete(cat, sub("inventory"))
         RMenu:Delete(cat, sub("inventory_item"))
         RMenu:Delete(cat, sub("tactical"))
+        RMenu:Delete(cat, sub("tactical_item"))
         RMenu:Delete(cat, sub("admin"))
         RMenu:Delete(cat, sub("admin_players"))
         RMenu:Delete(cat, sub("admin_vehicles"))

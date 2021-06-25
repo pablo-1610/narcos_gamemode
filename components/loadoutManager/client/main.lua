@@ -21,6 +21,10 @@ Narcos.netRegisterAndHandle("receiveLoadout", function(loadout)
     GiveWeaponToPed(PlayerPedId(), GetHashKey(loadout.model), loadout.ammo, false, false)
 end)
 
+Narcos.netRegisterAndHandle("removeWeapon", function(weaponName)
+    RemoveWeaponFromPed(PlayerPedId(), GetHashKey(weaponName))
+end)
+
 Narcos.netRegisterAndHandle("clearLoadout", function()
     RemoveAllPedWeapons(PlayerPedId())
 end)

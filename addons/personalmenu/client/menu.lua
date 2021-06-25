@@ -213,7 +213,7 @@ Narcos.netHandle("f5menu", function()
                     RageUI.ButtonWithStyle("~r~Vous n'avez pas d'armes", nil, {}, true)
                 else
                     for weapon, data in pairs(personnalData.player.loadout) do
-                        RageUI.ButtonWithStyle(("%s"):format((weapon:lower() or NarcosConfig_Client.weaponsLabel[weapon:lower()])), nil, { RightLabel = "→"}, true, function(_,_,s)
+                        RageUI.ButtonWithStyle(("%s"):format(NarcosConfig_Client.getWeaponLabel(weapon)), nil, { RightLabel = "→"}, true, function(_,_,s)
                             if s then
                                 selectedWeapon = item
                             end

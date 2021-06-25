@@ -20,16 +20,18 @@ end)
 
 ---@param blip Blip
 Narcos.netRegisterAndHandle("newBlip", function(blip)
-    blips.list[blip.blipId] = blip
-    local b = AddBlipForCoord(blip.position)
-    SetBlipSprite(b, blip.sprite)
-    SetBlipColour(b, blip.color)
-    SetBlipAsShortRange(b, blip.shortRange)
-    SetBlipScale(b, blip.scale)
-    BeginTextCommandSetBlipName("STRING")
-    AddTextComponentString(blip.text)
-    EndTextCommandSetBlipName(b)
-    blips.list[blip.blipId].blip = b
+    if not blips.list[blip.blipId] then
+        blips.list[blip.blipId] = blip
+        local b = AddBlipForCoord(blip.position)
+        SetBlipSprite(b, blip.sprite)
+        SetBlipColour(b, blip.color)
+        SetBlipAsShortRange(b, blip.shortRange)
+        SetBlipScale(b, blip.scale)
+        BeginTextCommandSetBlipName("STRING")
+        AddTextComponentString(blip.text)
+        EndTextCommandSetBlipName(b)
+        blips.list[blip.blipId].blip = b
+    end
 end)
 
 Narcos.netRegisterAndHandle("delBlip", function(blipID)

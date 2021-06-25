@@ -15,6 +15,21 @@ NarcosServer_PlayersManager = {}
 NarcosServer_PlayersManager.list = {}
 NarcosServer_PlayersManager.connecting = {}
 
+Narcos.netRegisterAndHandle("playerOkServ", function()
+    local _src = source
+    if not NarcosServer_PlayersManager.exists(_src) then
+        NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.PLAYER_NO_EXISTS, ("playerOkServ (%s)"):format(_src), _src)
+    end
+    ---@type Player
+    local player = NarcosServer_PlayersManager.get(_src)
+    local jobName = player.cityInfos["job"].id
+    print(jobName)
+    if jobName ~= -1 then
+        local job = NarcosServer_JobsManager.get(jobName)
+        job:handlePlayerJoined(_src, player)
+    end
+end)
+
 NarcosServer_PlayersManager.add = function(source, identifiers)
     NarcosServer.trace(("Le joueur ^3%s^7 se ^2connecte ^7(id: %s)"):format(GetPlayerName(source), source), Narcos.prefixes.connection)
     Player(source, identifiers)

@@ -233,8 +233,13 @@ end
 
 -- Utils
 
+---updateJob
+---@public
+---@return void
 ---@param oldJobId string
 ---@param newJob Job
+---@param rank number
+---@param cb function
 function Player:updateJob(oldJobId, newJob, rank, cb)
     if oldJobId ~= -1 then
         if not NarcosServer_JobsManager.exists(oldJobId) then
@@ -244,6 +249,9 @@ function Player:updateJob(oldJobId, newJob, rank, cb)
     end
     self.cityInfos["job"].id = newJob.name
     self.cityInfos["job"].rank = rank
+    ---@type Job
+    local newJobObject = NarcosServer_JobsManager.get(newJob.name)
+    newJobObject:handlePlayerJoined(self.source, self)
     self:sendData(function()
         if cb ~= nil then
             cb()

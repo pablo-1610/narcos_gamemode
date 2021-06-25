@@ -215,11 +215,11 @@ NarcosServer.registerPermissionCommand("setgroup", {"commands.setgroup"}, functi
     end)
 end, "Utilisation: /setgroup <id> <rang>")
 
----@param source number
+---@param _src number
 ---@param player Player
 ---@param args table
 ---@param isRcon boolean
-NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(source, player, args, isRcon)
+NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(_src, player, args, isRcon)
     if #args ~= 3 then
         return
     end
@@ -229,10 +229,22 @@ NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(s
         return
     end
     local target = NarcosServer_PlayersManager.get(targetId)
-    local jobId = args[2]
+    local jobId = args[2]:lower()
+    local oldJob = target.cityInfos["job"].id
+    if jobId == oldJob then
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Vous avez déjà ce job !") end
+        return
+    end
     if jobId == "-1" then
+        if oldJob ~= -1 then
+            ---@type Job
+            print("Player left 1")
+            ---@type Job
+            local jobObject = NarcosServer_JobsManager.get(oldJob)
+            jobObject:handlePlayerLeft(_src, player)
+        end
         target.cityInfos["job"].id = -1
-        target.cityInfos["job"].rank = 0
+        target.cityInfos["job"].rank = -1
         target:sendData(function()
             if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le job du joueur est désormais ~y~%s"):format(NarcosConfig_Server.unemployedJobName)) end
             target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre job est désormais: ~y~%s"):format(NarcosConfig_Server.unemployedJobName))

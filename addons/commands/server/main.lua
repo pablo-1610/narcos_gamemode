@@ -228,46 +228,16 @@ NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(_
         if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Le joueur n'est pas en ligne") end
         return
     end
+    ---@type Player
     local target = NarcosServer_PlayersManager.get(targetId)
-    local jobId = args[2]:lower()
-    local oldJob = target.cityInfos["job"].id
-    if jobId == oldJob then
+    local currentJobName, currentJobRank, currentJob = target.cityInfos["job"].id, target.cityInfos["job"].rank, NarcosServer_JobsManager.get(target.cityInfos["job"].id)
+    if currentJobName == args[2] and currentJobRank == args[3] then
         if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Vous avez déjà ce job !") end
         return
     end
-    if jobId == "-1" then
-        if oldJob ~= -1 then
-            ---@type Job
-            print("Player left 1")
-            ---@type Job
-            local jobObject = NarcosServer_JobsManager.get(oldJob)
-            jobObject:handlePlayerLeft(_src, player)
-        end
-        target.cityInfos["job"].id = -1
-        target.cityInfos["job"].rank = -1
-        target:sendData(function()
-            if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le job du joueur est désormais ~y~%s"):format(NarcosConfig_Server.unemployedJobName)) end
-            target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre job est désormais: ~y~%s"):format(NarcosConfig_Server.unemployedJobName))
-        end)
-        return
-    end
-    if not NarcosServer_JobsManager.exists(jobId) then
-        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Ce job n'existe pas") end
-        return
-    end
-    local job = NarcosServer_JobsManager.get(jobId)
-    local rankId = tonumber(args[3])
-    if job.ranks[rankId] == nil then
-        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, ("Le rang de ce job n'existe pas (%s max)"):format(#job.ranks)) end
-        return
-    end
-    if oldJob ~= -1 then
-        print("Oldjob is not unemployed")
-        local jobObject = NarcosServer_JobsManager.get(oldJob)
-        jobObject:handlePlayerLeft(_src, player)
-    end
-    target:updateJob(target.cityInfos["job"].id, job, rankId, function()
-        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le job du joueur est désormais ~y~%s ~s~(~y~grade "..rankId.."~s~)"):format(job.name)) end
-        target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre job est désormais: ~y~%s ~s~(~y~grade "..rankId.."~s~)"):format(job.name))
-    end)
 end, "Utilisation: /setjob <id> <job> <rang>")
+
+--[[
+    if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le job du joueur est désormais ~y~%s ~s~(~y~grade "..rankId.."~s~)"):format(job.name)) end
+    target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre job est désormais: ~y~%s ~s~(~y~grade "..rankId.."~s~)"):format(job.name))
+--]]

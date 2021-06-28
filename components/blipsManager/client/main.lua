@@ -20,7 +20,7 @@ end)
 
 ---@param blip Blip
 Narcos.netRegisterAndHandle("newBlip", function(blip)
-    Wait(450)
+    Wait(100)
     if not blips.list[blip.blipId] then
         blips.list[blip.blipId] = blip
         local b = AddBlipForCoord(blip.position)
@@ -58,10 +58,10 @@ Narcos.netRegisterAndHandle("cbBlips", function(incomingBlips)
         AddTextComponentString(blip.text)
         EndTextCommandSetBlipName(b)
         blips.list[blipID].blip = b
-        SetBlipFlashes(b, true)
-        Narcos.newWaitingThread(4500, function()
-            SetBlipFlashes(b, false)
+        SetBlipFlashes(blips.list[blipID].blip, true)
+        Narcos.newWaitingThread(1500, function()
+            SetBlipFlashes(blips.list[blipID].blip, false)
         end)
-        Wait(250)
+        Wait(10)
     end
 end)

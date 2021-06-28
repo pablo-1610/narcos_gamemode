@@ -127,7 +127,7 @@ NarcosConfig_Server = {
         'FOGGY',
         'OVERCAST',
         'CLOUDS',
-        'CLEARING',
-        'RAIN',
+        --'CLEARING',
+        --'RAIN',
     }
 }

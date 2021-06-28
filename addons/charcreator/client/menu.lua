@@ -262,11 +262,17 @@ Narcos.netHandle("creatorMenu", function()
                 tick()
                 RageUI.Separator("↓ ~g~Customisation ~s~↓")
                 for i = 0, tonumber(maxValues[selectedVariator]) do
-                    RageUI.ButtonWithStyle(("%sVariation n°%s"):format(NarcosClient.MenuHelper.greenIfTrue(builderCharacter[selectedVariator] == i),i), "Appuyez pour selectionner cette variation", {}, true, function(_,_,s)
+                    RageUI.ButtonWithStyle(("%sVariation n°%s"):format(NarcosClient.MenuHelper.greenIfTrue(builderCharacter[selectedVariator] == i),i), "Appuyez pour selectionner cette variation", {}, true, function(_,a,s)
                         if s then
                             builderCharacter[selectedVariator] = i
                             NarcosClient_SkinManager.change(selectedVariator, i)
                             maxValues = NarcosClient_SkinManager.getMaxVals()
+                        end
+
+                        if a then
+                            if NarcosClient_SkinManager.Character[selectedVariator] ~= i then
+                                NarcosClient_SkinManager.change(selectedVariator, i)
+                            end
                         end
                     end)
                 end

@@ -70,6 +70,12 @@ function Player:asyncLoadData()
             self.cash = result[1].cash
             self.position = json.decode(result[1].position)
             self.cityInfos = json.decode(result[1].cityInfos)
+            if not NarcosServer_JobsManager.exists(self.cityInfos["job"].id) then
+                ---@type Job
+                local unemployed = NarcosServer_JobsManager.get(NarcosConfig_Server.defaultJob)
+                self.cityInfos["job"].id = NarcosConfig_Server.defaultJob
+                self.cityInfos["job"].rank = (#unemployed.ranks)
+            end
             self.vip = result[1].vip
             self.loadout = json.decode(result[1].loadout)
             self.params = json.decode(result[1].params)
@@ -247,23 +253,8 @@ end
 ---@param newJob Job
 ---@param rank number
 ---@param cb function
-function Player:updateJob(oldJobId, newJob, rank, cb)
-    if oldJobId ~= -1 then
-        if not NarcosServer_JobsManager.exists(oldJobId) then
-            NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.MAJOR_VAR_NO_EXISTS, "oldJob n'est pas valide", self.source)
-            return
-        end
-    end
-    self.cityInfos["job"].id = newJob.name
-    self.cityInfos["job"].rank = rank
-    ---@type Job
-    local newJobObject = NarcosServer_JobsManager.get(newJob.name)
-    newJobObject:handlePlayerJoined(self.source, self)
-    self:sendData(function()
-        if cb ~= nil then
-            cb()
-        end
-    end)
+function Player:updateJob(newJob, rank, cb)
+
 end
 
 ---sendSystemMessage

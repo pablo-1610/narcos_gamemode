@@ -50,18 +50,18 @@ local index, comp, ignore = {}, {}, {
 local customOrder = {
     "face",
     "skin",
-    "age_1",
     "age_2",
+    "age_1",
     "hair_1",
     "hair_2",
     "hair_color_1",
     "hair_color_2",
-    "beard_1",
     "beard_2",
+    "beard_1",
     "beard_3",
     "beard_4",
-    "eyebrows_1",
     "eyebrows_2",
+    "eyebrows_1",
     "eyebrows_3",
     "eyebrows_4"
 }

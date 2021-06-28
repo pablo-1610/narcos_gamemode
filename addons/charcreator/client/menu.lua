@@ -117,6 +117,7 @@ Narcos.netHandle("creatorMenu", function()
 
     RMenu.Add(cat, sub("characterdet"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("character")), nil, desc, nil, nil, "root_cause", "shopui_title_bawsaq"))
     RMenu:Get(cat, sub("characterdet")).Closed = function()
+        NarcosClient_SkinManager.loadSkin(builderCharacter)
     end
 
     RageUI.Visible(RMenu:Get(cat, sub("main")), true)

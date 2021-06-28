@@ -62,38 +62,20 @@ function Job:handlePlayerJoined(_src, player)
     ---@type JobRank
     local playerRank = self.ranks[player.cityInfos["job"].rank]
     for zoneName, zoneData in pairs(self.zonesRelatives) do
-        if zoneData.perm ~= nil then
-            if playerRank:hasPermission(zoneData.perm) then
-                if zoneData.blip ~= nil then
-                    NarcosServer_BlipsManager.addAllowed(zoneData.blip, _src)
-                end
-                NarcosServer_ZonesManager.addAllowed(zoneData.zone, _src)
-            end
-        else
-            if zoneData.blip ~= nil then
-                NarcosServer_BlipsManager.addAllowed(zoneData.blip, _src)
-            end
-            NarcosServer_ZonesManager.addAllowed(zoneData.zone, _src)
+        if zoneData.blip ~= nil then
+            NarcosServer_BlipsManager.addAllowed(zoneData.blip, _src)
         end
+        NarcosServer_ZonesManager.addAllowed(zoneData.zone, _src)
     end
 end
 
 function Job:handlePlayerLeft(_src, player)
     local playerRank = self.ranks[player.cityInfos["job"].rank]
     for zoneName, zoneData in pairs(self.zonesRelatives) do
-        if zoneData.perm ~= nil then
-            if playerRank:hasPermission(zoneData.perm) then
-                if zoneData.blip ~= nil then
-                    NarcosServer_BlipsManager.removeAllowed(zoneData.blip, _src)
-                end
-                NarcosServer_ZonesManager.removeAllowed(zoneData.zone, _src)
-            end
-        else
-            if zoneData.blip ~= nil then
-                NarcosServer_BlipsManager.removeAllowed(zoneData.blip, _src)
-            end
-            NarcosServer_ZonesManager.removeAllowed(zoneData.zone, _src)
+        if zoneData.blip ~= nil then
+            NarcosServer_BlipsManager.removeAllowed(zoneData.blip, _src)
         end
+        NarcosServer_ZonesManager.removeAllowed(zoneData.zone, _src)
     end
 end
 

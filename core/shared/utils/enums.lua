@@ -57,5 +57,6 @@ NarcosEnums = {
         ["GARAGE"] = {cat = 2, desc = "Accéder au garage"},
         ["SAFE"] = {cat = 2, desc = "Accéder au coffre"},
         ["CLOAKROOM"] = {cat = 2, desc = "Accéder aux vestiaires"},
+        ["BANK"] = {cat = 1, desc = "Gérer les comptes"}
     }
 }

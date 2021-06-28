@@ -20,6 +20,7 @@ end)
 
 ---@param blip Blip
 Narcos.netRegisterAndHandle("newBlip", function(blip)
+    Wait(450)
     if not blips.list[blip.blipId] then
         blips.list[blip.blipId] = blip
         local b = AddBlipForCoord(blip.position)

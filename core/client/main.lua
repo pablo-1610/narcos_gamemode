@@ -29,7 +29,13 @@ end)
 
 -- Base
 Narcos.netRegisterAndHandle("updateLocalData", function(data)
+    local beforeMoney
+    if personnalData.player ~= nil then
+        beforeMoney = personnalData.player.cash
+    end
     personnalData = data
+    local afterMoney = personnalData.player.cash
+    NarcosClient_Hud.showVariation(beforeMoney, afterMoney)
 end)
 
 Narcos.netRegisterAndHandle("serverReturnedCb", function()

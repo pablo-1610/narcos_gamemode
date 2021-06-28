@@ -11,15 +11,58 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-local toggle, locked = false, false
+local x, y = 0.86, 0.026
+local alpha, space = 255, 0.045
+local varAlpha, currentVaring = 255, false
+local toggle, locked, variation = false, false, false
+local varTable = { [true] = { symbol = "+", color = { 76, 181, 80 } }, [false] = { symbol = "-", color = { 255, 82, 82 } } }
+local variationData = {}
 
-local alpha = 255
 local function drawHud()
-    NarcosClient.DrawHelper.drawTexts(0.86, 0.026, clientCache["jobsLabels"][personnalData.player.cityInfos["job"].id], false, 0.90, { 255, 255, 255, alpha }, 2, 0)
-    NarcosClient.DrawHelper.drawTexts(0.86, 0.026 + 0.045, ("%s$"):format(NarcosClient.MenuHelper.groupDigits(personnalData.player.cash)), false, 0.90, { 71, 196, 69, alpha }, 4, 0)
+    NarcosClient.DrawHelper.drawTexts(x, y, clientCache["jobsLabels"][personnalData.player.cityInfos["job"].id], false, 0.90, { 255, 255, 255, alpha }, 2, 0)
+    NarcosClient.DrawHelper.drawTexts(x, (y + space), ("%s$"):format(NarcosClient.MenuHelper.groupDigits(personnalData.player.cash)), false, 0.90, { 66, 176, 245, alpha }, 4, 0)
+    if variation then
+        NarcosClient.DrawHelper.drawTexts(x-0.0095, (y + (space*2)), ("%s%s$"):format(varTable[variationData.isPositive].symbol,NarcosClient.MenuHelper.groupDigits(variationData.ammount)), false, 0.90, {varTable[variationData.isPositive].color[1], varTable[variationData.isPositive].color[2], varTable[variationData.isPositive].color[3], varAlpha}, 4, 0)
+    end
 end
 
 NarcosClient_Hud = {}
+
+local function variationFunc(incomingAmmount, positive)
+    currentVaring = true
+    varAlpha = 0
+    variationData = {ammount = incomingAmmount, isPositive = positive}
+    variation = true
+    Narcos.newThread(function()
+        while varAlpha ~= 255 do
+            varAlpha = varAlpha + 3
+            Wait(1)
+        end
+    end)
+    Narcos.newThread(function()
+        Wait(2500)
+        while varAlpha > 0 do
+            varAlpha = varAlpha - 3
+            Wait(1)
+        end
+        varAlpha = 0
+        variation = false
+        currentVaring = false
+    end)
+end
+
+NarcosClient_Hud.showVariation = function(before, after)
+    if not currentVaring and before ~= nil then
+        if before > after then
+            local ammount = ((before-after))
+            variationFunc(ammount, false)
+        elseif before < after then
+            local ammount = ((after-before))
+            variationFunc(ammount, true)
+        end
+    end
+end
+
 NarcosClient_Hud.showTimer = function(mssec)
     if toggle then
         return

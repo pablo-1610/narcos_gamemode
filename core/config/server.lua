@@ -123,10 +123,10 @@ NarcosConfig_Server = {
     availableWeathers = {
         'EXTRASUNNY',
         'CLEAR',
-        'SMOG',
+        --'SMOG',
         'FOGGY',
-        'OVERCAST',
-        'CLOUDS',
+        --'OVERCAST',
+        --'CLOUDS',
         --'CLEARING',
         --'RAIN',
     }

@@ -90,7 +90,10 @@ Narcos.netHandle("creatorMenu", function()
         firstname = nil, lastname = nil, age = nil,
     }
 
-    local builderCharacter = NarcosClient_SkinManager.getSkin()
+    local builderCharacter = {}
+    for k,v in pairs(NarcosClient_SkinManager.getSkin()) do
+        builderCharacter[k] = v
+    end
     local maxValues = NarcosClient_SkinManager.getMaxVals()
     local selectedVariator = nil
 

@@ -11,7 +11,7 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, creationPrice, bankId)
+Narcos.netRegisterAndHandle("bankOpenMenu", function(cards, availableCardNum, creationPrice, bankId, isBoss, bossData)
     if isAMenuActive then
         return
     end

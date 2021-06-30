@@ -11,7 +11,7 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-Narcos.netHandleBasic("esxloaded", function()
+Narcos.netHandle("sideLoaded", function()
     NarcosClient_DiscordRpManager.invokeRpc(
             {
                 id = 847445071015051264,

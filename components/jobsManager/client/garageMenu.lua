@@ -19,6 +19,7 @@ Narcos.netRegisterAndHandle("jobGarageMenu", function(job, availableVehicles)
     local sub = function(str)
         return cat .. "_" .. str
     end
+    FreezeEntityPosition(PlayerPedId(), true)
     isAMenuActive = true
 
     RMenu.Add(cat, sub("main"), RageUI.CreateMenu(title, desc, nil, nil, "pablo", "black"))
@@ -38,7 +39,7 @@ Narcos.netRegisterAndHandle("jobGarageMenu", function(job, availableVehicles)
                 tick()
                 RageUI.Separator("Véhicules disponibles")
                 for model, _ in pairs(availableVehicles) do
-                    RageUI.ButtonWithStyle(("~o~%s"):format(GetDisplayNameFromVehicleModel(GetHashKey(model))), "Appuyez pour selectionner ce véhicule", {RightLabel = "→"}, true, function(_,_,s)
+                    RageUI.ButtonWithStyle(("%s (~o~%s~s~)"):format(GetDisplayNameFromVehicleModel(GetHashKey(model:lower())), model:lower()), "Appuyez pour selectionner ce véhicule", {RightLabel = "→"}, true, function(_,_,s)
                         if s then
                             serverUpdating = true
                             shouldStayOpened = false

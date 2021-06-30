@@ -255,14 +255,32 @@ NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(_
     end
     ---@type Player
     local target = NarcosServer_PlayersManager.get(targetId)
-    local currentJobName, currentJobRank, currentJob = target.cityInfos["job"].id, target.cityInfos["job"].rank, NarcosServer_JobsManager.get(target.cityInfos["job"].id)
-    if currentJobName == args[2] and currentJobRank == args[3] then
+    if not NarcosServer_JobsManager.exists(args[2]) then
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Ce job n'existe pas") end
+        return
+    end
+    ---@type Job
+    local newJob = NarcosServer_JobsManager.get(args[2])
+    ---@type Job
+    local currentJobName, currentJobRank, oldJob = target.cityInfos["job"].id, target.cityInfos["job"].rank, NarcosServer_JobsManager.get(target.cityInfos["job"].id)
+    if currentJobName == args[2] and currentJobRank == tonumber(args[3]) then
         if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Vous avez déjà ce job !") end
         return
     end
+    if tonumber(args[3]) <= 0 then
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Le grade doit être supérieur à 0") end
+        return
+    end
+    if tonumber(args[3]) > NarcosServer.getTableLenght(newJob.ranks) then
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, ("Ce grade n'existe pas (~o~max %s~s~)"):format(NarcosServer.getTableLenght(newJob.ranks))) end
+        return
+    end
+    target.cityInfos["job"].id = args[2]
+    target.cityInfos["job"].rank = tonumber(args[3])
+    oldJob:handlePlayerLeft(_src, player)
+    newJob:handlePlayerJoined(_src, player)
+    target:sendData(function()
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le job du joueur est désormais ~y~%s ~s~(~y~grade "..tonumber(args[3]).."~s~)"):format(newJob.name)) end
+        target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre job est désormais: ~y~%s ~s~(~y~grade "..tonumber(args[3]).."~s~)"):format(newJob.name))
+    end)
 end, "Utilisation: /setjob <id> <job> <rang>")
-
---[[
-    if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le job du joueur est désormais ~y~%s ~s~(~y~grade "..rankId.."~s~)"):format(job.name)) end
-    target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre job est désormais: ~y~%s ~s~(~y~grade "..rankId.."~s~)"):format(job.name))
---]]

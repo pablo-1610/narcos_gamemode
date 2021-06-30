@@ -86,6 +86,9 @@ end
 ---@return void
 function Inventory:clear(cb)
     self.content = {}
+    self.weight = self:calcWeight(self.content)
+    self.diffItems = self:getTypesCount()
+    self:saveInventory()
     if cb ~= nil then
         cb()
     end

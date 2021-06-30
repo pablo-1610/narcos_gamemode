@@ -10,3 +10,11 @@
   Unauthorized using, copying, modifying and/or distributing of this file,
   via any medium is strictly prohibited. This code is confidential.
 --]]
+
+Narcos.netRegisterAndHandle("showIdCard", function(playerId)
+    local _src = source
+    ---@type Player
+    local targetPlayer = NarcosServer_PlayersManager.get(playerId)
+    NarcosServer.toClient("idCardShown", playerId, _src, {targetPlayer.identity.firstname, targetPlayer.identity.lastname:upper(), targetPlayer.identity.age})
+    NarcosServer.toClient("serverReturnedCb", _src)
+end)

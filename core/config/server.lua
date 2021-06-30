@@ -17,7 +17,7 @@ NarcosConfig_Server = {
     defaultRank = "default",
     defaultJob = "unemployed",
 
-    bannedInstance = 666,
+    bannedInstance = 1,
 
     blipsScale = 0.90,
 

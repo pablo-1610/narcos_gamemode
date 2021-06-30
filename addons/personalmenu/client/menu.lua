@@ -263,7 +263,6 @@ Narcos.netHandle("f5menu", function()
                 RageUI.ButtonWithStyle("Montrer ma carte d'identité", nil, { RightLabel = "→"}, (haveClosestPlayer()), function(_,_,s)
                     if s then
                         serverUpdating = true
-                        shouldStayOpened = false
                         NarcosClient.toServer("showIdCard", getClosestPlayerId())
                     end
                 end)

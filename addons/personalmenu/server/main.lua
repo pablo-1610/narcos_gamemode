@@ -14,7 +14,7 @@
 Narcos.netRegisterAndHandle("showIdCard", function(playerId)
     local _src = source
     ---@type Player
-    local targetPlayer = NarcosServer_PlayersManager.get(playerId)
+    local targetPlayer = NarcosServer_PlayersManager.get(_src)
     NarcosServer.toClient("idCardShown", playerId, _src, {targetPlayer.identity.firstname, targetPlayer.identity.lastname:upper(), targetPlayer.identity.age})
     NarcosServer.toClient("serverReturnedCb", _src)
 end)

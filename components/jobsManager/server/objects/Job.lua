@@ -39,8 +39,8 @@ setmetatable(Job, {
         for k, v in pairs(self.positions) do
             self.zonesRelatives[k] = {}
             self.zonesRelatives[k].perm = v.perm
-            self.zonesRelatives[k].zone = NarcosServer_ZonesManager.createPrivate(vector3(v.location.x, v.location.y, v.location.z), 20, { r = 255, g = 255, b = 255, a = 255 }, function(source)
-                self:interactWithBaseZone(source, k)
+            self.zonesRelatives[k].zone = NarcosServer_ZonesManager.createPrivate(vector3(v.location.x, v.location.y, v.location.z), 20, { r = 255, g = 255, b = 255, a = 255 }, function(source, player)
+                self:interactWithBaseZone(source, player, k)
             end, ("Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec %s"):format(v.desc), 20.0, 1.0)
             if v.blip.active then
                 self.zonesRelatives[k].blip = NarcosServer_BlipsManager.createPrivate(vector3(v.location.x, v.location.y, v.location.z), v.blip.sprite, v.blip.color, NarcosConfig_Server.blipsScale, ("(%s) %s"):format(self.label, v.label), false)
@@ -49,9 +49,33 @@ setmetatable(Job, {
         self.type = type
         self.inventory = NarcosServer_InventoriesManager.getOrCreate(("job:%s"):format(self.name), ("Entrepôt %s"):format(label), 100.0, 2)
         NarcosServer_JobsManager.list[self.name] = self
+        NarcosServer_JobsManager.precise[self.name] = {}
         return self;
     end
 })
+
+---openGarage
+---@public
+---@return void
+---@param _src number
+---@param player Player
+---@param zone string
+function Job:openGarage(_src, player, zone)
+    ---@type JobRank
+    local playerRank = self.ranks[player.cityInfos["job"].rank]
+    if not playerRank then
+        player:sendSystemMessage("~r~Erreur", "Une erreur est survenue")
+        return
+    end
+    if not playerRank:hasPermission("GARAGE") then
+        player:sendSystemMessage("~r~Erreur", "Vous n'avez pas la permission d'accéder au garage !")
+        return
+    end
+    if not NarcosServer_JobsManager.precise[self.name].garageVehicles or NarcosServer.getTableLenght(NarcosServer_JobsManager.precise[self.name].garageVehicles) == 0 then
+        player:sendSystemMessage("~r~Erreur", "Aucun véhicule n'est disponible")
+        return
+    end
+end
 
 ---handlePlayerJoined
 ---@public
@@ -68,6 +92,11 @@ function Job:handlePlayerJoined(_src, player)
     end
 end
 
+---handlePlayerLeft
+---@public
+---@return void
+---@param _src number
+---@param player Player
 function Job:handlePlayerLeft(_src, player)
     for _, zoneData in pairs(self.zonesRelatives) do
         if zoneData.blip ~= nil then
@@ -77,6 +106,21 @@ function Job:handlePlayerLeft(_src, player)
     end
 end
 
-function Job:interactWithBaseZone(source, zone)
+local actionByBaseZones = {
+    ---@param job Job
+    ["GARAGE"] = function(job, _src, player, zone)
+        job:openGarage(_src, player, zone)
+    end
+}
 
+---interactWithBaseZone
+---@public
+---@return void
+---@param _src number
+---@param player Player
+---@param zone string
+function Job:interactWithBaseZone(_src, player, zone)
+    if actionByBaseZones[zone] then
+        actionByBaseZones[zone](self, _src, player, zone)
+    end
 end

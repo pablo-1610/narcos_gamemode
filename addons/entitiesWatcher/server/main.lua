@@ -13,22 +13,15 @@
 
 local function clearDeadVehicles()
     for _, vehicle in ipairs(GetAllVehicles()) do
-        NarcosServer.trace(("%s a %s (%s) de vie"):format(GetVehicleNumberPlateText(vehicle), GetEntityHealth(vehicle), GetVehicleEngineHealth(vehicle)), Narcos.prefixes.dev)
+        if GetVehicleEngineHealth(vehicle) <= 0 then
+            DeleteEntity(vehicle)
+        end
     end
 end
 
---[[
 Narcos.netHandle("sideLoaded", function()
     Narcos.newRepeatingTask(function()
-
+        clearDeadVehicles()
     end, function()
-        GetVehicles
     end, 1, (Narcos.second(60)*5))
 end)
---]]
-
-RegisterCommand("cVeh", function()
-    print("Starting clear")
-    clearDeadVehicles()
-    print("Finished clear")
-end, false)

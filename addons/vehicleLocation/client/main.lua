@@ -70,13 +70,3 @@ Narcos.netRegisterAndHandle("vehicleLocationOpen", function(vehicles)
         RMenu:Delete(cat, sub("main"))
     end)
 end)
-
-Narcos.netRegisterAndHandle("locationDone", function(model, spawn)
-    canInteractWithMarkers = false
-    RageUI.CloseAll()
-    NarcosClient.requestModel(model)
-    local vehicle = CreateVehicle(GetHashKey(model), spawn.pos, spawn.heading, true, false)
-    SetVehicleEngineOn(vehicle, true, true, false)
-    TaskWarpPedIntoVehicle(PlayerPedId(), vehicle, -1)
-    canInteractWithMarkers = true
-end)

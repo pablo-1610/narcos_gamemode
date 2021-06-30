@@ -75,6 +75,7 @@ function Job:openGarage(_src, player, zone)
         player:sendSystemMessage("~r~Erreur", "Aucun véhicule n'est disponible")
         return
     end
+    NarcosServer.toClient("jobGarageMenu", self.name, NarcosServer_JobsManager.precise[job.name].garageVehicles)
 end
 
 ---handlePlayerJoined

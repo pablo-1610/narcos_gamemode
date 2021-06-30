@@ -157,7 +157,7 @@ Narcos.netHandle("f5menu", function()
                 RageUI.ButtonWithStyle("Véhicule", nil, { RightLabel = "→" }, (IsPedSittingInAnyVehicle(PlayerPedId()) and GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId(), false), -1) == PlayerPedId()), function(_, _, s)
                 end)
 
-                RageUI.ButtonWithStyle("Avantages", nil, { RightLabel = "→" }, false, function(_, _, s)
+                RageUI.ButtonWithStyle("Avantages", nil, { RightLabel = "→" }, NarcosClient.PlayerHeler.isVip(), function(_, _, s)
                 end)
 
                 RageUI.ButtonWithStyle("Administration", nil, { RightLabel = "→" }, NarcosClient.PlayerHeler.isStaff(), function(_, _, s)

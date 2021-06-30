@@ -17,6 +17,12 @@ NarcosServer_PlayersManager.connecting = {}
 
 Narcos.netRegisterAndHandle("playerOkServ", function()
     local _src = source
+    Wait(1000)
+    ---@type Player
+    local player = NarcosServer_PlayersManager.get(_src)
+    ---@type Job
+    local job = NarcosServer_JobsManager.get(player.cityInfos["job"].id)
+    job:handlePlayerJoined(player.source, player)
     -- @TODO -> Rework jobs
 end)
 

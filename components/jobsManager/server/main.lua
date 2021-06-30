@@ -69,6 +69,31 @@ Narcos.netRegisterAndHandle("requestJobsLabels", function()
     NarcosServer.toClient("clientCacheSetCache", _src, "jobsLabels", labels)
 end)
 
+Narcos.netRegisterAndHandle("jobGarageOut", function(model)
+    local _src = source
+    if not NarcosServer_PlayersManager.exists(_src) then
+        NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.PLAYER_NO_EXISTS, ("jobGarageOut sur le model %s"):format(model), _src)
+    end
+    ---@type Player
+    local player = NarcosServer_PlayersManager.get(_src)
+    ---@type Job
+    local job = NarcosServer_JobsManager.get(player.cityInfos["job"].id)
+    if not job then
+        NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.MAJOR_VAR_NO_EXISTS, ("job est nul sur jobGarageOut model %s"):format(model), _src)
+    end
+    if not NarcosServer_JobsManager.precise[job.name] or not NarcosServer_JobsManager.precise[job.name].garageVehicles[model:lower()] then
+        NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.MAJOR_VAR_NO_EXISTS, ("aucun veh sur jobGarageOut model %s"):format(model), _src)
+    end
+    local out = NarcosServer_JobsManager.precise[job.name].vehiclesOut[math.random(1, #NarcosServer_JobsManager.precise[job.name].vehiclesOut)]
+    local veh = CreateVehicle(model:lower(), out.pos, out.heading, true, true)
+    while veh == nil do Wait(1) end
+    local rgb = NarcosServer_JobsManager.precise[job.name].garageVehicles[model:lower()].color
+    SetVehicleCustomPrimaryColour(veh, rgb[1], rgb[2], rgb[3])
+    SetVehicleCustomSecondaryColour(veh, rgb[1], rgb[2], rgb[3])
+    TaskWarpPedIntoVehicle(GetPlayerPed(_src), veh, -1)
+    NarcosServer.toClient("serverReturnedCb", _src)
+end)
+
 Narcos.netHandle("sideLoaded", function()
     NarcosServer_MySQL.query("SELECT * FROM jobs", {}, function(result)
         local tot = 0

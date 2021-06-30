@@ -62,11 +62,10 @@ Narcos.newThread(function()
         SetCreateRandomCopsOnScenarios(false)
         for i = 1, 15 do
             EnableDispatchService(i, false)
-            Citizen.Wait(1)
         end
-        if GetPlayerWantedLevel(playerId) ~= 0 then
-            SetPlayerWantedLevel(playerId, 0, false)
-            SetPlayerWantedLevelNow(playerId, false)
+        if GetPlayerWantedLevel(PlayerPedId()) ~= 0 then
+            SetPlayerWantedLevel(PlayerPedId(), 0, false)
+            SetPlayerWantedLevelNow(PlayerPedId(), false)
         end
         Wait(0)
     end

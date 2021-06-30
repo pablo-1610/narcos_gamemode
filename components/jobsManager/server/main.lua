@@ -38,7 +38,7 @@ NarcosServer_JobsManager.createJob = function(name, label)
                 rankPerms[k] = true
             end
         end
-        ranks[position] = {label = rankLabel.label, permissions = rankPerms}
+        ranks[position] = {label = rankLabel.label, permissions = rankPerms, outfit = {}}
     end
     NarcosServer_MySQL.insert("INSERT INTO jobs (name, label, money, history, ranks, positions, type) VALUES(@a, @b, @c, @hist, @d, @e, @f)", {
         ['a'] = name,

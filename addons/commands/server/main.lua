@@ -277,8 +277,8 @@ NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(_
     end
     target.cityInfos["job"].id = args[2]
     target.cityInfos["job"].rank = tonumber(args[3])
-    oldJob:handlePlayerLeft(_src, player)
-    newJob:handlePlayerJoined(_src, player)
+    oldJob:handlePlayerLeft(targetId, player)
+    newJob:handlePlayerJoined(targetId, player)
     target:sendData(function()
         if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le job du joueur est désormais ~y~%s ~s~(~y~grade "..tonumber(args[3]).."~s~)"):format(newJob.name)) end
         target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre job est désormais: ~y~%s ~s~(~y~grade "..tonumber(args[3]).."~s~)"):format(newJob.name))

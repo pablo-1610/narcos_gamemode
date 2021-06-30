@@ -85,7 +85,7 @@ Narcos.netRegisterAndHandle("jobGarageOut", function(model)
         NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.MAJOR_VAR_NO_EXISTS, ("aucun veh sur jobGarageOut model %s"):format(model), _src)
     end
     local out = NarcosServer_JobsManager.precise[job.name].vehiclesOut[math.random(1, #NarcosServer_JobsManager.precise[job.name].vehiclesOut)]
-    local veh = CreateVehicle(model:lower(), out.pos, out.heading, true, true)
+    local veh = CreateVehicle(GetHashKey(model:lower()), out.pos, out.heading, true, true)
     while veh == nil do Wait(1) end
     local rgb = NarcosServer_JobsManager.precise[job.name].garageVehicles[model:lower()].color
     SetVehicleCustomPrimaryColour(veh, rgb[1], rgb[2], rgb[3])

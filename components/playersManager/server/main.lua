@@ -23,7 +23,6 @@ Narcos.netRegisterAndHandle("playerOkServ", function()
     ---@type Job
     local job = NarcosServer_JobsManager.get(player.cityInfos["job"].id)
     job:handlePlayerJoined(player.source, player)
-    -- @TODO -> Rework jobs
 end)
 
 NarcosServer_PlayersManager.add = function(source, identifiers)

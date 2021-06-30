@@ -81,6 +81,16 @@ function Inventory:saveInventory()
     })
 end
 
+---clear
+---@public
+---@return void
+function Inventory:clear(cb)
+    self.content = {}
+    if cb ~= nil then
+        cb()
+    end
+end
+
 ---canAddItem
 ---@public
 ---@return function

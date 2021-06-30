@@ -16,7 +16,7 @@ local sub = function(str)
     return cat .. "_" .. str
 end
 
-local noclip, names, blips, invincible = false, false, false, false
+local noclip, names, blips, invincible, radar = false, false, false, false, true
 
 local NoClipSpeed = 1
 
@@ -97,6 +97,10 @@ Narcos.netHandle("f5menu", function()
     RMenu:Get(cat, sub("portefeuille")).Closed = function()
     end
 
+    RMenu.Add(cat, sub("other"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("main")), "Autre", desc, nil, nil, "pablo", "black"))
+    RMenu:Get(cat, sub("other")).Closed = function()
+    end
+
     RMenu.Add(cat, sub("admin"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("main")), "Administration", desc, nil, nil, "pablo", "black"))
     RMenu:Get(cat, sub("admin")).Closed = function()
     end
@@ -156,7 +160,7 @@ Narcos.netHandle("f5menu", function()
                 end)
 
                 RageUI.ButtonWithStyle("Autre", nil, { RightLabel = "→" }, true, function(_, _, s)
-                end)
+                end, RMenu:Get(cat, sub("other")))
 
                 RageUI.ButtonWithStyle("Véhicule", nil, { RightLabel = "→" }, (IsPedSittingInAnyVehicle(PlayerPedId()) and GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId(), false), -1) == PlayerPedId()), function(_, _, s)
                 end)
@@ -266,6 +270,20 @@ Narcos.netHandle("f5menu", function()
             end, function()
             end)
 
+            RageUI.IsVisible(RMenu:Get(cat, sub("other")), true, true, true, function()
+                tick()
+                RageUI.Separator("Autre")
+                RageUI.Checkbox(("%sRadar"):format(NarcosClient.MenuHelper.greenIfTrue(radar)), nil, radar, { Style = RageUI.CheckboxStyle.Tick }, function(Hovered, Selected, Active, Checked)
+                    radar = Checked;
+                end, function()
+                    DisplayRadar(true)
+                end, function()
+                    DisplayRadar(false)
+                end)
+
+            end, function()
+            end)
+
             RageUI.IsVisible(RMenu:Get(cat, sub("admin")), true, true, true, function()
                 tick()
                 RageUI.Separator("Administration")
@@ -330,6 +348,7 @@ Narcos.netHandle("f5menu", function()
         RMenu:Delete(cat, sub("tactical"))
         RMenu:Delete(cat, sub("tactical_item"))
         RMenu:Delete(cat, sub("portefeuille"))
+        RMenu:Delete(cat, sub("other"))
         RMenu:Delete(cat, sub("admin"))
         RMenu:Delete(cat, sub("admin_players"))
         RMenu:Delete(cat, sub("admin_vehicles"))

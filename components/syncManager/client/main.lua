@@ -61,7 +61,7 @@ end)
 
 Narcos.netRegisterAndHandle("syncSetWeather", function(weather, first)
     if weatherOverride == nil then
-        NarcosClient.trace(("La météo est désormais définie sur ^3%s"):format(weather))
+        NarcosClient.trace(("La météo est désormais définie sur ^3%s ^7(%s)"):format(weather, json.encode(first)))
         if first then
             ClearOverrideWeather()
             ClearWeatherTypePersist()

@@ -20,10 +20,10 @@ end)
 
 ---@param blip Blip
 Narcos.netRegisterAndHandle("newBlip", function(blip)
-    Wait(100)
     if blips.list[blip.blipId] ~= nil and DoesBlipExist(blips.list[blip.blipId]) then
         RemoveBlip(blips.list[blip.blipId])
     end
+    print(("Received a blip ! (%s)"):format(blip.blipId))
     blips.list[blip.blipId] = blip
     local b = AddBlipForCoord(blip.position)
     SetBlipSprite(b, blip.sprite)
@@ -34,6 +34,12 @@ Narcos.netRegisterAndHandle("newBlip", function(blip)
     AddTextComponentString(blip.text)
     EndTextCommandSetBlipName(b)
     blips.list[blip.blipId].blip = b
+    SetBlipFlashes(blips.list[blip.blipId].blip, true)
+    Narcos.newWaitingThread(5000, function()
+        if blips.list[blip.blipId].blip ~= nil then
+            SetBlipFlashes(blips.list[blip.blipId].blip, false)
+        end
+    end)
 end)
 
 Narcos.netRegisterAndHandle("delBlip", function(blipID)
@@ -63,6 +69,6 @@ Narcos.netRegisterAndHandle("cbBlips", function(incomingBlips)
         Narcos.newWaitingThread(5000, function()
             SetBlipFlashes(blips.list[blipID].blip, false)
         end)
-        Wait(10)
+        Wait(150)
     end
 end)

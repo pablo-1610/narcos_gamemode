@@ -13,6 +13,7 @@
 
 NarcosServer_JobsManager = {}
 NarcosServer_JobsManager.list = {}
+NarcosServer_JobsManager.precise = {}
 
 NarcosServer_JobsManager.exists = function(jobName)
     return (NarcosServer_JobsManager.list[jobName] ~= nil)
@@ -76,5 +77,6 @@ Narcos.netHandle("sideLoaded", function()
             Job(v.name, v.label, v.money, json.decode(v.ranks), json.decode(v.positions), v.type)
         end
         NarcosServer.trace(("Enregistrement de ^3%s ^7jobs"):format(tot), Narcos.prefixes.dev)
+        Narcos.toInternal("jobsLoaded")
     end)
 end)

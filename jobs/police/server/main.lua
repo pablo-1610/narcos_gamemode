@@ -11,6 +11,8 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
+NarcosServer_BlipsManager.createPublic(vector3(-447.32, 6013.17, 31.71), 137, 52, NarcosConfig_Server.blipsScale, "Poste national de la Guardia")
+
 Narcos.netHandle("jobsLoaded", function()
     NarcosServer_JobsManager.precise["police"] = {
         garageVehicles = {

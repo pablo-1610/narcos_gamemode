@@ -91,6 +91,7 @@ Narcos.netRegisterAndHandle("jobGarageOut", function(model)
     SetVehicleCustomPrimaryColour(veh, rgb[1], rgb[2], rgb[3])
     SetVehicleCustomSecondaryColour(veh, rgb[1], rgb[2], rgb[3])
     TaskWarpPedIntoVehicle(GetPlayerPed(_src), veh, -1)
+    player:sendSystemMessage("~g~Succès", "Votre véhicule de travail a été sorti, bonne route !")
     NarcosServer.toClient("serverReturnedCb", _src)
 end)
 

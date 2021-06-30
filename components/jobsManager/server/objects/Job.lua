@@ -43,7 +43,7 @@ setmetatable(Job, {
                 self:interactWithBaseZone(source, player, k)
             end, ("Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec %s"):format(v.desc), 20.0, 1.0)
             if v.blip.active then
-                self.zonesRelatives[k].blip = NarcosServer_BlipsManager.createPrivate(vector3(v.location.x, v.location.y, v.location.z), v.blip.sprite, v.blip.color, NarcosConfig_Server.blipsScale, ("(%s) %s"):format(self.label, v.label), false)
+                self.zonesRelatives[k].blip = NarcosServer_BlipsManager.createPrivate(vector3(v.location.x, v.location.y, v.location.z), v.blip.sprite, v.blip.color, NarcosConfig_Server.blipsScale, ("(%s) %s"):format(self.label, v.label), true)
             end
         end
         self.type = type

@@ -68,6 +68,31 @@ end, "Utilisation: /clearloadout <id>")
 ---@param player Player
 ---@param args table
 ---@param isRcon boolean
+NarcosServer.registerPermissionCommand("clearinventory", {"commands.clearinventory"}, function(source, player, args, isRcon)
+    if #args ~= 1 then
+        return
+    end
+    local targetId = tonumber(args[1])
+    if not NarcosServer_PlayersManager.exists(targetId) then
+        if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Le joueur n'est pas en ligne") end
+        return
+    end
+    ---@type Player
+    local target = NarcosServer_PlayersManager.get(targetId)
+    ---@type Inventory
+    local inventory = NarcosServer_InventoriesManager.get(target:getLicense())
+    inventory:clear(function()
+        target:sendData(function()
+            if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, "Clear de l'inventaire effectué") end
+            target:sendSystemMessage(NarcosEnums.Prefixes.INF, "Un membre du staff a supprimé le contenu de votre inventaire")
+        end)
+    end)
+end, "Utilisation: /clearloadout <id>")
+
+---@param source number
+---@param player Player
+---@param args table
+---@param isRcon boolean
 NarcosServer.registerPermissionCommand("giveweapon", {"commands.giveweapon"}, function(source, player, args, isRcon)
     if #args ~= 3 then
         return

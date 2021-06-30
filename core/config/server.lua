@@ -65,7 +65,8 @@ NarcosConfig_Server = {
 
     -- Ne pas toucher
     instancesRanges = {
-        creator = 100
+        creator = 100,
+        driving = 2500,
     },
 
     availableWeapons = {

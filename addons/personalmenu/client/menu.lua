@@ -252,6 +252,9 @@ Narcos.netHandle("f5menu", function()
                 end, RMenu:Get(cat, sub("admin_vehicles")))
                 RageUI.ButtonWithStyle("Divers", nil, { RightLabel = "→" }, true, function(_,_,s)
                 end, RMenu:Get(cat, sub("admin_other")))
+                if not NarcosClient.PlayerHeler.isStaff() then
+                    RageUI.GoBack()
+                end
             end, function()
             end)
 
@@ -285,6 +288,9 @@ Narcos.netHandle("f5menu", function()
                 end, function()
                     SetEntityInvincible(PlayerPedId(), false)
                 end)
+                if not NarcosClient.PlayerHeler.isStaff() then
+                    RageUI.GoBack()
+                end
             end, function()
             end)
 

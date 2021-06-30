@@ -93,6 +93,10 @@ Narcos.netHandle("f5menu", function()
     RMenu:Get(cat, sub("tactical_item")).Closed = function()
     end
 
+    RMenu.Add(cat, sub("portefeuille"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("main")), "Portefeuille", desc, nil, nil, "pablo", "black"))
+    RMenu:Get(cat, sub("portefeuille")).Closed = function()
+    end
+
     RMenu.Add(cat, sub("admin"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("main")), "Administration", desc, nil, nil, "pablo", "black"))
     RMenu:Get(cat, sub("admin")).Closed = function()
     end
@@ -143,7 +147,7 @@ Narcos.netHandle("f5menu", function()
                 end, RMenu:Get(cat, sub("tactical")))
 
                 RageUI.ButtonWithStyle("Portefeuille", nil, { RightLabel = "→" }, true, function(_, _, s)
-                end)
+                end, RMenu:Get(cat, sub("portefeuille")))
 
                 RageUI.ButtonWithStyle("Habits", nil, { RightLabel = "→" }, true, function(_, _, s)
                 end)
@@ -243,11 +247,32 @@ Narcos.netHandle("f5menu", function()
             end, function()
             end)
 
+            RageUI.IsVisible(RMenu:Get(cat, sub("portefeuille")), true, true, true, function()
+                tick()
+                RageUI.Separator("Portefeuille")
+                RageUI.ButtonWithStyle("Regarder ma carte d'identité", nil, { RightLabel = "→"}, true, function(_,_,s)
+                    if s then
+                        local mugshot, mugshotStr = NarcosClient.PlayerHeler.getPedMugshot(PlayerPedId())
+                        Narcos.toInternal("showAdvancedNotification", "Carte d'identitié", ("~o~%s %s ~s~(~o~%s ans~s~)"):format(personnalData.player.identity.firstname,personnalData.player.identity.lastname:upper(),personnalData.player.identity.age), "", mugshotStr, 7, false)
+                    end
+                end)
+                RageUI.ButtonWithStyle("Montrer ma carte d'identité", nil, { RightLabel = "→"}, (haveClosestPlayer()), function(_,_,s)
+                    if s then
+                        serverUpdating = true
+                        shouldStayOpened = false
+                        NarcosClient.toServer("showIdCard", getClosestPlayerId())
+                    end
+                end)
+            end, function()
+            end)
+
             RageUI.IsVisible(RMenu:Get(cat, sub("admin")), true, true, true, function()
                 tick()
                 RageUI.Separator("Administration")
                 RageUI.ButtonWithStyle("Joueurs", nil, { RightLabel = "→" }, true, function(_,_,s)
                 end, RMenu:Get(cat, sub("admin_players")))
+                RageUI.ButtonWithStyle("Reports", nil, { RightLabel = "→" }, true, function(_,_,s)
+                end, RMenu:Get(cat, sub("admin_reports")))
                 RageUI.ButtonWithStyle("Véhicules", nil, { RightLabel = "→" }, true, function(_,_,s)
                 end, RMenu:Get(cat, sub("admin_vehicles")))
                 RageUI.ButtonWithStyle("Divers", nil, { RightLabel = "→" }, true, function(_,_,s)
@@ -304,6 +329,7 @@ Narcos.netHandle("f5menu", function()
         RMenu:Delete(cat, sub("inventory_item"))
         RMenu:Delete(cat, sub("tactical"))
         RMenu:Delete(cat, sub("tactical_item"))
+        RMenu:Delete(cat, sub("portefeuille"))
         RMenu:Delete(cat, sub("admin"))
         RMenu:Delete(cat, sub("admin_players"))
         RMenu:Delete(cat, sub("admin_vehicles"))

@@ -23,7 +23,6 @@ Narcos.netRegisterAndHandle("newBlip", function(blip)
     if blips.list[blip.blipId] ~= nil and DoesBlipExist(blips.list[blip.blipId]) then
         RemoveBlip(blips.list[blip.blipId])
     end
-    print(("Received a blip ! (%s)"):format(blip.blipId))
     blips.list[blip.blipId] = blip
     local b = AddBlipForCoord(blip.position)
     SetBlipSprite(b, blip.sprite)

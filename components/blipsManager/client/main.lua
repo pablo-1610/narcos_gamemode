@@ -60,7 +60,7 @@ Narcos.netRegisterAndHandle("cbBlips", function(incomingBlips)
         EndTextCommandSetBlipName(b)
         blips.list[blipID].blip = b
         SetBlipFlashes(blips.list[blipID].blip, true)
-        Narcos.newWaitingThread(1500, function()
+        Narcos.newWaitingThread(5000, function()
             SetBlipFlashes(blips.list[blipID].blip, false)
         end)
         Wait(10)

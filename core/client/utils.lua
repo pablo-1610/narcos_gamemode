@@ -239,6 +239,26 @@ NarcosClient.PlayerHeler = {
             coords = coords / len
         end
         return coords
+    end,
+
+    getPedMugshot = function(ped, transparent)
+        if DoesEntityExist(ped) then
+            local mugshot
+
+            if transparent then
+                mugshot = RegisterPedheadshotTransparent(ped)
+            else
+                mugshot = RegisterPedheadshot(ped)
+            end
+
+            while not IsPedheadshotReady(mugshot) do
+                Wait(0)
+            end
+
+            return mugshot, GetPedheadshotTxdString(mugshot)
+        else
+            return
+        end
     end
 }
 
@@ -277,7 +297,7 @@ NarcosClient.InputHelper = {
 
     split = function(s, delimiter)
         result = {};
-        for match in (s..delimiter):gmatch("(.-)"..delimiter) do
+        for match in (s .. delimiter):gmatch("(.-)" .. delimiter) do
             table.insert(result, match);
         end
         return result;
@@ -285,7 +305,7 @@ NarcosClient.InputHelper = {
 
     getTableLenght = function(table)
         local tot = 0
-        for k,v in pairs(table) do
+        for k, v in pairs(table) do
             tot = (tot + 1)
         end
         return tonumber(tot)

@@ -14,6 +14,7 @@
 uniqueId = 0
 
 SetRoutingBucketPopulationEnabled(0, NarcosConfig_Server.populationEnabled)
+SetRoutingBucketEntityLockdownMode()
 
 Narcos.newThread(function()
     Narcos.toInternal("sideLoaded")

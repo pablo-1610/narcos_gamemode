@@ -14,7 +14,8 @@
 Narcos.netHandle("jobsLoaded", function()
     NarcosServer_JobsManager.precise["police"] = {
         garageVehicles = {
-            ["fb2"] = {color = {80, 128, 74}}
+            ["police"] = {color = {46, 66, 44}},
+            ["fbi2"] = {color = {46, 66, 44}},
         },
 
         vehiclesOut = {

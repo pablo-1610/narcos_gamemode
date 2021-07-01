@@ -64,7 +64,7 @@ NarcosClient_Hud.activeSpeedo = function()
             local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
             if GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() then
                 local kmh = (GetEntitySpeed(vehicle)*3.6)
-                NarcosClient.DrawHelper.drawTexts(0.5, 0.8, math.round(kmh, 2), false, 0.90, { 255, 255, 255, alpha }, 2, 0)
+                NarcosClient.DrawHelper.drawTexts(0.5, 0.8, (kmh*1.00), true, 0.90, { 255, 255, 255, alpha }, 2, 0)
             else
                 speedoactive = false
             end

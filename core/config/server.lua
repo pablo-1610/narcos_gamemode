@@ -35,7 +35,7 @@ NarcosConfig_Server = {
     staffWebhook = "https://discord.com/api/webhooks/857439977629810709/YVGozHr9x9qRT_8NZDF-sZ_hHGvf65-lANsIoA_fjwJT6gQ6ndyy8PSNE2s9Ma0tR9lx0",
 
     locationPosition = vector3(2606.98, 2909.81, 40.42),
-    locationNpc = {type = "a_m_m_mexlabor_01", pos = vector3(2606.43, 2908.63, 40.42), heading = 330.02},
+    locationNpc = {type = "a_m_m_mexlabor_01", pos = vector3(2606.60, 2909.09, 40.42), heading = 330.02},
     locationOut = {pos = vector3(2600.62, 2914.49, 39.63), heading = 147.93},
 
     cardCreationCost = 150,

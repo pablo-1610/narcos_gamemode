@@ -44,7 +44,13 @@ Narcos.netHandle("playerOk", function()
                         while not HasModelLoaded(model) do
                             Wait(1)
                         end
-                        local ped = CreatePed(9, model, npc.position.coords.x, npc.position.coords.y, npc.position.coords.z, npc.position.heading, false, false)
+                        local ped = CreatePed(9, model, npc.position.coords.x, npc.position.coords.y, (npc.position.coords.z-1.0), npc.position.heading, false, false)
+                        if npc.frozen then
+                            FreezeEntityPosition(ped, true)
+                        end
+                        if npc.animation ~= nil then
+                            TaskStartScenarioInPlace(ped, npc.animation, -1, true)
+                        end
                         SetEntityHeading(ped, npc.position.heading)
                         SetEntityAsMissionEntity(ped, 0, 0)
                         npcs.list[npcId].npcHandle = ped
@@ -53,18 +59,6 @@ Narcos.netHandle("playerOk", function()
                         end
                         if not npc.ai then
                             SetBlockingOfNonTemporaryEvents(ped, true)
-                        end
-                        if npc.frozen then
-                            Narcos.newWaitingThread(1500, function()
-                                if npcs.list[npcId].npcHandle ~= nil and DoesEntityExist(npcs.list[npcId].npcHandle) then
-                                    FreezeEntityPosition(ped, true)
-                                    if npc.animation ~= nil then
-                                        TaskStartScenarioInPlace(ped, npc.animation, -1, true)
-                                    end
-                                end
-                            end)
-                        elseif npc.animation ~= nil then
-                            TaskStartScenarioInPlace(ped, npc.animation, -1, false)
                         end
                     end
                 else

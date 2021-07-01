@@ -35,7 +35,7 @@ NarcosConfig_Server = {
     staffWebhook = "https://discord.com/api/webhooks/857439977629810709/YVGozHr9x9qRT_8NZDF-sZ_hHGvf65-lANsIoA_fjwJT6gQ6ndyy8PSNE2s9Ma0tR9lx0",
 
     locationPosition = vector3(2606.98, 2909.81, 40.42),
-    locationNpc = {type = "a_m_m_mexlabor_01", pos = vector3(2606.03, 2908.10, 40.20), heading = 330.02},
+    locationNpc = {type = "a_m_m_mexlabor_01", pos = vector3(2606.43, 2908.63, 40.42), heading = 330.02},
     locationOut = {pos = vector3(2600.62, 2914.49, 39.63), heading = 147.93},
 
     cardCreationCost = 150,
@@ -130,5 +130,13 @@ NarcosConfig_Server = {
         --'CLOUDS',
         --'CLEARING',
         --'RAIN',
+    },
+
+    availableClothesShops = {
+        {
+            vendorNpcLoc = {coords = vector3(5.99, 6511.19, 31.87), heading = 57.51},
+            vendorNpcZone = vector3(4.45, 6512.62, 31.87),
+            mainZone = vector3(12.30, 6513.55, 31.87)
+        }
     }
 }

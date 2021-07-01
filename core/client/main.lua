@@ -50,23 +50,28 @@ Narcos.newThread(function()
 end)
 
 Narcos.newThread(function()
+    while currentState ~= NarcosEnums.GameStates.PLAYING do
+        Wait(100)
+    end
     while true do
-        ClearPlayerWantedLevel(PlayerPedId())
+        for i = 1, 15 do
+            EnableDispatchService(i, false)
+        end
         ResetPlayerStamina(PlayerPedId())
         RestorePlayerStamina(PlayerPedId(), true)
         DisablePlayerVehicleRewards(PlayerPedId())
+        -- Lockdown is handling that
+        --[[
         SetGarbageTrucks(false)
         SetRandomBoats(false)
         SetCreateRandomCops(false)
         SetCreateRandomCopsNotOnScenarios(false)
         SetCreateRandomCopsOnScenarios(false)
-        for i = 1, 15 do
-            EnableDispatchService(i, false)
-        end
+        --]]
         if GetPlayerWantedLevel(PlayerPedId()) ~= 0 then
             SetPlayerWantedLevel(PlayerPedId(), 0, false)
             SetPlayerWantedLevelNow(PlayerPedId(), false)
         end
-        Wait(0)
+        Wait(350)
     end
 end)

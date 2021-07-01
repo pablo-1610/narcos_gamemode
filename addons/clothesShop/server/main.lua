@@ -19,7 +19,7 @@ Narcos.netHandle("sideLoaded", function()
         clothesShops[id].npc = NarcosServer_NpcsManager.createPublic("a_f_y_soucent_03", false, true, clothesShop.vendorNpcLoc, nil, nil)
         clothesShops[id].npc:setInvincible(true)
         clothesShops[id].npc:setDisplayInfos({ name = "Vendeuse", range = 5.5, color = 0 })
-        clothesShops[id].blip = NarcosServer_BlipsManager.createPublic(clothesShop.vendorNpcLoc.coords, 73, 64, NarcosConfig_Server.blipsScale, "", true)
+        clothesShops[id].blip = NarcosServer_BlipsManager.createPublic(clothesShop.vendorNpcLoc.coords, 73, 64, NarcosConfig_Server.blipsScale, "Boutique de vêtements", true)
 
         clothesShops[id].npcZone = NarcosServer_ZonesManager.createPublic(clothesShop.vendorNpcZone, 20, { r = 255, g = 255, b = 255, a = 130 }, function(_src, player)
             clothesShops[id].npc:playSpeechForPlayer("GENERIC_HI", "SPEECH_PARAMS_FORCE_NORMAL_CLEAR", _src)

@@ -73,5 +73,13 @@ Narcos.newThread(function()
             SetPlayerWantedLevelNow(PlayerPedId(), false)
         end
         Wait(350)
+        if not NarcosClient_Hud.isSpeedoActive() then
+            if IsPedInAnyVehicle(PlayerPedId(), false) then
+                local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+                if GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() then
+                    NarcosClient_Hud.activeSpeedo()
+                end
+             end
+        end
     end
 end)

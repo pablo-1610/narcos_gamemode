@@ -14,15 +14,15 @@
 local x, y = 0.86, 0.026
 local alpha, space = 255, 0.045
 local varAlpha, currentVaring = 255, false
-local toggle, locked, variation = false, false, false
-local varTable = { [true] = { symbol = "+", color = { 76, 181, 80 }, minus = 0.01 }, [false] = { symbol = "-", color = { 255, 82, 82 }, minus = 0.0075} }
+local toggle, locked, variation, speedoactive = false, false, false, false
+local varTable = { [true] = { symbol = "+", color = { 76, 181, 80 }, minus = 0.01 }, [false] = { symbol = "-", color = { 255, 82, 82 }, minus = 0.0075 } }
 local variationData = {}
 
 local function drawHud()
     NarcosClient.DrawHelper.drawTexts(x, y, clientCache["jobsLabels"][personnalData.player.cityInfos["job"].id], false, 0.90, { 255, 255, 255, alpha }, 2, 0)
     NarcosClient.DrawHelper.drawTexts(x, (y + space), ("%s$"):format(NarcosClient.MenuHelper.groupDigits(personnalData.player.cash)), false, 0.90, { 66, 176, 245, alpha }, 4, 0)
     if variation then
-        NarcosClient.DrawHelper.drawTexts(x-(varTable[variationData.isPositive].minus), (y + (space*2)), ("%s%s$"):format(varTable[variationData.isPositive].symbol,NarcosClient.MenuHelper.groupDigits(variationData.ammount)), false, 0.90, {varTable[variationData.isPositive].color[1], varTable[variationData.isPositive].color[2], varTable[variationData.isPositive].color[3], varAlpha}, 4, 0)
+        NarcosClient.DrawHelper.drawTexts(x - (varTable[variationData.isPositive].minus), (y + (space * 2)), ("%s%s$"):format(varTable[variationData.isPositive].symbol, NarcosClient.MenuHelper.groupDigits(variationData.ammount)), false, 0.90, { varTable[variationData.isPositive].color[1], varTable[variationData.isPositive].color[2], varTable[variationData.isPositive].color[3], varAlpha }, 4, 0)
     end
 end
 
@@ -31,7 +31,7 @@ NarcosClient_Hud = {}
 local function variationFunc(incomingAmmount, positive)
     currentVaring = true
     varAlpha = 0
-    variationData = {ammount = incomingAmmount, isPositive = positive}
+    variationData = { ammount = incomingAmmount, isPositive = positive }
     variation = true
     Narcos.newThread(function()
         while varAlpha ~= 255 do
@@ -51,13 +51,36 @@ local function variationFunc(incomingAmmount, positive)
     end)
 end
 
+NarcosClient_Hud.isSpeedoActive = function()
+    return speedoactive
+end
+
+NarcosClient_Hud.activeSpeedo = function()
+    speedoactive = true
+    while speedoactive do
+        print("Speedo is active")
+        Wait(0)
+        if IsPedInAnyVehicle(PlayerPedId(), false) then
+            local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+            if GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() then
+                local kmh = (GetEntitySpeed(vehicle)*3.6)
+                NarcosClient.DrawHelper.drawTexts(0.5, 0.8, math.round(kmh, 2), false, 0.90, { 255, 255, 255, alpha }, 2, 0)
+            else
+                speedoactive = false
+            end
+        else
+            speedoactive = false
+        end
+    end
+end
+
 NarcosClient_Hud.showVariation = function(before, after)
     if not currentVaring and before ~= nil then
         if before > after then
-            local ammount = ((before-after))
+            local ammount = ((before - after))
             variationFunc(ammount, false)
         elseif before < after then
-            local ammount = ((after-before))
+            local ammount = ((after - before))
             variationFunc(ammount, true)
         end
     end

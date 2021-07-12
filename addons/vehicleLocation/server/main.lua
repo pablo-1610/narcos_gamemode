@@ -18,6 +18,7 @@ Narcos.netHandle("sideLoaded", function()
 
     npc = NarcosServer_NpcsManager.createPublic(NarcosConfig_Server.locationNpc.type, false, true, { coords = NarcosConfig_Server.locationNpc.pos, heading = NarcosConfig_Server.locationNpc.heading }, "WORLD_HUMAN_STAND_IMPATIENT_UPRIGHT_FACILITY", nil)
     npc:setInvincible(true)
+    npc:setDisplayInfos({name = "Francisco Faggio", range = 5.5, color = 0})
 
     zone = NarcosServer_ZonesManager.createPublic(NarcosConfig_Server.locationPosition, 20, { r = 255, g = 255, b = 255, a = 130 }, function(_src)
         npc:playSpeechForPlayer("GENERIC_HI", "SPEECH_PARAMS_FORCE_NORMAL_CLEAR", _src)

@@ -64,7 +64,6 @@ NarcosClient_Hud.activeSpeedo = function()
             if GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() then
                 local kmh = (GetEntitySpeed(vehicle)*3.6)
                 if not kmh or kmh == "" or kmh <= 0 then kmh = 0 end
-                print("["..json.encode(kmh).."]")
                 NarcosClient.DrawHelper.drawTexts(0.5, 0.8, math.floor((kmh+0.5)), true, 1.05, { 132, 189, 109, alpha }, 2, 0)
                 NarcosClient.DrawHelper.drawTexts(0.5, 0.835, "kmh", true, 0.50, { 255,255,255, alpha }, 2, 0)
             else

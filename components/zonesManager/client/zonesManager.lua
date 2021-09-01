@@ -27,8 +27,6 @@ Narcos.netHandle("playerOk", function()
             if dist <= zone.distances[1] and canInteractWithMarkers then
                 closeToMarker = true
                 DrawMarker(zone.type, zoneCoords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.75, 0.75, 0.75, zone.color.r, zone.color.g, zone.color.b, zone.color.a, 0, 1, 2, 0, nil, nil, 0)
-                --DrawMarker(25, zoneCoords-0.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.5, 0.5, 255, 255, 255, 200, 0, 1, 2, 0, nil, nil, 0)
-                --DrawMarker(zone.type, zoneCoords, 0.0, 0.0, 0.0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, zone.color.r, zone.color.g, zone.color.b, zone.color.a, 0, 1, 2, 0, nil, nil, 0)
                 if dist <= zone.distances[2] and (not isAMenuActive) then
                     AddTextEntry("ZONES", (zone.help or "Appuyez sur ~INPUT_CONTEXT~ pour intéragir"))
                     DisplayHelpTextThisFrame("ZONES", false)

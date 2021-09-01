@@ -255,6 +255,35 @@ end, "Utilisation: /car <modèle>")
 ---@param player Player
 ---@param args table
 ---@param isRcon boolean
+NarcosServer.registerPermissionCommand("setjobpos", {"commands.setjobpos"}, function(_src, player, args, isRcon)
+    if isRcon then return end
+    if #args ~= 2 then
+        return
+    end
+    local job, positionId = args[1]:lower(), args[2]
+    if not NarcosServer_JobsManager.exists(job) then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Ce job n'existe pas")
+        return
+    end
+    job = NarcosServer_JobsManager.get(job)
+    local positions = job.positions
+    if not (positions[positionId:upper()]) then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Cette position n'existe pas")
+        return
+    end
+    local pos = GetEntityCoords(GetPlayerPed(_src))
+    positions[positionId:upper()].location = pos
+    NarcosServer_MySQL.execute("UPDATE jobs SET positions = @positions WHERE name = @name", {
+        ["positions"] = json.encode(positions),
+        ["name"] = args[1]:lower()
+    })
+    player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Position du job ~y~%s ~s~mise à jour"):format(job.label))
+end, "Utilisation: /setjobpos <job> <id>")
+
+---@param _src number
+---@param player Player
+---@param args table
+---@param isRcon boolean
 NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(_src, player, args, isRcon)
     if #args ~= 3 then
         return

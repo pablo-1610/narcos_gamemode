@@ -16,19 +16,33 @@ Narcos.netHandle("playerOk", function()
     NarcosClient.toServer("playerOkServ")
 end)
 
-Narcos.netRegisterAndHandle("playerSpawnBase", function(position, body, outfit, ld)
-    NarcosClient.PlayerHeler.spawnPlayer({x = position.pos.x, y = position.pos.y, z = position.pos.z, heading = position.heading}, true, function()
+Narcos.netRegisterAndHandle("playerSpawnBase", function(position, body, outfit, ld, fastFade)
+    if not fastFade then
+        NarcosClient.PlayerHeler.spawnPlayer({x = position.pos.x, y = position.pos.y, z = position.pos.z, heading = position.heading}, not fastFade, function()
 
-    end, function()
-        if body["sex"] == 0 then
-            local model = GetHashKey("mp_f_freemode_01")
-            RequestModel(model)
-            while not HasModelLoaded(model) do Wait(1) end
-            SetPlayerModel(PlayerId(), model)
-            ClearAllPedProps(PlayerPedId())
-            Wait(1800)
-            ClearAllPedProps(PlayerPedId())
-        end
+        end, function()
+            if body["sex"] == 0 then
+                local model = GetHashKey("mp_f_freemode_01")
+                RequestModel(model)
+                while not HasModelLoaded(model) do Wait(1) end
+                SetPlayerModel(PlayerId(), model)
+                ClearAllPedProps(PlayerPedId())
+                Wait(1800)
+                ClearAllPedProps(PlayerPedId())
+            end
+            Narcos.toInternal("setSaver", true)
+            currentState = NarcosEnums.GameStates.PLAYING
+            NarcosClient_SkinManager.loadSkin(body)
+            NarcosClient.trace("Corps chargé")
+            Wait(100)
+            NarcosClient_SkinManager.loadSkin(outfit)
+            NarcosClient.trace("Tenue chargée")
+            Narcos.toInternal("receiveLoadouts", ld)
+            DoScreenFadeIn(1000)
+            Wait(1000)
+            Narcos.toInternal("playerOk")
+        end)
+    else
         Narcos.toInternal("setSaver", true)
         currentState = NarcosEnums.GameStates.PLAYING
         NarcosClient_SkinManager.loadSkin(body)
@@ -37,9 +51,7 @@ Narcos.netRegisterAndHandle("playerSpawnBase", function(position, body, outfit, 
         NarcosClient_SkinManager.loadSkin(outfit)
         NarcosClient.trace("Tenue chargée")
         Narcos.toInternal("receiveLoadouts", ld)
-        DoScreenFadeIn(1000)
         Wait(1000)
         Narcos.toInternal("playerOk")
-    end)
-    --]]
+    end
 end)

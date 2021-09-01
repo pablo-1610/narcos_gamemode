@@ -249,7 +249,7 @@ NarcosServer.registerPermissionCommand("car", {"commands.car"}, function(_src, p
     if #args ~= 1 then return end
     local veh = CreateVehicle(GetHashKey(args[1]), GetEntityCoords(GetPlayerPed(_src)), 90.0, true, true)
     TaskWarpPedIntoVehicle(GetPlayerPed(_src), veh, -1)
-end)
+end, "Utilisation: /car <modèle>")
 
 ---@param _src number
 ---@param player Player

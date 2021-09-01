@@ -38,7 +38,7 @@ Player.__index = Player
 setmetatable(Player, {
     ---@param source number
     ---@param identifiers table
-    __call = function(_, source, identifiers)
+    __call = function(_, source, identifiers, anormalLoad)
         local self = setmetatable({}, Player);
         self.source = source
         self.cache = {}
@@ -48,7 +48,7 @@ setmetatable(Player, {
         self.rank = NarcosServer_RanksManager.get(NarcosConfig_Server.defaultRank)
         self.inventory = NarcosServer_InventoriesManager.getOrCreate(identifiers['license'], ("Sac de %s"):format(self.name), 20.0, 1)
         NarcosServer_PlayersManager.list[tonumber(source)] = self
-        self:asyncLoadData()
+        self:asyncLoadData(anormalLoad)
         return self
     end
 })
@@ -58,7 +58,7 @@ setmetatable(Player, {
 ---asyncLoadData
 ---@public
 ---@return void
-function Player:asyncLoadData()
+function Player:asyncLoadData(anormalLoad)
     NarcosServer_MySQL.query("SELECT * FROM players WHERE license = @a", { ['a'] = self:getLicense() }, function(result)
         if result[1] then
             self.newPlayer = false
@@ -90,6 +90,9 @@ function Player:asyncLoadData()
             self.newPlayer = true
         end
         Narcos.toInternal("playerObjectLoaded", self.source)
+        if anormalLoad then
+            Narcos.toInternal(("%scomplete"):format(self.source), self)
+        end
     end)
 end
 

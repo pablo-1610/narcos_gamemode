@@ -25,9 +25,9 @@ Narcos.netRegisterAndHandle("playerOkServ", function()
     job:handlePlayerJoined(player.source, player)
 end)
 
-NarcosServer_PlayersManager.add = function(source, identifiers)
-    NarcosServer.trace(("Le joueur ^3%s^7 se ^2connecte ^7(id: %s)"):format(GetPlayerName(source), source), Narcos.prefixes.connection)
-    Player(source, identifiers)
+NarcosServer_PlayersManager.add = function(source, identifiers, anormalLoad)
+    if not anormalLoad then NarcosServer.trace(("Le joueur ^3%s^7 se ^2connecte ^7(id: %s)"):format(GetPlayerName(source), source), Narcos.prefixes.connection) end
+    return Player(source, identifiers, anormalLoad)
 end
 
 NarcosServer_PlayersManager.remove = function(source)
@@ -124,6 +124,20 @@ Narcos.netRegisterAndHandle("playerJoined", function()
     Narcos.toInternal("sendCaches", _src)
     ---@type Player
     local player = NarcosServer_PlayersManager.get(_src)
+    if player == nil then
+        NarcosServer.trace(("Le joueur ^3%s ^7n'est pas chargé, chargement en cours..."):format(GetPlayerName(_src)), Narcos.prefixes.connection)
+        local identifiers = NarcosServer.getIdentifiers(_src)
+        NarcosServer_PlayersManager.add(tonumber(_src), identifiers, true)
+        Narcos.netHandle(("%scomplete"):format(_src), function(loadedPlayer)
+            player = NarcosServer_PlayersManager.get(tonumber(_src))
+            player:sendData(function()
+                local pos, heading = GetEntityCoords(GetPlayerPed(_src)), GetEntityHeading(GetPlayerPed(_src))
+                NarcosServer.toClient("playerSpawnBase", _src, {pos = {x = pos.x, y = pos.y, z = pos.z}, heading = heading}, player.body, player.outfits[player.selectedOutfit], player.loadout, true)
+                NarcosServer.trace(("Le joueur ^2%s ^7a été chargé"):format(GetPlayerName(_src)), Narcos.prefixes.connection)
+            end)
+        end)
+        return
+    end
     if player:getIsNewPlayer() then
         NarcosServer_InstancesManager.setInstance(_src, (NarcosConfig_Server.instancesRanges.creator + _src))
         NarcosServer.trace(("Le joueur ^3%s^7 est nouveau ! Bienvenue"):format(player.name), Narcos.prefixes.connection)

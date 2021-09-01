@@ -46,6 +46,19 @@ end)
 Narcos.newThread(function()
     while true do
         Wait(0)
+        local playerId = PlayerId()
+        if GetPlayerWantedLevel(playerId) ~= 0 then
+            SetPlayerWantedLevel(playerId, 0, false)
+            SetPlayerWantedLevelNow(playerId, false)
+        end
+        HideHudComponentThisFrame(1)
+        HideHudComponentThisFrame(3)
+        HideHudComponentThisFrame(4)
+        HideHudComponentThisFrame(6)
+        HideHudComponentThisFrame(7)
+        HideHudComponentThisFrame(8)
+        HideHudComponentThisFrame(9)
+        HideHudComponentThisFrame(13)
     end
 end)
 
@@ -68,10 +81,6 @@ Narcos.newThread(function()
         SetCreateRandomCopsNotOnScenarios(false)
         SetCreateRandomCopsOnScenarios(false)
         --]]
-        if GetPlayerWantedLevel(PlayerPedId()) ~= 0 then
-            SetPlayerWantedLevel(PlayerPedId(), 0, false)
-            SetPlayerWantedLevelNow(PlayerPedId(), false)
-        end
         Wait(350)
         if not NarcosClient_Hud.isSpeedoActive() then
             if IsPedInAnyVehicle(PlayerPedId(), false) then

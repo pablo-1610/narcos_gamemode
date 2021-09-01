@@ -55,6 +55,7 @@ NarcosClient_Hud.isSpeedoActive = function()
     return speedoactive
 end
 
+local baseSpeedoMinor = 0.05
 NarcosClient_Hud.activeSpeedo = function()
     speedoactive = true
     while speedoactive do
@@ -64,9 +65,12 @@ NarcosClient_Hud.activeSpeedo = function()
             if GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() then
                 local kmh = (GetEntitySpeed(vehicle)*3.6)
                 if not kmh or kmh == "" or kmh <= 0 then kmh = 0 end
-                print(math.floor((kmh+0.5)))
-                NarcosClient.DrawHelper.drawTexts(0.5, 0.8, math.floor((kmh+0.5)), true, 1.05, { 132, 189, 109, alpha }, 2, 0)
-                NarcosClient.DrawHelper.drawTexts(0.5, 0.835, "kmh", true, 0.50, { 255,255,255, alpha }, 2, 0)
+                if alpha > 0 then
+                    DrawRect(0.5, 0.8465+baseSpeedoMinor, 0.05, 0.083, 0,0,0,60)
+                    DrawRect(0.5, 0.889+baseSpeedoMinor, 0.05, 0.005, 107, 107, 107,255)
+                end
+                NarcosClient.DrawHelper.drawTexts(0.5, 0.8+baseSpeedoMinor, tostring(math.floor((kmh+0.5))), true, 1.05, { 132, 189, 109, alpha }, 2, 0)
+                NarcosClient.DrawHelper.drawTexts(0.5, 0.852+baseSpeedoMinor, "kmh", true, 0.50, { 255,255,255, alpha }, 2, 0)
             else
                 speedoactive = false
             end

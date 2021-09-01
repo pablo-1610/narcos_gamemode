@@ -21,6 +21,13 @@ RegisterCommand("tp", function(source, args)
     SetEntityCoords(PlayerPedId(), x, y, z, false, false, false, false)
 end)
 
+RegisterCommand("tpco", function(source, args)
+    local waypoint = GetFirstBlipInfoId(8)
+    if DoesBlipExist(waypoint) then
+        SetEntityCoords(PlayerPedId(), GetBlipInfoIdCoord(waypoint))
+    end
+end)
+
 RegisterCommand("revive", function()
     NetworkResurrectLocalPlayer(GetEntityCoords(PlayerPedId()), 0.0, -1, 0)
     ClearPedBloodDamage(PlayerPedId())

@@ -244,6 +244,17 @@ end, "Utilisation: /setgroup <id> <rang>")
 ---@param player Player
 ---@param args table
 ---@param isRcon boolean
+NarcosServer.registerPermissionCommand("car", {"commands.car"}, function(_src, player, args, isRcon)
+    if isRcon then return end
+    if #args ~= 1 then return end
+    local veh = CreateVehicle(GetHashKey(args[1]), GetEntityCoords(GetPlayerPed(_src)), 90.0, true, true)
+    TaskWarpPedIntoVehicle(GetPlayerPed(_src), veh, -1)
+end)
+
+---@param _src number
+---@param player Player
+---@param args table
+---@param isRcon boolean
 NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(_src, player, args, isRcon)
     if #args ~= 3 then
         return

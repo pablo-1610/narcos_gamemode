@@ -50,6 +50,22 @@ setmetatable(Job, {
         self.inventory = NarcosServer_InventoriesManager.getOrCreate(("job:%s"):format(self.name), ("Entrepôt %s"):format(label), 100.0, 2)
         NarcosServer_JobsManager.list[self.name] = self
         NarcosServer_JobsManager.precise[self.name] = {}
+        Narcos.newWaitingThread(1, function()
+            if NarcosServer_JobsManager.precise[self.name] ~= nil then
+                local additionalData = NarcosServer_JobsManager.precise[self.name]
+                if additionalData.vehCb ~= nil then
+                    for k, v in pairs(additionalData.vehCb) do
+                        self.zonesRelatives[("VEHCB%s"):format(k)] = {}
+                        self.zonesRelatives[("VEHCB%s"):format(k)].zone = NarcosServer_ZonesManager.createPrivate(v, 20, { r = 255, g = 255, b = 255, a = 255 }, function(source, player)
+                            local veh = GetVehiclePedIsIn(GetPlayerPed(source), false)
+                            if veh == nil then return end
+                            DeleteEntity(veh)
+                            player:sendSystemMessage(NarcosEnums.Prefixes.SUC, "Véhicule rangé")
+                        end, "Appuyez sur ~INPUT_CONTEXT~ pour ranger votre véhicule", 20.0, 1.0)
+                    end
+                end
+            end
+        end)
         return self;
     end
 })
@@ -85,7 +101,7 @@ end
 ---@param player Player
 function Job:handlePlayerJoined(_src, player)
     ---@type JobRank
-    for _, zoneData in pairs(self.zonesRelatives) do
+    for id, zoneData in pairs(self.zonesRelatives) do
         if zoneData.blip ~= nil then
             NarcosServer_BlipsManager.addAllowed(zoneData.blip, _src)
         end

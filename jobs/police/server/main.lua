@@ -15,13 +15,31 @@ NarcosServer_BlipsManager.createPublic(vector3(442.78, -984.40, 30.68), 137, 38,
 
 Narcos.netHandle("jobsLoaded", function()
     NarcosServer_JobsManager.precise["police"] = {
+        vehCb = {
+            vector3(462.47, -1014.79, 28.06),
+            vector3(462.66, -1019.61, 28.10)
+        },
+
         garageVehicles = {
-            ["police"] = {color = {255, 255, 255}},
-            ["fbi2"] = {color = {255, 255, 255}},
+            ["police"] = {color = {0, 0, 0}},
+            ["fbi2"] = {color = {0, 0, 0}},
         },
 
         vehiclesOut = {
-            {pos = vector3(-482.66, 6024.72, 31.34), heading = 228.71}
-        }
+            {pos = vector3(446.01, -1026.23, 28.65), heading = 4.16},
+            {pos = vector3(442.33, -1026.98, 28.72), heading = 8.78},
+        },
+
+        getMarkers = function()
+            return {
+                -- Custom markers
+            }
+        end,
+
+        getBlips = function()
+            return {
+                -- Custom blips
+            }
+        end
     }
 end)

@@ -17,9 +17,11 @@ Narcos.netHandle("sideLoaded", function()
                 id = 847445071015051264,
                 text = "Se promène dans la nature",
                 image = "city",
+                --[[
                 buttons = {
                     {"Discord", "https://discord.gg/JjkVfQByVE"},
                 }
+                --]]
             }
     )
 end)

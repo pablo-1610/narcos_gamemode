@@ -11,13 +11,13 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-NarcosServer_BlipsManager.createPublic(vector3(-447.32, 6013.17, 31.71), 137, 52, NarcosConfig_Server.blipsScale, "Poste national de la Guardia", true)
+NarcosServer_BlipsManager.createPublic(vector3(442.78, -984.40, 30.68), 137, 38, NarcosConfig_Server.blipsScale, "Commissariat central", true)
 
 Narcos.netHandle("jobsLoaded", function()
     NarcosServer_JobsManager.precise["police"] = {
         garageVehicles = {
-            ["police"] = {color = {46, 66, 44}},
-            ["fbi2"] = {color = {46, 66, 44}},
+            ["police"] = {color = {255, 255, 255}},
+            ["fbi2"] = {color = {255, 255, 255}},
         },
 
         vehiclesOut = {

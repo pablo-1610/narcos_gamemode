@@ -31,7 +31,7 @@ Narcos.newRepeatingTask = function(onRun, onFinished, delay, interval)
     end
     Narcos.newThread(function()
         while activeTasks[taskID] do
-            onRun()
+            onRun(taskID)
             if interval > 0 then
                 Wait(interval)
             end

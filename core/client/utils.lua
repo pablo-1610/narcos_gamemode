@@ -13,6 +13,14 @@
 
 NarcosClient = {}
 
+NarcosClient.split = function(s, delimiter)
+    result = {};
+    for match in (s..delimiter):gmatch("(.-)"..delimiter) do
+        table.insert(result, match);
+    end
+    return result;
+end
+
 -- MenuHelper
 NarcosClient.MenuHelper = {
     defineOrValue = function(value)
@@ -76,6 +84,7 @@ NarcosClient.MenuHelper = {
 
 -- DrawHelper
 NarcosClient.DrawHelper = {
+
     showLoading = function(message)
         if type(message) == "string" then
             Citizen.InvokeNative(0xABA17D7CE615ADBF, "STRING")

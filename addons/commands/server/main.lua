@@ -244,17 +244,6 @@ end, "/setgroup <id> <rang>")
 ---@param player Player
 ---@param args table
 ---@param isRcon boolean
-NarcosServer.registerPermissionCommand("car", {"commands.car"}, function(_src, player, args, isRcon)
-    if isRcon then return end
-    if #args ~= 1 then return end
-    local veh = CreateVehicle(GetHashKey(args[1]), GetEntityCoords(GetPlayerPed(_src)), 90.0, true, true)
-    TaskWarpPedIntoVehicle(GetPlayerPed(_src), veh, -1)
-end, "/car <modèle>")
-
----@param _src number
----@param player Player
----@param args table
----@param isRcon boolean
 NarcosServer.registerPermissionCommand("setjobpos", {"commands.setjobpos"}, function(_src, player, args, isRcon)
     if isRcon then return end
     if #args ~= 2 then
@@ -324,6 +313,24 @@ NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(_
         target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre job est désormais: ~y~%s ~s~(~y~grade "..tonumber(args[3]).."~s~)"):format(newJob.name))
     end)
 end, "/setjob <id> <job> <rang>")
+
+---@param _src number
+---@param isRcon boolean
+NarcosServer.registerCommand("id", function(_src, player, _, isRcon)
+    if isRcon then return end
+    player:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre identifiant unique est le suivant: ~y~%s"):format(_src), _src)
+end)
+
+---@param _src number
+---@param player Player
+---@param args table
+---@param isRcon boolean
+NarcosServer.registerPermissionCommand("car", {"commands.car"}, function(_src, player, args, isRcon)
+    if isRcon then return end
+    if #args ~= 1 then return end
+    local veh = CreateVehicle(GetHashKey(args[1]), GetEntityCoords(GetPlayerPed(_src)), 90.0, true, true)
+    TaskWarpPedIntoVehicle(GetPlayerPed(_src), veh, -1)
+end, "/car <modèle>")
 
 ---@param _src number
 ---@param player Player

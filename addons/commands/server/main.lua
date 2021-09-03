@@ -324,3 +324,14 @@ NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(_
         target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre job est désormais: ~y~%s ~s~(~y~grade "..tonumber(args[3]).."~s~)"):format(newJob.name))
     end)
 end, "Utilisation: /setjob <id> <job> <rang>")
+
+---@param _src number
+---@param player Player
+---@param args table
+---@param isRcon boolean
+NarcosServer.registerPermissionCommand("announce", {"commands.announce"}, function(_src, player, args, isRcon)
+    if #args <= 1 then
+        return
+    end
+    NarcosServer.toAll("receiveAnnounce", table.concat(args, " "))
+end, "Utilisation: /announce <message>")

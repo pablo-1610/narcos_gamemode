@@ -32,7 +32,7 @@ Narcos.newRepeatingTask = function(onRun, onFinished, delay, interval)
             onRun()
             Wait(interval)
         end
-        onFinished()
+        if onFinished ~= nil then onFinished() end
     end)
     return taskID
 end

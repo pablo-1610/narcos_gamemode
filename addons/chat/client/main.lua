@@ -70,7 +70,7 @@ end
 NarcosClient_Chat.refreshCommands = function()
     local suggestions = {}
     for command, v in pairs(NarcosClient_Chat.commands) do
-        table.insert(suggestions, { name = '/' .. command, help = (v.help or ''), staff = v.staff })
+        table.insert(suggestions, { name = '/' .. command, help = (("Utilisation: %s"):format(v.help) or ''), staff = v.staff })
     end
     NarcosClient_Chat.addSuggestions(suggestions)
 end

@@ -73,7 +73,7 @@
             <div class="suggestions-wrap" v-show="currentSuggestions.length > 0">
                 <ul class="suggestions">
                     <li class="suggestion" v-for="s in currentSuggestions">
-                        <p>
+                        <p style="color:aqua">
             <span :class="{ 'disabled': s.disabled }">
               {{s.name}}
             </span>
@@ -89,6 +89,14 @@
                             </template>
                             <template v-for="p in s.params" v-if="!p.disabled">
                                 {{p.help}}
+                            </template>
+                        </small>
+                        <small>
+                            <template v-if="s.staff">
+                                <p style="color:#b0bbbd">Accès: <strong style="color:orange">Sous permission(s)</strong>️</p>
+                            </template>
+                            <template v-if="!s.staff">
+                                <p style="color:#b0bbbd">Accès: <strong style="color:green">Tout le monde</strong>️</p>
                             </template>
                         </small>
                     </li>

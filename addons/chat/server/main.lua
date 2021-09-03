@@ -14,8 +14,8 @@
 NarcosServer_Chat = {}
 NarcosServer_Chat.commands = {}
 
-NarcosServer_Chat.setCommand = function(command, help)
-    NarcosServer_Chat.commands[command] = {help = (help or '')}
+NarcosServer_Chat.setCommand = function(command, help,isStaff)
+    NarcosServer_Chat.commands[command] = {help = (help or ''), staff = isStaff or false}
     NarcosServer.trace(("Ajout d'une commande ^3%s"):format(command), Narcos.prefixes.dev)
 end
 

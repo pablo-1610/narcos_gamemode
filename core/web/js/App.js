@@ -92,7 +92,7 @@ window.APP = {
       if (this.removedSuggestions.find(a => a.name == suggestion.name)) {
         this.removedSuggestions.splice(this.removedSuggestions.indexOf(suggestion.name), 1)
       }
-
+      suggestion.staff = suggestion.staff || false;
       this.backingSuggestions.push(suggestion);
     },
     ON_SUGGESTION_REMOVE({ name }) {

@@ -49,7 +49,7 @@ NarcosServer.registerConsoleCommand = function(command, func)
 end
 
 NarcosServer.registerPermissionCommand = function(command, permissions, func, help)
-    NarcosServer_Chat.setCommand(command, help)
+    NarcosServer_Chat.setCommand(command, help, (#permissions>0))
     RegisterCommand(command, function(_src, args)
         if _src == 0 then
             NarcosServer.webhook(("Console: /%s %s"):format(command:lower(),json.encode(args)), "orange", NarcosConfig_Server.staffWebhook)

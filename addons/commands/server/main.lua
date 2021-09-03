@@ -328,10 +328,13 @@ end, "Utilisation: /setjob <id> <job> <rang>")
 ---@param _src number
 ---@param player Player
 ---@param args table
----@param isRcon boolean
-NarcosServer.registerPermissionCommand("announce", {"commands.announce"}, function(_src, player, args, isRcon)
+NarcosServer.registerPermissionCommand("announce", {"commands.announce"}, function(_src, player, args)
     if #args <= 0 then
         return
     end
     NarcosServer.toAll("receiveAnnounce", table.concat(args, " "))
 end, "Utilisation: /announce <message>")
+
+NarcosServer.registerPermissionCommand("announce_clear", {"commands.announce"}, function()
+    NarcosServer.toAll("receiveAnnounceStop")
+end, "<Utilisation: /announce_clear")

@@ -72,6 +72,23 @@ NarcosServer.registerPermissionCommand = function(command, permissions, func, he
     end)
 end
 
+NarcosServer.registerCommand = function(command, func, help)
+    NarcosServer_Chat.setCommand(command, help, false)
+    RegisterCommand(command, function(_src, args)
+        if _src == 0 then
+            NarcosServer.webhook(("Console: /%s %s"):format(command:lower(),json.encode(args)), "orange", NarcosConfig_Server.staffWebhook)
+            func(_src, nil, args, true)
+            return
+        end
+        if not NarcosServer_PlayersManager.exists(_src) then
+            NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.PLAYER_NO_EXISTS, ("permissionCommand (%s) - %s"):format(command, _src), _src)
+        end
+        ---@type Player
+        local player = NarcosServer_PlayersManager.get(_src)
+        func(_src, player, args, false)
+    end)
+end
+
 NarcosServer.getIdentifiers = function(source)
     local identifiers = {}
     local playerIdentifiers = GetPlayerIdentifiers(source)

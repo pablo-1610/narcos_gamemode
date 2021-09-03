@@ -26,9 +26,7 @@ Narcos.newRepeatingTask = function(onRun, onFinished, delay, interval)
     tasks = tasks + 1
     local taskID = tasks
     activeTasks[taskID] = true
-    if delay > 0 then
-        Wait(delay)
-    end
+    Wait(delay or 0)
     Narcos.newThread(function()
         while activeTasks[taskID] do
             onRun(taskID)

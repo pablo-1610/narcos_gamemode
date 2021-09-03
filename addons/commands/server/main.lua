@@ -330,7 +330,7 @@ end, "Utilisation: /setjob <id> <job> <rang>")
 ---@param args table
 ---@param isRcon boolean
 NarcosServer.registerPermissionCommand("announce", {"commands.announce"}, function(_src, player, args, isRcon)
-    if #args <= 1 then
+    if #args <= 0 then
         return
     end
     NarcosServer.toAll("receiveAnnounce", table.concat(args, " "))

@@ -62,7 +62,7 @@ NarcosServer.registerPermissionCommand("clearloadout", {"commands.clearloadout"}
         if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, "Clear des armes effectué") end
         target:sendSystemMessage(NarcosEnums.Prefixes.INF, "Un membre du staff a supprimé vos armes")
     end)
-end, "Utilisation: /clearloadout <id>")
+end, "/clearloadout <id>")
 
 ---@param source number
 ---@param player Player
@@ -87,7 +87,7 @@ NarcosServer.registerPermissionCommand("clearinventory", {"commands.clearinvento
             target:sendSystemMessage(NarcosEnums.Prefixes.INF, "Un membre du staff a supprimé le contenu de votre inventaire")
         end)
     end)
-end, "Utilisation: /clearloadout <id>")
+end, "/clearloadout <id>")
 
 ---@param source number
 ---@param player Player
@@ -120,7 +120,7 @@ NarcosServer.registerPermissionCommand("giveweapon", {"commands.giveweapon"}, fu
         if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, "Don de l'arme effectuée") end
         target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Un membre du staff vous a fait don d'une arme (~o~%s~s~) avec ~o~%s ~s~balles"):format(weapon, ammount))
     end)
-end, "Utilisation: /giveweapon <id> <arme> <munitions>")
+end, "/giveweapon <id> <arme> <munitions>")
 
 ---@param source number
 ---@param player Player
@@ -162,7 +162,7 @@ NarcosServer.registerPermissionCommand("giveitem", {"commands.giveitem"}, functi
         if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.ERR, ("Le joueur n'a pas assez de place pour accueillir ~o~%s %s"):format(ammount, item.label)) end
         return
     end
-end, "Utilisation: /giveitem <id> <item> <quantité>")
+end, "/giveitem <id> <item> <quantité>")
 
 ---@param source number
 ---@param player Player
@@ -187,7 +187,7 @@ NarcosServer.registerPermissionCommand("givemoney", {"commands.givemoney"}, func
     if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le joueur a désormais ~g~%s$"):format(NarcosServer.groupDigits(final))) end
     target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre argent a été définie à: ~g~%s$"):format(NarcosServer.groupDigits(final)))
     target:setCash(final)
-end, "Utilisation: /givemoney <id> <montant>")
+end, "/givemoney <id> <montant>")
 
 ---@param source number
 ---@param player Player
@@ -211,7 +211,7 @@ NarcosServer.registerPermissionCommand("setmoney", {"commands.setmoney"}, functi
     if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le joueur a désormais ~g~%s$"):format(NarcosServer.groupDigits(ammount))) end
     target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre argent a été définie à: ~g~%s$"):format(NarcosServer.groupDigits(ammount)))
     target:setCash(ammount)
-end, "Utilisation: /setmoney <id> <montant>")
+end, "/setmoney <id> <montant>")
 
 ---@param source number
 ---@param player Player
@@ -238,7 +238,7 @@ NarcosServer.registerPermissionCommand("setgroup", {"commands.setgroup"}, functi
             target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre rang est désormais: ~o~%s"):format(rank.label))
         end)
     end)
-end, "Utilisation: /setgroup <id> <rang>")
+end, "/setgroup <id> <rang>")
 
 ---@param _src number
 ---@param player Player
@@ -249,7 +249,7 @@ NarcosServer.registerPermissionCommand("car", {"commands.car"}, function(_src, p
     if #args ~= 1 then return end
     local veh = CreateVehicle(GetHashKey(args[1]), GetEntityCoords(GetPlayerPed(_src)), 90.0, true, true)
     TaskWarpPedIntoVehicle(GetPlayerPed(_src), veh, -1)
-end, "Utilisation: /car <modèle>")
+end, "/car <modèle>")
 
 ---@param _src number
 ---@param player Player
@@ -278,7 +278,7 @@ NarcosServer.registerPermissionCommand("setjobpos", {"commands.setjobpos"}, func
         ["name"] = args[1]:lower()
     })
     player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Position du job ~y~%s ~s~mise à jour"):format(job.label))
-end, "Utilisation: /setjobpos <job> <id>")
+end, "/setjobpos <job> <id>")
 
 ---@param _src number
 ---@param player Player
@@ -323,7 +323,7 @@ NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(_
         if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le job du joueur est désormais ~y~%s ~s~(~y~grade "..tonumber(args[3]).."~s~)"):format(newJob.name)) end
         target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre job est désormais: ~y~%s ~s~(~y~grade "..tonumber(args[3]).."~s~)"):format(newJob.name))
     end)
-end, "Utilisation: /setjob <id> <job> <rang>")
+end, "/setjob <id> <job> <rang>")
 
 ---@param _src number
 ---@param player Player
@@ -333,8 +333,8 @@ NarcosServer.registerPermissionCommand("announce", {"commands.announce"}, functi
         return
     end
     NarcosServer.toAll("receiveAnnounce", table.concat(args, " "))
-end, "Utilisation: /announce <message>")
+end, "/announce <message>")
 
 NarcosServer.registerPermissionCommand("announce_clear", {"commands.announce"}, function()
     NarcosServer.toAll("receiveAnnounceStop")
-end, "<Utilisation: /announce_clear")
+end, "/announce_clear")

@@ -62,10 +62,16 @@ end
 
 Narcos.netRegisterAndHandle("requestJobsLabels", function()
     local _src = source
+    local ranksLabels = {}
     local labels = {}
     for k, v in pairs(NarcosServer_JobsManager.list) do
+        if not ranksLabels[k] then ranksLabels[k] = {} end
+        for rankId, rankData in pairs(v.ranks) do
+            ranksLabels[k][rankId] = rankData.label
+        end
         labels[k] = v.label
     end
+    NarcosServer.toClient("clientCacheSetCache", _src, "jobsRanksLabels", ranksLabels)
     NarcosServer.toClient("clientCacheSetCache", _src, "jobsLabels", labels)
 end)
 

@@ -18,15 +18,24 @@ local toggle, locked, variation, speedoactive = false, false, false, false
 local varTable = { [true] = { symbol = "+", color = { 76, 181, 80 }, minus = 0.01 }, [false] = { symbol = "-", color = { 255, 82, 82 }, minus = 0.0075 } }
 local variationData = {}
 
+RegisterCommand("tes", function()
+    print("RANKS -> "..json.encode(clientCache["jobsRanksLabels"]))
+    print("JOBS -> "..json.encode(clientCache["jobsLabels"]))
+    print(clientCache["jobsRanksLabels"]["police"][1])
+    print(personnalData.player.cityInfos["job"].id)
+    print(personnalData.player.cityInfos["job"].rank)
+end, false)
+
 local function drawHud()
     DrawRect(1.0, 0, 0.08, 0.06, 0,0,0,math.round(alpha/3))
     DrawRect(1.0, 0, 0.08, 0.005, 20, 69, 122,math.round(alpha/0.5))
     NarcosClient.DrawHelper.drawTexts(0.97, 0.0015, ("%s:%s"):format(gameClock[1],gameClock[2]), false, 0.40, {255,255,255,math.round(alpha/0.5)}, 4,0)
 
-    --NarcosClient.DrawHelper.drawTexts(x, y, clientCache["jobsLabels"][personnalData.player.cityInfos["job"].id], false, 0.90, { 255, 255, 255, alpha }, 2, 0)
-    --NarcosClient.DrawHelper.drawTexts(x, (y + space), ("%s$"):format(NarcosClient.MenuHelper.groupDigits(personnalData.player.cash)), false, 0.90, { 66, 176, 245, alpha }, 4, 0)
+    NarcosClient.DrawHelper.drawTexts(x, y, ("%s — %s"):format(clientCache["jobsLabels"][personnalData.player.cityInfos["job"].id], clientCache["jobsRanksLabels"][personnalData.player.cityInfos["job"].id][personnalData.player.cityInfos["job"].rank]), false, 0.50, { 255, 255, 255, alpha }, 4, 0)
+
+    NarcosClient.DrawHelper.drawTexts(x, (y + space), ("%s$"):format(NarcosClient.MenuHelper.groupDigits(personnalData.player.cash)), false, 0.50, { 66, 176, 245, alpha }, 4, 0)
     if variation then
-        --NarcosClient.DrawHelper.drawTexts(x - (varTable[variationData.isPositive].minus), (y + (space * 2)), ("%s%s$"):format(varTable[variationData.isPositive].symbol, NarcosClient.MenuHelper.groupDigits(variationData.ammount)), false, 0.90, { varTable[variationData.isPositive].color[1], varTable[variationData.isPositive].color[2], varTable[variationData.isPositive].color[3], varAlpha }, 4, 0)
+        NarcosClient.DrawHelper.drawTexts(x - (varTable[variationData.isPositive].minus), (y + (space * 2)), ("%s%s$"):format(varTable[variationData.isPositive].symbol, NarcosClient.MenuHelper.groupDigits(variationData.ammount)), false, 0.50, { varTable[variationData.isPositive].color[1], varTable[variationData.isPositive].color[2], varTable[variationData.isPositive].color[3], varAlpha }, 4, 0)
     end
 end
 

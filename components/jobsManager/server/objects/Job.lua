@@ -16,6 +16,7 @@
 ---@field public label string
 ---@field public money number
 ---@field public ranks table
+---@field public ranksClone table
 ---@field public positions table
 ---@field public zonesRelatives table
 ---@field public blipsRelatives table
@@ -44,6 +45,7 @@ setmetatable(Job, {
         for k, v in pairs(ranks) do
             self.ranks[k] = JobRank(v.label, v.permissions, v.outfit, v.salary)
         end
+        self.ranksClone = self.ranks
         self.positions = positions
         self.zonesRelatives = {}
         for k, v in pairs(self.positions) do
@@ -85,6 +87,10 @@ setmetatable(Job, {
     end
 })
 
+function Job:areRankWaitingReboot()
+    return false
+end
+
 ---openManager
 ---@public
 ---@return void
@@ -108,7 +114,7 @@ function Job:openManager(_src, player, zone)
             v.identity = json.decode(v.identity)
             table.insert(employeesTable, v)
         end
-        NarcosServer.toClient("jobManagerMenu", _src, employeesTable, self.ranks, self.label, self.name)
+        NarcosServer.toClient("jobManagerMenu", _src, employeesTable, self.ranksClone, self.label, self.name, (self:areRankWaitingReboot()))
     end)
 end
 

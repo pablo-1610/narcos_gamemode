@@ -42,7 +42,7 @@ setmetatable(Job, {
             end
         end)
         for k, v in pairs(ranks) do
-            self.ranks[k] = JobRank(v.label, v.permissions, v.outfit)
+            self.ranks[k] = JobRank(v.label, v.permissions, v.outfit, v.salary)
         end
         self.positions = positions
         self.zonesRelatives = {}
@@ -226,12 +226,14 @@ end
 ---updateEmployees
 ---@public
 ---@return void
-function Job:updateEmployees()
-    NarcosServer_MySQL.query("SELECT * FROM job_employees WHERE job_id = @job_id", {
-        ["job_id"] = self.name
-    }, function(result)
-        for k, v in pairs(result) do
-            self.employees[v.identifier] = v.rank
+function Job:getEmployeesSorted(cb)
+    local employeesTable = {}
+    -- Get Employee list
+    NarcosServer_MySQL.query("SELECT identifier, identity, job_employees.rank FROM job_employees JOIN players ON job_employees.identifier = players.license WHERE job_id = @job_id ORDER BY job_employees.rank ASC", {["job_id"] = self.name}, function(result)
+        for k,v in pairs(result) do
+            v.identity = json.decode(v.identity)
+            table.insert(employeesTable, v)
         end
+        cb(employeesTable)
     end)
 end

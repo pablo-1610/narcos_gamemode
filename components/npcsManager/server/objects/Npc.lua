@@ -110,6 +110,13 @@ function Npc:setDisplayInfos(table)
     self.displayInfos = table
 end
 
+---setHoldingWeapon
+---@public
+---@return void
+function Npc:setHoldingWeapon(weapon)
+    self.holdingWeapon = weapon
+end
+
 ---setFloatingText
 ---@public
 ---@return void

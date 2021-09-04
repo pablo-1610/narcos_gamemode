@@ -22,7 +22,7 @@ NarcosServer_JobsManager.updateManagerWatchers = function(job)
     job:getEmployeesSorted(function(employees)
         for source, suscribedJob in pairs(managerWatcher) do
             if suscribedJob == job then
-                NarcosServer.toClient("managerReceivedUpdate", source, job.name, employees, job.ranks)
+                NarcosServer.toClient("managerReceivedUpdate", source, job.name, employees, job.ranksClone, job:areRankWaitingReboot())
             end
         end
     end)

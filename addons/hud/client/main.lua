@@ -15,7 +15,7 @@ local x, y = 0.86, 0.026
 local alpha, space = 255, 0.045
 local varAlpha, currentVaring = 255, false
 local toggle, locked, variation, speedoactive = false, false, false, false
-local varTable = { [true] = { symbol = "+", color = { 76, 181, 80 }, minus = 0.01 }, [false] = { symbol = "-", color = { 255, 82, 82 }, minus = 0.0075 } }
+local varTable = { [true] = { symbol = "+", color = { 76, 181, 80 }, minus = 0.005}, [false] = { symbol = "-", color = { 255, 82, 82 }, minus = 0.0028} }
 local variationData = {}
 
 local function drawHud()
@@ -24,10 +24,9 @@ local function drawHud()
     NarcosClient.DrawHelper.drawTexts(0.97, 0.0015, ("%s:%s"):format(gameClock[1],gameClock[2]), false, 0.40, {255,255,255,math.round(alpha/0.5)}, 4,0)
 
     NarcosClient.DrawHelper.drawTexts(x, y, ("%s — %s"):format(clientCache["jobsLabels"][personnalData.player.cityInfos["job"].id], clientCache["jobsRanksLabels"][personnalData.player.cityInfos["job"].id][personnalData.player.cityInfos["job"].rank]), false, 0.50, { 255, 255, 255, alpha }, 4, 0)
-
     NarcosClient.DrawHelper.drawTexts(x, (y + space), ("%s$"):format(NarcosClient.MenuHelper.groupDigits(personnalData.player.cash)), false, 0.50, { 66, 176, 245, alpha }, 4, 0)
     if variation then
-        NarcosClient.DrawHelper.drawTexts(x - (varTable[variationData.isPositive].minus), (y + (space * 2)), ("%s%s$"):format(varTable[variationData.isPositive].symbol, NarcosClient.MenuHelper.groupDigits(variationData.ammount)), false, 0.50, { varTable[variationData.isPositive].color[1], varTable[variationData.isPositive].color[2], varTable[variationData.isPositive].color[3], varAlpha }, 4, 0)
+        NarcosClient.DrawHelper.drawTexts(x - (varTable[variationData.isPositive].minus), (y + (space) + 0.025), ("%s%s$"):format(varTable[variationData.isPositive].symbol, NarcosClient.MenuHelper.groupDigits(variationData.ammount)), false, 0.50, { varTable[variationData.isPositive].color[1], varTable[variationData.isPositive].color[2], varTable[variationData.isPositive].color[3], varAlpha }, 4, 0)
     end
 end
 

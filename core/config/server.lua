@@ -22,8 +22,8 @@ NarcosConfig_Server = {
     blipsScale = 0.90,
 
     startingCash = 500,
-    startingPosition = vector3(2614.53, 2920.02, 40.42),
-    startingHeading = 65.90,
+    startingPosition = vector3(-1424.89, 6754.07, 8.97),
+    startingHeading = 250.94,
 
     unemployedJobName = "Explorateur",
 

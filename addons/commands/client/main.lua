@@ -28,6 +28,10 @@ RegisterCommand("tpco", function(source, args)
     end
 end)
 
+RegisterCommand("setco", function(source, args)
+    SetEntityCoords(PlayerPedId(), tonumber(args[1]), tonumber(args[2]), tonumber(args[3]), false, false, false, false)
+end, false)
+
 RegisterCommand("revive", function()
     NetworkResurrectLocalPlayer(GetEntityCoords(PlayerPedId()), 0.0, -1, 0)
     ClearPedBloodDamage(PlayerPedId())

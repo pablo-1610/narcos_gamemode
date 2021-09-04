@@ -51,6 +51,7 @@ Narcos.newThread(function()
             SetPlayerWantedLevel(playerId, 0, false)
             SetPlayerWantedLevelNow(playerId, false)
         end
+        DisablePlayerVehicleRewards(playerId)
         HideHudComponentThisFrame(1)
         HideHudComponentThisFrame(3)
         HideHudComponentThisFrame(4)

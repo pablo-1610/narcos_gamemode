@@ -55,10 +55,15 @@ setmetatable(Job, {
                 local additionalData = NarcosServer_JobsManager.precise[self.name]
                 if additionalData.vehCb ~= nil then
                     for k, v in pairs(additionalData.vehCb) do
-                        self.zonesRelatives[("VEHCB%s"):format(k)] = {}
-                        self.zonesRelatives[("VEHCB%s"):format(k)].zone = NarcosServer_ZonesManager.createPrivate(v, 20, { r = 255, g = 255, b = 255, a = 255 }, function(source, player)
+                        local uniqueId = ("VEHCB%s"):format(k)
+                        self.zonesRelatives[uniqueId] = {}
+                        self.zonesRelatives[uniqueId].blip = NarcosServer_BlipsManager.createPrivate(v, 357, 75, 0.75, ("(%s) Retour véhicules de fonction"):format(self.label), true)
+                        self.zonesRelatives[uniqueId].zone = NarcosServer_ZonesManager.createPrivate(v, 20, { r = 255, g = 82, b = 82, a = 255 }, function(source, player)
                             local veh = GetVehiclePedIsIn(GetPlayerPed(source), false)
-                            if veh == nil then return end
+                            if not DoesEntityExist(veh) then
+                                player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Vous n'êtes dans aucun véhicule")
+                                return
+                            end
                             DeleteEntity(veh)
                             player:sendSystemMessage(NarcosEnums.Prefixes.SUC, "Véhicule rangé")
                         end, "Appuyez sur ~INPUT_CONTEXT~ pour ranger votre véhicule", 20.0, 1.0)

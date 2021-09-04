@@ -67,6 +67,11 @@ Narcos.netHandle("jobsLoaded", function()
             {pos = vector3(442.33, -1026.98, 28.72), heading = 8.78},
         },
 
+        outfitEditor = {
+            position = vector3(452.63, -973.67, 30.6),
+            heading = 91.16
+        };
+
         getMarkers = function()
             return {
                 -- Custom markers

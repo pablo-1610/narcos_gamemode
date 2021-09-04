@@ -21,6 +21,7 @@
 ---@field public blipsRelatives table
 ---@field public type number
 ---@field public inventory Inventory
+---@field public employees table
 Job = {}
 Job.__index = Job
 
@@ -30,9 +31,18 @@ setmetatable(Job, {
         self.name = name
         self.label = label
         self.money = money
+        self.employees = employees
         self.ranks = {}
+        self.employees = {}
+        NarcosServer_MySQL.query("SELECT * FROM job_employees WHERE job_id = @job_id", {
+            ["job_id"] = self.name
+        }, function(result)
+            for k, v in pairs(result) do
+                self.employees[v.identifier] = v.rank
+            end
+        end)
         for k, v in pairs(ranks) do
-            self.ranks[k] = JobRank(v.label, v.permissions)
+            self.ranks[k] = JobRank(v.label, v.permissions, v.outfit)
         end
         self.positions = positions
         self.zonesRelatives = {}
@@ -75,6 +85,33 @@ setmetatable(Job, {
     end
 })
 
+---openManager
+---@public
+---@return void
+---@param _src number
+---@param player Player
+---@param zone string
+function Job:openManager(_src, player, zone)
+    local playerRank = self.ranks[player.cityInfos["job"].rank]
+    if not playerRank then
+        player:sendSystemMessage("~r~Erreur", "Une erreur est survenue")
+        return
+    end
+    if not playerRank == 1 or not playerRank:hasPermission("MANAGE") then
+        player:sendSystemMessage("~r~Erreur", "Vous n'avez pas la permission d'accéder au manager !")
+        return
+    end
+    local employeesTable = {}
+    -- Get Employee list
+    NarcosServer_MySQL.query("SELECT identifier, identity, job_employees.rank FROM job_employees JOIN players ON job_employees.identifier = players.license WHERE job_id = @job_id ORDER BY job_employees.rank ASC", {["job_id"] = self.name}, function(result)
+        for k,v in pairs(result) do
+            v.identity = json.decode(v.identity)
+            table.insert(employeesTable, v)
+        end
+        NarcosServer.toClient("jobManagerMenu", _src, employeesTable, self.ranks, self.label, self.name)
+    end)
+end
+
 ---openGarage
 ---@public
 ---@return void
@@ -88,7 +125,7 @@ function Job:openGarage(_src, player, zone)
         player:sendSystemMessage("~r~Erreur", "Une erreur est survenue")
         return
     end
-    if not playerRank:hasPermission("GARAGE") then
+    if not playerRank == 1 or not playerRank:hasPermission("MANAGE") then
         player:sendSystemMessage("~r~Erreur", "Vous n'avez pas la permission d'accéder au garage !")
         return
     end
@@ -99,13 +136,36 @@ function Job:openGarage(_src, player, zone)
     NarcosServer.toClient("jobGarageMenu", _src, self.name, NarcosServer_JobsManager.precise[self.name].garageVehicles)
 end
 
+---isEmployee
+---@public
+---@return void
+---@param identifier string
+function Job:isEmployee(identifier)
+    return self.employees[identifier] ~= nil
+end
+
 ---handlePlayerJoined
 ---@public
 ---@return void
 ---@param _src number
 ---@param player Player
 function Job:handlePlayerJoined(_src, player)
-    ---@type JobRank
+    if self.name == NarcosConfig_Server.defaultJob then return end
+    ---@type Player
+    local player = NarcosServer_PlayersManager.get(_src)
+    local identifier = player:getLicense()
+    local rank = player.cityInfos["job"].rank
+    if self.employees[identifier] then
+        -- Security check
+        self.employees[identifier] = rank
+    else
+        self.employees[identifier] = rank
+        NarcosServer_MySQL.execute("INSERT INTO job_employees (identifier, job_id, rank) VALUES(@identifier, @job_id, @rank)", {
+            ["identifier"] = identifier,
+            ["job_id"] = self.name,
+            ["rank"] = rank
+        })
+    end
     for id, zoneData in pairs(self.zonesRelatives) do
         if zoneData.blip ~= nil then
             NarcosServer_BlipsManager.addAllowed(zoneData.blip, _src)
@@ -120,6 +180,17 @@ end
 ---@param _src number
 ---@param player Player
 function Job:handlePlayerLeft(_src, player)
+    if self.name == NarcosConfig_Server.defaultJob then return end
+    ---@type Player
+    local player = NarcosServer_PlayersManager.get(_src)
+    local identifier = player:getLicense()
+    if self.employees[identifier] then
+        self.employees[identifier] = nil
+        NarcosServer_MySQL.execute("DELETE FROM job_employees WHERE identifier = @identifier AND job_id = @job_id", {
+            ["identifier"] = identifier,
+            ["job_id"] = self.name,
+        })
+    end
     for _, zoneData in pairs(self.zonesRelatives) do
         if zoneData.blip ~= nil then
             NarcosServer_BlipsManager.removeAllowed(zoneData.blip, _src)
@@ -132,6 +203,11 @@ local actionByBaseZones = {
     ---@param job Job
     ["GARAGE"] = function(job, _src, player, zone)
         job:openGarage(_src, player, zone)
+    end,
+
+    ---@param job Job
+    ["MANAGER"] = function(job, _src, player, zone)
+        job:openManager(_src, player, zone)
     end
 }
 
@@ -145,4 +221,17 @@ function Job:interactWithBaseZone(_src, player, zone)
     if actionByBaseZones[zone] then
         actionByBaseZones[zone](self, _src, player, zone)
     end
+end
+
+---updateEmployees
+---@public
+---@return void
+function Job:updateEmployees()
+    NarcosServer_MySQL.query("SELECT * FROM job_employees WHERE job_id = @job_id", {
+        ["job_id"] = self.name
+    }, function(result)
+        for k, v in pairs(result) do
+            self.employees[v.identifier] = v.rank
+        end
+    end)
 end

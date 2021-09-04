@@ -48,8 +48,13 @@ Narcos.netHandle("playerOk", function()
                         if npc.frozen then
                             FreezeEntityPosition(ped, true)
                         end
-                        if npc.animation ~= nil then
-                            TaskStartScenarioInPlace(ped, npc.animation, -1, true)
+                        if npc.holdingWeapon ~= nil then
+                            GiveWeaponToPed(ped, GetHashKey(npc.holdingWeapon), 1500, true, false)
+                            SetCurrentPedWeapon(ped, GetHashKey(npc.holdingWeapon), true)
+                        else
+                            if npc.animation ~= nil then
+                                TaskStartScenarioInPlace(ped, npc.animation, -1, true)
+                            end
                         end
                         SetEntityHeading(ped, npc.position.heading)
                         SetEntityAsMissionEntity(ped, 0, 0)

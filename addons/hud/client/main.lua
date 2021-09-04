@@ -19,10 +19,14 @@ local varTable = { [true] = { symbol = "+", color = { 76, 181, 80 }, minus = 0.0
 local variationData = {}
 
 local function drawHud()
-    NarcosClient.DrawHelper.drawTexts(x, y, clientCache["jobsLabels"][personnalData.player.cityInfos["job"].id], false, 0.90, { 255, 255, 255, alpha }, 2, 0)
-    NarcosClient.DrawHelper.drawTexts(x, (y + space), ("%s$"):format(NarcosClient.MenuHelper.groupDigits(personnalData.player.cash)), false, 0.90, { 66, 176, 245, alpha }, 4, 0)
+    DrawRect(1.0, 0, 0.08, 0.06, 0,0,0,math.round(alpha/3))
+    DrawRect(1.0, 0, 0.08, 0.005, 20, 69, 122,math.round(alpha/0.5))
+    NarcosClient.DrawHelper.drawTexts(0.97, 0.0015, ("%s:%s"):format(gameClock[1],gameClock[2]), false, 0.40, {255,255,255,math.round(alpha/0.5)}, 4,0)
+
+    --NarcosClient.DrawHelper.drawTexts(x, y, clientCache["jobsLabels"][personnalData.player.cityInfos["job"].id], false, 0.90, { 255, 255, 255, alpha }, 2, 0)
+    --NarcosClient.DrawHelper.drawTexts(x, (y + space), ("%s$"):format(NarcosClient.MenuHelper.groupDigits(personnalData.player.cash)), false, 0.90, { 66, 176, 245, alpha }, 4, 0)
     if variation then
-        NarcosClient.DrawHelper.drawTexts(x - (varTable[variationData.isPositive].minus), (y + (space * 2)), ("%s%s$"):format(varTable[variationData.isPositive].symbol, NarcosClient.MenuHelper.groupDigits(variationData.ammount)), false, 0.90, { varTable[variationData.isPositive].color[1], varTable[variationData.isPositive].color[2], varTable[variationData.isPositive].color[3], varAlpha }, 4, 0)
+        --NarcosClient.DrawHelper.drawTexts(x - (varTable[variationData.isPositive].minus), (y + (space * 2)), ("%s%s$"):format(varTable[variationData.isPositive].symbol, NarcosClient.MenuHelper.groupDigits(variationData.ammount)), false, 0.90, { varTable[variationData.isPositive].color[1], varTable[variationData.isPositive].color[2], varTable[variationData.isPositive].color[3], varAlpha }, 4, 0)
     end
 end
 
@@ -55,7 +59,7 @@ NarcosClient_Hud.isSpeedoActive = function()
     return speedoactive
 end
 
-local baseSpeedoMinor = 0.05
+local baseSpeedoMinor = 0.21
 NarcosClient_Hud.activeSpeedo = function()
     speedoactive = true
     while speedoactive do
@@ -65,12 +69,10 @@ NarcosClient_Hud.activeSpeedo = function()
             if GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() then
                 local kmh = (GetEntitySpeed(vehicle)*3.6)
                 if not kmh or kmh == "" or kmh <= 0 then kmh = 0 end
-                if alpha > 0 then
-                    DrawRect(0.5, 0.8465+baseSpeedoMinor, 0.05, 0.083, 0,0,0,60)
-                    DrawRect(0.5, 0.889+baseSpeedoMinor, 0.05, 0.005, 107, 107, 107,255)
-                end
-                NarcosClient.DrawHelper.drawTexts(0.5, 0.8+baseSpeedoMinor, tostring(math.floor((kmh+0.5))), true, 1.05, { 132, 189, 109, alpha }, 2, 0)
-                NarcosClient.DrawHelper.drawTexts(0.5, 0.852+baseSpeedoMinor, "kmh", true, 0.50, { 255,255,255, alpha }, 2, 0)
+                DrawRect(0.5, 1.0, 0.252-baseSpeedoMinor, 0.154, 196, 196, 196,math.round(alpha/3))
+                DrawRect(0.5, 1.0, 0.25-baseSpeedoMinor, 0.15, 0,0,0,math.round(alpha/2))
+                NarcosClient.DrawHelper.drawTexts(0.5, 0.925, tostring(math.floor((kmh+0.5))), true, 0.85, { 255, 189, 109, alpha }, 2, 0)
+                NarcosClient.DrawHelper.drawTexts(0.5, 0.97, "kmh", true, 0.45, { 255,255,255, alpha }, 2, 0)
             else
                 speedoactive = false
             end

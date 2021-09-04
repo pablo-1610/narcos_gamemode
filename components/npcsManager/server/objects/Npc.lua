@@ -24,6 +24,7 @@
 
 ---@field public invincible boolean
 ---@field public displayInfos table
+---@field public holdingWeapon table
 Npc = {}
 Npc.__index = Npc
 
@@ -117,6 +118,23 @@ function Npc:setFloatingText(text, rangeDisplay)
     self.displayInfos.floating = text
 end
 
+---setRandomName
+---@public
+---@return void
+function Npc:setRandomName()
+    self:setDisplayInfos({name = NarcosShared_Generator.getRandomFullName(), range = 5.5, color = 0})
+end
+
+---playSpeechForPlayer
+---@public
+---@return void
+function Npc:playSpeechForPlayer(speech, param, source)
+    NarcosServer.toClient("npcPlaySound", source, self.id, speech, param)
+end
+
+---playSpeech
+---@public
+---@return void
 function Npc:playSpeech(speech, param)
     if self:isRestricted() then
         for source, _ in pairs(self.allowed) do
@@ -125,11 +143,4 @@ function Npc:playSpeech(speech, param)
     else
         NarcosServer.toAll("npcPlaySound", self.id, speech, param)
     end
-end
-
----playSpeechForPlayer
----@public
----@return void
-function Npc:playSpeechForPlayer(speech, param, source)
-    NarcosServer.toClient("npcPlaySound", source, self.id, speech, param)
 end

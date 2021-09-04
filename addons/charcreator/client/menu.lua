@@ -216,8 +216,9 @@ Narcos.netHandle("creatorMenu", function()
                                 ["torso_1"] = 15,
                                 ["shoes_1"] = 5,
                                 ["pants_1"] = 15,
-                                ["pants_2"] = 0
+                                ["pants_2"] = 0,
                             })
+                            builderCharacter = NarcosClient_SkinManager.getSkin()
                             TaskStartScenarioInPlace(PlayerPedId(), "WORLD_HUMAN_AA_SMOKE", -1, false)
                             maxValues = NarcosClient_SkinManager.getMaxVals()
                             waitingChanges = false
@@ -238,8 +239,10 @@ Narcos.netHandle("creatorMenu", function()
                                 ["torso_1"] = 49,
                                 ["shoes_1"] = 5,
                                 ["pants_1"] = 110,
-                                ["pants_2"] = 5
+                                ["pants_2"] = 5,
+                                ["glasses_1"] = -1
                             })
+                            builderCharacter = NarcosClient_SkinManager.getSkin()
                             TaskStartScenarioInPlace(PlayerPedId(), "WORLD_HUMAN_DRINKING", -1, false)
                             ClearAllPedProps(PlayerPedId())
                             maxValues = NarcosClient_SkinManager.getMaxVals()

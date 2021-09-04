@@ -60,6 +60,7 @@ NarcosServer.registerPermissionCommand("clearloadout", {"commands.clearloadout"}
     local target = NarcosServer_PlayersManager.get(targetId)
     target:clearWeapons(function()
         if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, "Clear des armes effectué") end
+        target:savePlayer()
         target:sendSystemMessage(NarcosEnums.Prefixes.INF, "Un membre du staff a supprimé vos armes")
     end)
 end, "/clearloadout <id>")
@@ -84,6 +85,7 @@ NarcosServer.registerPermissionCommand("clearinventory", {"commands.clearinvento
     inventory:clear(function()
         target:sendData(function()
             if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, "Clear de l'inventaire effectué") end
+            target:savePlayer()
             target:sendSystemMessage(NarcosEnums.Prefixes.INF, "Un membre du staff a supprimé le contenu de votre inventaire")
         end)
     end)
@@ -118,6 +120,7 @@ NarcosServer.registerPermissionCommand("giveweapon", {"commands.giveweapon"}, fu
     local ammount = (tonumber(args[3]) or 200)
     target:addWeapon(weapon, ammount, function()
         if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, "Don de l'arme effectuée") end
+        target:savePlayer()
         target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Un membre du staff vous a fait don d'une arme (~o~%s~s~) avec ~o~%s ~s~balles"):format(weapon, ammount))
     end)
 end, "/giveweapon <id> <arme> <munitions>")
@@ -155,6 +158,7 @@ NarcosServer.registerPermissionCommand("giveitem", {"commands.giveitem"}, functi
         inventory:addItem(itemId, function()
             target:sendData(function()
                 if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Don de ~o~%s %s~s~ à %s effectué"):format(ammount, item.label, target.name)) end
+                target:savePlayer()
                 target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Un membre du staff vous a fait don de ~o~%s %s"):format(ammount, item.label))
             end)
         end, tonumber(ammount))
@@ -186,6 +190,7 @@ NarcosServer.registerPermissionCommand("givemoney", {"commands.givemoney"}, func
     local final = (target.cash + ammount)
     if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le joueur a désormais ~g~%s$"):format(NarcosServer.groupDigits(final))) end
     target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre argent a été définie à: ~g~%s$"):format(NarcosServer.groupDigits(final)))
+    target:savePlayer()
     target:setCash(final)
 end, "/givemoney <id> <montant>")
 
@@ -210,6 +215,7 @@ NarcosServer.registerPermissionCommand("setmoney", {"commands.setmoney"}, functi
     end
     if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le joueur a désormais ~g~%s$"):format(NarcosServer.groupDigits(ammount))) end
     target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre argent a été définie à: ~g~%s$"):format(NarcosServer.groupDigits(ammount)))
+    target:savePlayer()
     target:setCash(ammount)
 end, "/setmoney <id> <montant>")
 
@@ -235,6 +241,7 @@ NarcosServer.registerPermissionCommand("setgroup", {"commands.setgroup"}, functi
     target:setRankFromId(rankId, function(rank)
         target:sendData(function()
             if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le rang du joueur est désormais ~o~%s"):format(rank.label)) end
+            target:savePlayer()
             target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre rang est désormais: ~o~%s"):format(rank.label))
         end)
     end)
@@ -310,6 +317,7 @@ NarcosServer.registerPermissionCommand("setjob", {"commands.setjob"}, function(_
     newJob:handlePlayerJoined(targetId, player)
     target:sendData(function()
         if not isRcon then player:sendSystemMessage(NarcosEnums.Prefixes.SUC, ("Le job du joueur est désormais ~y~%s ~s~(~y~grade "..tonumber(args[3]).."~s~)"):format(newJob.name)) end
+        target:savePlayer()
         target:sendSystemMessage(NarcosEnums.Prefixes.INF, ("Votre job est désormais: ~y~%s ~s~(~y~grade "..tonumber(args[3]).."~s~)"):format(newJob.name))
     end)
 end, "/setjob <id> <job> <rang>")

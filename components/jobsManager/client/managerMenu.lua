@@ -15,13 +15,21 @@ local sub = function(str)
     return cat .. "_" .. str
 end
 --serverReturnedCb
+Narcos.netRegister("managerReceivedUpdate")
 Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, name)
     if isAMenuActive then
         return
     end
-
+    NarcosClient.toServer("managerSubscribe", name)
+    Narcos.netHandle("managerReceivedUpdate", function(job, employeesN, ranksN)
+        if job == name then
+            employees = employeesN
+            ranks = ranksN
+        end
+    end)
     RMenu.Add(cat, sub("main"), RageUI.CreateMenu(title, desc, nil, nil, "pablo", "black"))
     RMenu:Get(cat, sub("main")).Closed = function()
+        NarcosClient.toServer("managerUnSubscribe")
         FreezeEntityPosition(PlayerPedId(), false)
         RMenu:Delete(cat, sub("main"))
         isAMenuActive = false

@@ -12,11 +12,13 @@
 --]]
 
 local timeOverride, weatherOverride = nil, nil
+gameClock = {0,0}
 
 NarcosClient_SyncManager = {}
 
 NarcosClient_SyncManager.overrideTime = function(h, m)
     timeOverride = {h,m}
+    gameClock = {h,m}
     NetworkOverrideClockTime(tonumber(timeOverride[1]), tonumber(timeOverride[2]), 00)
 end
 
@@ -53,9 +55,11 @@ end)
 Narcos.netRegisterAndHandle("syncSetTime", function(time)
     if timeOverride ~= nil then
         NetworkOverrideClockTime(tonumber(timeOverride[1]), tonumber(timeOverride[2]), 00)
+        gameClock = {timeOverride[1],timeOverride[2]}
     else
         NarcosClient.trace(("Le temps est désormais défini sur ^3%s:%s"):format(tonumber(time[1]),tonumber(time[2])))
         NetworkOverrideClockTime(tonumber(time[1]), tonumber(time[2]), 00)
+        gameClock = {time[1], time[2]}
     end
 end)
 

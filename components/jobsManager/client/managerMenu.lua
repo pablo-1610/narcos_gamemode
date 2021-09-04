@@ -16,15 +16,16 @@ local sub = function(str)
 end
 --serverReturnedCb
 Narcos.netRegister("managerReceivedUpdate")
-Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, name)
+Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, name, pendingReboot)
     if isAMenuActive then
         return
     end
     NarcosClient.toServer("managerSubscribe", name)
-    Narcos.netHandle("managerReceivedUpdate", function(job, employeesN, ranksN)
+    Narcos.netHandle("managerReceivedUpdate", function(job, employeesN, ranksN, pendingRebootN)
         if job == name then
             employees = employeesN
             ranks = ranksN
+            pendingRebootN = pendingReboot
         end
     end)
     RMenu.Add(cat, sub("main"), RageUI.CreateMenu(title, desc, nil, nil, "pablo", "black"))
@@ -47,12 +48,23 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
     RMenu:Get(cat, sub("ranks")).Closed = function()
     end
 
+    RMenu.Add(cat, sub("ranks_manage"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("ranks")), title, desc, nil, nil, "pablo", "black"))
+    RMenu:Get(cat, sub("ranks_manage")).Closed = function()
+    end
+
+    RMenu.Add(cat, sub("confirm"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("main")), title, desc, nil, nil, "pablo", "black"))
+    RMenu:Get(cat, sub("confirm")).Closed = function()
+    end
+
     FreezeEntityPosition(PlayerPedId(), true)
     isAMenuActive = true
     RageUI.Visible(RMenu:Get(cat, sub("main")), true)
     Narcos.newThread(function()
-        local selectedEmployeed, selectedRank
+        local selectedEmployeed, selectedRank, confirmOption
         local function baseSep()
+            if pendingReboot then
+                RageUI.Separator(("%sDes modifications sont en attente d'application"):format(NarcosClient.MenuHelper.alert))
+            end
             RageUI.Separator(("Gestion de l'entreprise: ~y~%s"):format(label))
         end
         local function formatIdentity(identity)
@@ -86,6 +98,50 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
 
             RageUI.IsVisible(RMenu:Get(cat, sub("ranks")), true, true, true, function()
                 baseSep()
+                for rankId, rankData in pairs(ranks) do
+                    RageUI.ButtonWithStyle(("~s~[~r~#%s~s~] %s"):format(rankId, rankData.label), nil, {RightLabel = "→→"}, (rankId > personnalData.player.cityInfos["job"].rank) and (rankId ~= 1), function(_,_,s)
+                        if s then
+                            selectedRank = rankId
+                        end
+                    end, RMenu:Get(cat, sub("ranks_manage")))
+                end
+            end, function()
+            end)
+
+            RageUI.IsVisible(RMenu:Get(cat, sub("ranks_manage")), true, true, true, function()
+                baseSep()
+                RageUI.Separator(("Selection: ~o~%s"):format(ranks[selectedRank].label))
+                RageUI.ButtonWithStyle("Gestion des permissions", nil, {RightLabel = "→→"}, true, function(_,_,s)
+                end, RMenu:Get(cat, sub("ranks_manage_permissions")))
+                RageUI.ButtonWithStyle("Définir la tenue", nil, {RightLabel = "→→"}, true, function(_,_,s)
+                    if s then
+
+                    end
+                end, RMenu:Get(cat, sub("ranks_manage_clothes")))
+                RageUI.ButtonWithStyle("~r~Supprimer le grade", nil, {RightLabel = "→→"}, true, function(_,_,s)
+                    if s then
+                        confirmOption = {"deleteJobRank", ("Supprimer le grade (%s)"):format(ranks[selectedRank].label), "ranks_manage", true, {selectedRank}}
+                    end
+                end, RMenu:Get(cat, sub("confirm")))
+            end, function()
+            end)
+
+            RageUI.IsVisible(RMenu:Get(cat, sub("confirm")), true, true, true, function()
+                baseSep()
+                RageUI.Separator(("~s~\"~b~%s~s~\""):format(confirmOption[2]))
+                RageUI.ButtonWithStyle("~r~Oups, retour en arrière", nil, {}, true, function(_,_,s)
+                    if s then
+                        RageUI.Visible(RMenu:Get(cat, sub(confirmOption[3])), true)
+                    end
+                end)
+                RageUI.ButtonWithStyle("~g~Confirmer l'opération", nil, {}, true, function(_,_,s)
+                    if s then
+                        if confirmOption[4] then
+                            serverUpdating = true
+                        end
+                        TriggerServerEvent(confirmOption[1], name, confirmOption[5])
+                    end
+                end)
             end, function()
             end)
             Wait(0)

@@ -18,14 +18,6 @@ local toggle, locked, variation, speedoactive = false, false, false, false
 local varTable = { [true] = { symbol = "+", color = { 76, 181, 80 }, minus = 0.01 }, [false] = { symbol = "-", color = { 255, 82, 82 }, minus = 0.0075 } }
 local variationData = {}
 
-RegisterCommand("tes", function()
-    print("RANKS -> "..json.encode(clientCache["jobsRanksLabels"]))
-    print("JOBS -> "..json.encode(clientCache["jobsLabels"]))
-    print(clientCache["jobsRanksLabels"]["police"][1])
-    print(personnalData.player.cityInfos["job"].id)
-    print(personnalData.player.cityInfos["job"].rank)
-end, false)
-
 local function drawHud()
     DrawRect(1.0, 0, 0.08, 0.06, 0,0,0,math.round(alpha/3))
     DrawRect(1.0, 0, 0.08, 0.005, 20, 69, 122,math.round(alpha/0.5))

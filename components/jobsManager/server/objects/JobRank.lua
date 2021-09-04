@@ -15,15 +15,17 @@
 ---@field public label string
 ---@field public permissions table
 ---@field public outfit table
+---@field public salary number
 JobRank = {}
 JobRank.__index = JobRank
 
 setmetatable(JobRank, {
-    __call = function(_, label, permissions, outfit)
+    __call = function(_, label, permissions, outfit, salary)
         local self = setmetatable({}, JobRank);
         self.label = label
         self.permissions = permissions
         self.outfit = outfit
+        self.salary = salary
         return self;
     end
 })

@@ -11,31 +11,33 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
-local npc
+local npc, object
 
 local function createAmbiantNpc()
     npc = NarcosServer_NpcsManager.createPublic("s_m_y_cop_01", false, true, {coords = vector3(433.79, -978.54, 30.70), heading = 95.35}, "WORLD_HUMAN_GUARD_STAND")
     npc:setInvincible(true)
-    npc:setRandomName()
     npc:setHoldingWeapon("weapon_specialcarbine")
     npc = NarcosServer_NpcsManager.createPublic("s_m_y_cop_01", false, true, {coords = vector3(433.77, -985.31, 30.7), heading = 95.35}, "WORLD_HUMAN_GUARD_STAND")
     npc:setInvincible(true)
-    npc:setRandomName()
     npc:setHoldingWeapon("weapon_specialcarbine")
 
     npc = NarcosServer_NpcsManager.createPublic("s_m_y_cop_01", false, true, {coords = vector3(431.82, -972.61, 30.71), heading = 40.20}, "CODE_HUMAN_MEDIC_TIME_OF_DEATH")
     npc:setInvincible(true)
-    npc:setRandomName()
 
     -- ROUTE
     npc = NarcosServer_NpcsManager.createPublic("s_m_y_cop_01", false, true, {coords = vector3(400.69, -1015.11, 29.42), heading = 184.24}, "WORLD_HUMAN_CAR_PARK_ATTENDANT")
     npc:setInvincible(true)
-    npc:setRandomName()
 
     npc = NarcosServer_NpcsManager.createPublic("s_m_y_cop_01", false, true, {coords = vector3(402.16, -1014.95, 29.36), heading = 184.24}, "WORLD_HUMAN_GUARD_STAND_ARMY")
     npc:setInvincible(true)
-    npc:setRandomName()
     npc:setHoldingWeapon("weapon_combatpdw")
+
+    -- PROPS
+    object = NarcosServer_ObjectsManager.createPublic("prop_barrier_work04a", true, {coords = vector3(401.35, -1013.12, 29.41), heading = 355.0})
+    object:setInvincible(true)
+
+    object = NarcosServer_ObjectsManager.createPublic("prop_air_lights_05a", true, {coords = vector3(403.90, -1013.64, 29.27), heading = 336.0})
+    object:setInvincible(true)
 
     -- CHIEN
     npc = NarcosServer_NpcsManager.createPublic("a_c_shepherd", false, true, {coords = vector3(431.08, -973.43, 30.71), heading = 40.20}, "WORLD_DOG_SITTING_ROTTWEILER")

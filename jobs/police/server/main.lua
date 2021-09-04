@@ -57,6 +57,8 @@ Narcos.netHandle("jobsLoaded", function()
 
         garageVehicles = {
             ["police"] = {color = {0, 0, 0}},
+            ["police2"] = {color = {0,0,0}},
+            ["police3"] = {color = {0,0,0}},
             ["fbi2"] = {color = {0, 0, 0}},
         },
 

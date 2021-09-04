@@ -11,6 +11,39 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
+local npc
+
+local function createAmbiantNpc()
+    npc = NarcosServer_NpcsManager.createPublic("s_m_y_cop_01", false, true, {coords = vector3(433.79, -978.54, 30.70), heading = 95.35}, "WORLD_HUMAN_GUARD_STAND")
+    npc:setInvincible(true)
+    npc:setRandomName()
+    npc:setHoldingWeapon("weapon_specialcarbine")
+    npc = NarcosServer_NpcsManager.createPublic("s_m_y_cop_01", false, true, {coords = vector3(433.77, -985.31, 30.7), heading = 95.35}, "WORLD_HUMAN_GUARD_STAND")
+    npc:setInvincible(true)
+    npc:setRandomName()
+    npc:setHoldingWeapon("weapon_specialcarbine")
+
+    npc = NarcosServer_NpcsManager.createPublic("s_m_y_cop_01", false, true, {coords = vector3(431.82, -972.61, 30.71), heading = 40.20}, "CODE_HUMAN_MEDIC_TIME_OF_DEATH")
+    npc:setInvincible(true)
+    npc:setRandomName()
+
+    -- ROUTE
+    npc = NarcosServer_NpcsManager.createPublic("s_m_y_cop_01", false, true, {coords = vector3(400.69, -1015.11, 29.42), heading = 184.24}, "WORLD_HUMAN_CAR_PARK_ATTENDANT")
+    npc:setInvincible(true)
+    npc:setRandomName()
+
+    npc = NarcosServer_NpcsManager.createPublic("s_m_y_cop_01", false, true, {coords = vector3(402.16, -1014.95, 29.36), heading = 184.24}, "WORLD_HUMAN_GUARD_STAND_ARMY")
+    npc:setInvincible(true)
+    npc:setRandomName()
+    npc:setHoldingWeapon("weapon_combatpdw")
+
+    -- CHIEN
+    npc = NarcosServer_NpcsManager.createPublic("a_c_shepherd", false, true, {coords = vector3(431.08, -973.43, 30.71), heading = 40.20}, "WORLD_DOG_SITTING_ROTTWEILER")
+    npc:setInvincible(true)
+end
+
+createAmbiantNpc()
+
 NarcosServer_BlipsManager.createPublic(vector3(442.78, -984.40, 30.68), 137, 38, NarcosConfig_Server.blipsScale, "Commissariat central", true)
 
 Narcos.netHandle("jobsLoaded", function()

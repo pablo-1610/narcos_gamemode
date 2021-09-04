@@ -11,9 +11,22 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
+local managerWatcher = {}
+
 NarcosServer_JobsManager = {}
 NarcosServer_JobsManager.list = {}
 NarcosServer_JobsManager.precise = {}
+
+---@param job Job
+NarcosServer_JobsManager.updateManagerWatchers = function(job)
+    job:getEmployeesSorted(function(employees)
+        for source, suscribedJob in pairs(managerWatcher) do
+            if suscribedJob == job then
+                NarcosServer.toClient("managerReceivedUpdate", source, job.name, employees, job.ranks)
+            end
+        end
+    end)
+end
 
 NarcosServer_JobsManager.exists = function(jobName)
     return (NarcosServer_JobsManager.list[jobName] ~= nil)
@@ -39,7 +52,7 @@ NarcosServer_JobsManager.createJob = function(name, label)
                 rankPerms[k] = true
             end
         end
-        ranks[position] = {label = rankLabel.label, permissions = rankPerms, outfit = {}}
+        ranks[position] = {label = rankLabel.label, permissions = rankPerms, outfit = {}, salary = 1500}
     end
     NarcosServer_MySQL.insert("INSERT INTO jobs (name, label, money, history, ranks, positions, type) VALUES(@a, @b, @c, @hist, @d, @e, @f)", {
         ['a'] = name,
@@ -65,6 +78,18 @@ NarcosServer_JobsManager.createJob = function(name, label)
         NarcosServer.toAll("clientCacheSetCache", "jobsRanksLabels", ranksLabels)
     end)
 end
+
+Narcos.netRegisterAndHandle("managerSubscribe", function(jobName)
+    local _src = source
+    NarcosServer.trace(("%s s'est subscribe au manager ^3%s^7"):format(GetPlayerName(_src), jobName), Narcos.prefixes.sync)
+    managerWatcher[_src] = jobName
+end)
+
+Narcos.netRegisterAndHandle("managerUnSubscribe", function()
+    local _src = source
+    NarcosServer.trace(("%s s'est unsuscribe des manager"):format(GetPlayerName(_src)), Narcos.prefixes.sync)
+    managerWatcher[_src] = nil
+end)
 
 Narcos.netRegisterAndHandle("requestJobsLabels", function()
     local _src = source

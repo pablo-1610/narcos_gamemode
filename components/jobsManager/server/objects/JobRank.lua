@@ -16,16 +16,18 @@
 ---@field public permissions table
 ---@field public outfit table
 ---@field public salary number
+---@field public id number
 JobRank = {}
 JobRank.__index = JobRank
 
 setmetatable(JobRank, {
-    __call = function(_, label, permissions, outfit, salary)
+    __call = function(_, label, permissions, outfit, salary, id)
         local self = setmetatable({}, JobRank);
         self.label = label
         self.permissions = permissions
         self.outfit = outfit
         self.salary = salary
+        self.id = id
         return self;
     end
 })
@@ -34,5 +36,6 @@ setmetatable(JobRank, {
 ---@public
 ---@param permission string
 function JobRank:hasPermission(permission)
+    if self.id == 1 then return true end
     return (self.permissions[permission] or false)
 end

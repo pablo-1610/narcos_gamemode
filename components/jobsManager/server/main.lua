@@ -312,6 +312,7 @@ Narcos.netRegisterAndHandle("deleteJobRank", function(jobName, args)
             NarcosServer_PlayersManager.findByIdentifier(data.identifier, function(foundPlayer)
                 local currentCity = json.decode(data.cityInfos)
                 if not foundPlayer then
+                    print(data.identifier.." n'est pas co")
                     currentCity["job"] = NarcosConfig_Server.baseCityInfos["job"]
                     NarcosServer_MySQL.execute("UPDATE players SET ranks = @ranks WHERE license = @license", {
                         ["ranks"] = json.encode(currentCity),
@@ -323,9 +324,8 @@ Narcos.netRegisterAndHandle("deleteJobRank", function(jobName, args)
                     local previousJob = NarcosServer_JobsManager.get(jobName)
                     previousJob:handlePlayerLeft(foundPlayer.source, foundPlayer)
                     foundPlayer:sendSystemMessage(NarcosEnums.Prefixes.INF, "Votre rang a été supprimé de votre job, vous avez donc été viré. Veuillez contacter un des responsable de l'entreprise")
-                    foundPlayer:sendData(function()
-                        foundPlayer:savePlayer()
-                    end)
+                    foundPlayer:savePlayer()
+                    foundPlayer:sendData()
                 end
             end)
         end

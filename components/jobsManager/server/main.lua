@@ -174,7 +174,8 @@ Narcos.netRegisterAndHandle("deleteJobRank", function(jobName, args)
     -- DELETE
     for rankId, rankData in pairs(job.ranks) do
         if rankId > args[1] then
-            fakeRanks[rankId] = (rankId-1)
+            fakeRanks[rankId] = nil
+            fakeRanks[rankId-1] = rankData
         end
     end
     NarcosServer_MySQL.execute("UPDATE jobs SET ranks = @ranks WHERE name = @name", {

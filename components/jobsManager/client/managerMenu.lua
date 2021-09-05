@@ -126,6 +126,21 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
             RageUI.IsVisible(RMenu:Get(cat, sub("employees_manage")), true, true, true, function()
                 baseSep()
                 RageUI.Separator(("Selection: ~o~%s"):format(formatIdentity(employees[selectedEmployeed].identity)))
+                RageUI.ButtonWithStyle("Promouvoir", nil, {}, validatePermission(ranks, personnalData.player.cityInfos["job"].rank, "PROMOTE"), function(_,_,s)
+                    if s then
+
+                    end
+                end)
+                RageUI.ButtonWithStyle("Rétrograder", nil, {}, validatePermission(ranks, personnalData.player.cityInfos["job"].rank, "DEMOTE"), function(_,_,s)
+                    if s then
+
+                    end
+                end)
+                RageUI.ButtonWithStyle("Virer", nil, {}, validatePermission(ranks, personnalData.player.cityInfos["job"].rank, "FIRE"), function(_,_,s)
+                    if s then
+
+                    end
+                end)
             end, function()
             end)
 

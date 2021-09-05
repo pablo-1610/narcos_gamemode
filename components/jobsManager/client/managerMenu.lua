@@ -14,6 +14,12 @@ local title, cat, desc = "Manager", "jobManager", "Gérez votre entreprise"
 local sub = function(str)
     return cat .. "_" .. str
 end
+
+local function validatePermission(rank, rankId, permission)
+    if rankId == 1 then return true end
+    return rank[rankId].permissions[permission] or false
+end
+
 local operationState = false
 --serverReturnedCb
 Narcos.netRegister("managerReceivedUpdate")
@@ -101,7 +107,7 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
             RageUI.IsVisible(RMenu:Get(cat, sub("main")), true, true, true, function()
                 baseSep()
                 RageUI.ButtonWithStyle("Gérer les employés", nil, { RightLabel = "→→" }, true, nil, RMenu:Get(cat, sub("employees")))
-                RageUI.ButtonWithStyle("Gérer les grades", nil, { RightLabel = "→→" }, true, nil, RMenu:Get(cat, sub("ranks")))
+                RageUI.ButtonWithStyle("Gérer les grades", nil, { RightLabel = "→→" }, validatePermission(ranks, personnalData.player.cityInfos["job"].rank, "ROLES"), nil, RMenu:Get(cat, sub("ranks")))
             end, function()
             end)
 

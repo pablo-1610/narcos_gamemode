@@ -48,18 +48,34 @@ NarcosEnums = {
         INF = "~b~Information"
     },
 
+    PermissionsOrder = {
+        "MANAGE",
+        "ROLES",
+        "EMPLOYEES",
+        "RECRUIT",
+        "BANK",
+        "FIRE",
+        "PROMOTE",
+        "DEMOTE",
+        "GARAGE",
+        "SAFE",
+        "CLOAKROOM",
+        "PINGALL"
+    },
+
     Permissions = {
-        ["MANAGE"] = { cat = 1, desc = "Menu de gestion" },
-        ["ROLES"] = { cat = 1, desc = "Gérer les rôles"},
+        ["MANAGE"] = {desc = "Menu de gestion" },
+        ["ROLES"] = {desc="Gérer les rôles"},
+        ["EMPLOYEES"] = {desc = "Gérer les employés"},
+        ["RECRUIT"] = {desc = "Recruter des joueurs" },
+        ["BANK"] = { cat = 1, desc = "Gérer les comptes" },
+        ["FIRE"] = { desc = "Virer des joueurs" },
+        ["PROMOTE"] = {desc = "Promouvoir des joueurs" },
+        ["DEMOTE"] = {desc = "Rétrograder des joueurs" },
+        ["GARAGE"] = {desc = "Accéder au garage" },
+        ["SAFE"] = { desc = "Accéder au coffre" },
+        ["CLOAKROOM"] = { desc = "Accéder aux vestiaires" },
         ["PINGALL"] = { cat = 1, desc = "Envoyer un message à tous"},
-        ["RECRUIT"] = { cat = 1, desc = "Recruter des joueurs" },
-        ["FIRE"] = { cat = 1, desc = "Virer des joueurs" },
-        ["PROMOTE"] = { cat = 1, desc = "Promouvoir un joueur" },
-        ["DEMOTE"] = { cat = 1, desc = "Rétrograder un joueur" },
-        ["GARAGE"] = { cat = 2, desc = "Accéder au garage" },
-        ["SAFE"] = { cat = 2, desc = "Accéder au coffre" },
-        ["CLOAKROOM"] = { cat = 2, desc = "Accéder aux vestiaires" },
-        ["BANK"] = { cat = 1, desc = "Gérer les comptes" }
     },
 
     PriceByComponent = {            --tshirt 177    torse 361      calque 79    jambes 132

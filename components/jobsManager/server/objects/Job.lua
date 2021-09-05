@@ -108,7 +108,7 @@ function Job:openManager(_src, player, zone)
             v.identity = json.decode(v.identity)
             table.insert(employeesTable, v)
         end
-        NarcosServer.toClient("jobManagerMenu", _src, employeesTable, self.ranks, self.label, self.name, NarcosEnums.PermissionsOrder)
+        NarcosServer.toClient("jobManagerMenu", _src, employeesTable, self.ranks, self.label, self.name, NarcosEnums.PermissionsOrder, self.money)
     end)
 end
 
@@ -158,6 +158,7 @@ function Job:handlePlayerJoined(_src, player)
     if self.employees[identifier] then
         -- Security check
         self.employees[identifier] = rank
+        NarcosServer_JobsManager.updateManagerWatchers(self)
     else
         self.employees[identifier] = rank
         NarcosServer_MySQL.execute("INSERT INTO job_employees (identifier, job_id, rank) VALUES(@identifier, @job_id, @rank)", {
@@ -165,6 +166,7 @@ function Job:handlePlayerJoined(_src, player)
             ["job_id"] = self.name,
             ["rank"] = rank
         })
+        Narcos.newWaitingThread(250, function() NarcosServer_JobsManager.updateManagerWatchers(self) end)
     end
     for id, zoneData in pairs(self.zonesRelatives) do
         if zoneData.blip ~= nil then
@@ -190,6 +192,7 @@ function Job:handlePlayerLeft(_src, player)
             ["identifier"] = identifier,
             ["job_id"] = self.name,
         })
+        Narcos.newWaitingThread(250, function() NarcosServer_JobsManager.updateManagerWatchers(self) end)
     end
     for _, zoneData in pairs(self.zonesRelatives) do
         if zoneData.blip ~= nil then

@@ -23,7 +23,7 @@ end
 local operationState = false
 --serverReturnedCb
 Narcos.netRegister("managerReceivedUpdate")
-Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, name, customPermOrder)
+Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, name, customPermOrder, money)
     local permissionsEditor, permissionsEditorFinal, permissionsEditorScratch, rankBuilder = {}, {}, {}, {}
     ---@param rankData JobRank
     for rankId, jobRank in pairs(ranks) do
@@ -36,8 +36,9 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
         return
     end
     NarcosClient.toServer("managerSubscribe", name)
-    Narcos.netHandle("managerReceivedUpdate", function(employeesN, ranksN)
+    Narcos.netHandle("managerReceivedUpdate", function(employeesN, ranksN, moneyN)
         employees = employeesN
+        money = moneyN
         ranks = ranksN
         permissionsEditor = {}
         permissionsEditorFinal = {}
@@ -98,7 +99,7 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
     Narcos.newThread(function()
         local selectedEmployeed, selectedRank, confirmOption
         local function baseSep()
-            RageUI.Separator(("Gestion de l'entreprise: ~y~%s"):format(label))
+            RageUI.Separator(("Gestion de l'entreprise: ~y~%s ~s~(~g~%s$~s~)"):format(label, NarcosClient.MenuHelper.groupDigits(money)))
         end
         local function formatIdentity(identity)
             return ("%s %s"):format(identity.lastname:upper(), identity.firstname)
@@ -184,7 +185,7 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
                             -- TODO -> Modify outfit
                         end
                     end, RMenu:Get(cat, sub("ranks_manage_clothes")))
-                    RageUI.ButtonWithStyle("~r~Supprimer le grade", nil, { RightLabel = "→→" }, true, function(_, _, s)
+                    RageUI.ButtonWithStyle("~r~Supprimer le grade", selectedRank == #ranks and "Appuyez pour supprimer ce grade" or "~r~Vous ne pouvez pas supprimer un rang intermédiaire", { RightLabel = "→→" }, selectedRank == #ranks, function(_, _, s)
                         if s then
                             operationState = false
                             confirmOption = { "deleteJobRank", ("Supprimer le grade (%s)"):format(ranks[selectedRank].label), "ranks_manage", true, { selectedRank } }

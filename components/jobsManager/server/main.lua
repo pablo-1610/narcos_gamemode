@@ -22,7 +22,7 @@ NarcosServer_JobsManager.updateManagerWatchers = function(job)
     job:getEmployeesSorted(function(employees)
         for source, suscribedJob in pairs(managerWatcher) do
             if suscribedJob == job.name then
-                NarcosServer.toClient("managerReceivedUpdate", source, employees, job.ranks)
+                NarcosServer.toClient("managerReceivedUpdate", source, employees, job.ranks, job.money)
             end
         end
     end)
@@ -288,15 +288,13 @@ Narcos.netRegisterAndHandle("deleteJobRank", function(jobName, args)
         NarcosServer.toClient("serverReturnedCb", _src)
         return
     end
+    if args[1] ~= #job.ranks then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Ce rang ne peut pas être supprimé")
+        NarcosServer.toClient("serverReturnedCb", _src)
+        return
+    end
     local fakeRanks = job.ranks
     fakeRanks[args[1]] = nil
-    -- DELETE
-    for rankId, rankData in pairs(job.ranks) do
-        if rankId > args[1] then
-            fakeRanks[rankId] = nil
-            fakeRanks[rankId-1] = rankData
-        end
-    end
     NarcosServer_MySQL.execute("UPDATE jobs SET ranks = @ranks WHERE name = @name", {
         ["ranks"] = json.encode(job.ranks),
         ["name"] = jobName
@@ -312,10 +310,9 @@ Narcos.netRegisterAndHandle("deleteJobRank", function(jobName, args)
             NarcosServer_PlayersManager.findByIdentifier(data.identifier, function(foundPlayer)
                 local currentCity = json.decode(data.cityInfos)
                 if not foundPlayer then
-                    print(data.identifier.." n'est pas co")
                     currentCity["job"] = NarcosConfig_Server.baseCityInfos["job"]
-                    NarcosServer_MySQL.execute("UPDATE players SET ranks = @ranks WHERE license = @license", {
-                        ["ranks"] = json.encode(currentCity),
+                    NarcosServer_MySQL.execute("UPDATE players SET cityInfos = @cityInfos WHERE license = @license", {
+                        ["cityInfos"] = json.encode(currentCity),
                         ["license"] = data.identifier
                     })
                 else
@@ -334,6 +331,7 @@ Narcos.netRegisterAndHandle("deleteJobRank", function(jobName, args)
             ["rank"] = args[1]
         })
         job.ranks = fakeRanks
+        Wait(150)
         NarcosServer_JobsManager.updateManagerWatchers(job)
         player:sendSystemMessage(NarcosEnums.Prefixes.SUC, "Modification effectuée")
         player:sendSystemMessage(NarcosEnums.Prefixes.INF, ("%s personnes ont été destituées"):format(i))

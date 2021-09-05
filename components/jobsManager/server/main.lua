@@ -301,10 +301,6 @@ Narcos.netRegisterAndHandle("deleteJobRank", function(jobName, args)
         ["ranks"] = json.encode(job.ranks),
         ["name"] = jobName
     })
-    NarcosServer_MySQL.execute("DELETE FROM job_employees WHERE job_id = @job_id AND rank = @rank", {
-        ["job_id"] = jobName,
-        ["rank"] = args[1]
-    })
     NarcosServer_MySQL.query("SELECT identifier, cityInfos FROM job_employees JOIN players ON job_employees.identifier = players.license WHERE job_id = @job_id AND job_employees.rank = @rank", {
         ["job_id"] = jobName,
         ["rank"] = args[1]
@@ -322,6 +318,7 @@ Narcos.netRegisterAndHandle("deleteJobRank", function(jobName, args)
                         ["license"] = data.identifier
                     })
                 else
+                    print("Player is online !")
                     foundPlayer.cityInfos["job"] = NarcosConfig_Server.baseCityInfos["job"]
                     ---@type Job
                     local previousJob = NarcosServer_JobsManager.get(jobName)
@@ -333,6 +330,10 @@ Narcos.netRegisterAndHandle("deleteJobRank", function(jobName, args)
                 end
             end)
         end
+        NarcosServer_MySQL.execute("DELETE FROM job_employees WHERE job_id = @job_id AND rank = @rank", {
+            ["job_id"] = jobName,
+            ["rank"] = args[1]
+        })
         job.ranks = fakeRanks
         NarcosServer_JobsManager.updateManagerWatchers(job)
         player:sendSystemMessage(NarcosEnums.Prefixes.SUC, "Modification effectuée")

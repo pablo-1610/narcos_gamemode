@@ -50,10 +50,12 @@ NarcosEnums = {
 
     Permissions = {
         ["MANAGE"] = { cat = 1, desc = "Menu de gestion" },
+        ["ROLES"] = { cat = 1, desc = "Gérer les rôles"},
+        ["PINGALL"] = { cat = 1, desc = "Envoyer un message à tous"},
         ["RECRUIT"] = { cat = 1, desc = "Recruter des joueurs" },
         ["FIRE"] = { cat = 1, desc = "Virer des joueurs" },
         ["PROMOTE"] = { cat = 1, desc = "Promouvoir un joueur" },
-        ["DEMOTE"] = { cat = 1, desc = "Déstituer un joueur" },
+        ["DEMOTE"] = { cat = 1, desc = "Rétrograder un joueur" },
         ["GARAGE"] = { cat = 2, desc = "Accéder au garage" },
         ["SAFE"] = { cat = 2, desc = "Accéder au coffre" },
         ["CLOAKROOM"] = { cat = 2, desc = "Accéder aux vestiaires" },

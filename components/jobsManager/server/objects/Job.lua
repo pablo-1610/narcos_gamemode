@@ -42,7 +42,7 @@ setmetatable(Job, {
             end
         end)
         for k, v in pairs(ranks) do
-            self.ranks[k] = JobRank(v.label, v.permissions, v.outfit, v.salary)
+            self.ranks[k] = JobRank(v.label, v.permissions, v.outfit, v.salary, k)
         end
         self.positions = positions
         self.zonesRelatives = {}

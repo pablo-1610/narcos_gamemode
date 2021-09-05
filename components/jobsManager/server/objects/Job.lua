@@ -108,7 +108,7 @@ function Job:openManager(_src, player, zone)
             v.identity = json.decode(v.identity)
             table.insert(employeesTable, v)
         end
-        NarcosServer.toClient("jobManagerMenu", _src, employeesTable, self.ranks, self.label, self.name)
+        NarcosServer.toClient("jobManagerMenu", _src, employeesTable, self.ranks, self.label, self.name, NarcosEnums.PermissionsOrder)
     end)
 end
 

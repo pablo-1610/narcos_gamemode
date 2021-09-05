@@ -175,9 +175,8 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
                     RageUI.Separator(("Selection: ~o~%s"):format(ranks[selectedRank].label))
                     RageUI.ButtonWithStyle("~g~Appliquer les permissions", nil, {RightLabel = "→→"}, true, function(_,_,s)
                         if s then
-                            permissionsEditorFinal = table.unpack({permissionsEditor})
                             operationState = false
-                            confirmOption = { "setJobRankPermissions", ("Modif. permissions (%s)"):format(ranks[selectedRank].label), "ranks_manage_permissions", true, { selectedRank, permissionsEditorFinal } }
+                            confirmOption = { "setJobRankPermissions", ("Modif. permissions (%s)"):format(ranks[selectedRank].label), "ranks_manage_permissions", true, { selectedRank, permissionsEditor[selectedRank] } }
                         end
                     end, RMenu:Get(cat, sub("confirm")))
                     RageUI.Separator("↓ ~r~Permissions ~s~↓")

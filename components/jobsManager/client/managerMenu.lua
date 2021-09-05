@@ -177,7 +177,18 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
 
             RageUI.IsVisible(RMenu:Get(cat, sub("ranks_manage_create")), true, true, true, function()
                 baseSep()
-
+                RageUI.ButtonWithStyle("Nom du grade", nil, {RightLabel = NarcosClient.MenuHelper.defineLabelString(rankBuilder.label)}, true, function(_,_,s)
+                    if s then
+                        local label = NarcosClient.InputHelper.showBox("Nom du grade", "", 12, false)
+                        if label ~= nil then
+                            rankBuilder.label = label
+                        end
+                    end
+                end)
+                RageUI.ButtonWithStyle("~g~Créer le grade", nil, {}, rankBuilder.label ~= nil, function(_,_,s)
+                    operationState = false
+                    confirmOption = { "createJobRank", ("Creation grade (%s)"):format(rankBuilder.label), "ranks_manage", true, { rankBuilder.label } }
+                end, RMenu:Get(cat, sub("confirm")))
             end, function()
             end)
 

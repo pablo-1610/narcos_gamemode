@@ -106,6 +106,53 @@ Narcos.netRegisterAndHandle("requestJobsLabels", function()
     NarcosServer.toClient("clientCacheSetCache", _src, "jobsLabels", labels)
 end)
 
+Narcos.netRegisterAndHandle("createJobRank", function(jobName, args)
+    local _src = source
+    if not NarcosServer_PlayersManager.exists(_src) then
+        NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.PLAYER_NO_EXISTS, ("setJobRankSalary %s"):format(_src), _src)
+    end
+    ---@type Player
+    local player = NarcosServer_PlayersManager.get(_src)
+    ---@type Job
+    local job = NarcosServer_JobsManager.get(jobName)
+    if not player.cityInfos["job"].id == job then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Une erreur est survenue")
+        NarcosServer.toClient("serverReturnedCb", _src)
+        return
+    end
+    -- SECURITY
+    ---@type Job
+    local playerJob = NarcosServer_JobsManager.get(player.cityInfos["job"].id)
+    ---@type Rank
+    local playerRank = playerJob.ranks[player.cityInfos["job"].rank]
+    if(not playerRank:hasPermission("MANAGE") or not playerRank:hasPermission("ROLES")) then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Vous n'avez pas la permission de faire cette action, les permissions ont peut être été modifiées pendant votre utilisation")
+        NarcosServer.toClient("serverReturnedCb", _src)
+        return
+    end
+    --
+    ---@type JobRank
+    job.ranks[#job.ranks+1] = JobRank(args[1], {}, {}, 1500, (#job.ranks+1))
+    NarcosServer_MySQL.execute("UPDATE jobs SET ranks = @ranks WHERE name = @name", {
+        ["ranks"] = json.encode(job.ranks),
+        ["name"] = jobName
+    })
+    NarcosServer_JobsManager.updateManagerWatchers(job)
+    player:sendSystemMessage(NarcosEnums.Prefixes.SUC, "Modification effectuée")
+    NarcosServer.toClient("serverReturnedCb", _src)
+    local ranksLabels = {}
+    local labels = {}
+    for k, v in pairs(NarcosServer_JobsManager.list) do
+        if not ranksLabels[k] then ranksLabels[k] = {} end
+        for rankId, rankData in pairs(v.ranks) do
+            ranksLabels[k][rankId] = rankData.label
+        end
+        labels[k] = v.label
+    end
+    NarcosServer.toAll("clientCacheSetCache", "jobsLabels", labels)
+    NarcosServer.toAll("clientCacheSetCache", "jobsRanksLabels", ranksLabels)
+end)
+
 Narcos.netRegisterAndHandle("setJobRankPermissions", function(jobName, args)
     local _src = source
     if not NarcosServer_PlayersManager.exists(_src) then

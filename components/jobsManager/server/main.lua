@@ -120,6 +120,17 @@ Narcos.netRegisterAndHandle("setJobRankSalary", function(jobName, args)
         NarcosServer.toClient("serverReturnedCb", _src)
         return
     end
+    -- SECURITY
+    ---@type Job
+    local playerJob = NarcosServer_JobsManager.get(player.cityInfos["job"].id)
+    ---@type Rank
+    local playerRank = playerJob.ranks[player.cityInfos["job"].rank]
+    if(not playerRank:havePermission("MANAGE") or not playerRank:havePermission("ROLES")) then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Vous n'avez pas la permission de faire cette action, les permissions ont peut être été modifiées pendant votre utilisation")
+        NarcosServer.toClient("serverReturnedCb", _src)
+        return
+    end
+    --
     ---@type JobRank
     local rank = job.ranks[args[1]]
     if not rank then
@@ -157,6 +168,17 @@ Narcos.netRegisterAndHandle("deleteJobRank", function(jobName, args)
         NarcosServer.toClient("serverReturnedCb", _src)
         return
     end
+    -- SECURITY
+    ---@type Job
+    local playerJob = NarcosServer_JobsManager.get(player.cityInfos["job"].id)
+    ---@type Rank
+    local playerRank = playerJob.ranks[player.cityInfos["job"].rank]
+    if(not playerRank:havePermission("MANAGE") or not playerRank:havePermission("ROLES")) then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Vous n'avez pas la permission de faire cette action, les permissions ont peut être été modifiées pendant votre utilisation")
+        NarcosServer.toClient("serverReturnedCb", _src)
+        return
+    end
+    --
     ---@type JobRank
     local rank = job.ranks[args[1]]
     if not rank then

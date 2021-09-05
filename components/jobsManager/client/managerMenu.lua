@@ -23,7 +23,7 @@ end
 local operationState = false
 --serverReturnedCb
 Narcos.netRegister("managerReceivedUpdate")
-Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, name)
+Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, name, customPermOrder)
     local permissionsEditor, permissionsEditorFinal, permissionsEditorScratch, rankBuilder = {}, {}, {}, {}
     ---@param rankData JobRank
     for rankId, jobRank in pairs(ranks) do
@@ -106,7 +106,7 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
         while isAMenuActive do
             RageUI.IsVisible(RMenu:Get(cat, sub("main")), true, true, true, function()
                 baseSep()
-                RageUI.ButtonWithStyle("Gérer les employés", nil, { RightLabel = "→→" }, true, nil, RMenu:Get(cat, sub("employees")))
+                RageUI.ButtonWithStyle("Gérer les employés", nil, { RightLabel = "→→" }, validatePermission(ranks, personnalData.player.cityInfos["job"].rank, "EMPLOYEES"), nil, RMenu:Get(cat, sub("employees")))
                 RageUI.ButtonWithStyle("Gérer les grades", nil, { RightLabel = "→→" }, validatePermission(ranks, personnalData.player.cityInfos["job"].rank, "ROLES"), nil, RMenu:Get(cat, sub("ranks")))
             end, function()
             end)
@@ -166,7 +166,7 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
                     end, RMenu:Get(cat, sub("ranks_manage_permissions")))
                     RageUI.ButtonWithStyle("Définir la tenue", nil, { RightLabel = "→→" }, true, function(_, _, s)
                         if s then
-
+                            -- TODO -> Modify outfit
                         end
                     end, RMenu:Get(cat, sub("ranks_manage_clothes")))
                     RageUI.ButtonWithStyle("~r~Supprimer le grade", nil, { RightLabel = "→→" }, true, function(_, _, s)
@@ -209,8 +209,8 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
                         end
                     end, RMenu:Get(cat, sub("confirm")))
                     RageUI.Separator("↓ ~r~Permissions ~s~↓")
-                    for k, v in pairs(permissionsEditor[selectedRank]) do
-                        RageUI.Checkbox(("%s%s"):format(NarcosClient.MenuHelper.greenIfTrue(permissionsEditor[selectedRank][k].grant),v.label), nil, v.grant, { Style = RageUI.CheckboxStyle.Tick }, function(_, _, _, c)
+                    for _, k in pairs(customPermOrder) do
+                        RageUI.Checkbox(("%s%s"):format(NarcosClient.MenuHelper.greenIfTrue(permissionsEditor[selectedRank][k].grant),permissionsEditor[selectedRank][k].label), nil, permissionsEditor[selectedRank][k].grant, { Style = RageUI.CheckboxStyle.Tick }, function(_, _, _, c)
                             permissionsEditor[selectedRank][k].grant = c
                         end, function()
                         end, function()

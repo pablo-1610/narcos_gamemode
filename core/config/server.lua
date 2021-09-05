@@ -17,6 +17,8 @@ NarcosConfig_Server = {
     defaultRank = "default",
     defaultJob = "unemployed",
 
+    yatchVehicle = "seashark",
+
     paycheckInterval = 30, -- In minutes
 
     bannedInstance = 1,

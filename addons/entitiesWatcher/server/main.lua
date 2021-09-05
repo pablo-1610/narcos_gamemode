@@ -55,5 +55,5 @@ Narcos.netHandle("sideLoaded", function()
         deleteNewVehicles()
     end, function()
 
-    end, 1, (Narcos.second(5)))
+    end, 1, (Narcos.second(60*3)))
 end)

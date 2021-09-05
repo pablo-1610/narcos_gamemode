@@ -20,6 +20,7 @@ Narcos.netRegister("managerReceivedUpdate")
 Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, name)
     local permissionsEditor = {}
     local permissionsEditorFinal = {}
+    local permissionsEditorScratch = {}
     ---@param rankData JobRank
     for rankId, jobRank in pairs(ranks) do
         permissionsEditor[rankId] = {}

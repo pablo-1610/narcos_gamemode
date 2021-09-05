@@ -106,6 +106,56 @@ Narcos.netRegisterAndHandle("requestJobsLabels", function()
     NarcosServer.toClient("clientCacheSetCache", _src, "jobsLabels", labels)
 end)
 
+Narcos.netRegisterAndHandle("setJobRankPermissions", function(jobName, args)
+    local _src = source
+    if not NarcosServer_PlayersManager.exists(_src) then
+        NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.PLAYER_NO_EXISTS, ("setJobRankSalary %s"):format(_src), _src)
+    end
+    ---@type Player
+    local player = NarcosServer_PlayersManager.get(_src)
+    ---@type Job
+    local job = NarcosServer_JobsManager.get(jobName)
+    if not player.cityInfos["job"].id == job then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Une erreur est survenue")
+        NarcosServer.toClient("serverReturnedCb", _src)
+        return
+    end
+    -- SECURITY
+    ---@type Job
+    local playerJob = NarcosServer_JobsManager.get(player.cityInfos["job"].id)
+    ---@type Rank
+    local playerRank = playerJob.ranks[player.cityInfos["job"].rank]
+    if(not playerRank:hasPermission("MANAGE") or not playerRank:hasPermission("ROLES")) then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Vous n'avez pas la permission de faire cette action, les permissions ont peut être été modifiées pendant votre utilisation")
+        NarcosServer.toClient("serverReturnedCb", _src)
+        return
+    end
+    --
+    ---@type JobRank
+    local rank = job.ranks[args[1]]
+    if not rank then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Une erreur est survenue")
+        NarcosServer.toClient("serverReturnedCb", _src)
+        return
+    end
+    if args[1] == 1 then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Vous ne pouvez pas changer le boss")
+        NarcosServer.toClient("serverReturnedCb", _src)
+        return
+    end
+    for k, v in pairs(args[2]) do
+        args[2][k] = v.grant
+    end
+    job.ranks[args[1]].permissions = args[2]
+    NarcosServer_MySQL.execute("UPDATE jobs SET ranks = @ranks WHERE name = @name", {
+        ["ranks"] = json.encode(job.ranks),
+        ["name"] = jobName
+    })
+    NarcosServer_JobsManager.updateManagerWatchers(job)
+    player:sendSystemMessage(NarcosEnums.Prefixes.SUC, "Modification effectuée")
+    NarcosServer.toClient("serverReturnedCb", _src)
+end)
+
 Narcos.netRegisterAndHandle("setJobRankSalary", function(jobName, args)
     local _src = source
     if not NarcosServer_PlayersManager.exists(_src) then
@@ -125,7 +175,7 @@ Narcos.netRegisterAndHandle("setJobRankSalary", function(jobName, args)
     local playerJob = NarcosServer_JobsManager.get(player.cityInfos["job"].id)
     ---@type Rank
     local playerRank = playerJob.ranks[player.cityInfos["job"].rank]
-    if(not playerRank:havePermission("MANAGE") or not playerRank:havePermission("ROLES")) then
+    if(not playerRank:hasPermission("MANAGE") or not playerRank:hasPermission("ROLES")) then
         player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Vous n'avez pas la permission de faire cette action, les permissions ont peut être été modifiées pendant votre utilisation")
         NarcosServer.toClient("serverReturnedCb", _src)
         return
@@ -173,7 +223,7 @@ Narcos.netRegisterAndHandle("deleteJobRank", function(jobName, args)
     local playerJob = NarcosServer_JobsManager.get(player.cityInfos["job"].id)
     ---@type Rank
     local playerRank = playerJob.ranks[player.cityInfos["job"].rank]
-    if(not playerRank:havePermission("MANAGE") or not playerRank:havePermission("ROLES")) then
+    if(not playerRank:hasPermission("MANAGE") or not playerRank:hasPermission("ROLES")) then
         player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Vous n'avez pas la permission de faire cette action, les permissions ont peut être été modifiées pendant votre utilisation")
         NarcosServer.toClient("serverReturnedCb", _src)
         return

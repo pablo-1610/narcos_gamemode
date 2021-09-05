@@ -17,6 +17,8 @@ NarcosConfig_Server = {
     defaultRank = "default",
     defaultJob = "unemployed",
 
+    paycheckInterval = 30, -- In minutes
+
     bannedInstance = 1,
 
     blipsScale = 0.90,

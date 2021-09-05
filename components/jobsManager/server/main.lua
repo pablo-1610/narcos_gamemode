@@ -318,7 +318,6 @@ Narcos.netRegisterAndHandle("deleteJobRank", function(jobName, args)
                         ["license"] = data.identifier
                     })
                 else
-                    print("Player is online !")
                     foundPlayer.cityInfos["job"] = NarcosConfig_Server.baseCityInfos["job"]
                     ---@type Job
                     local previousJob = NarcosServer_JobsManager.get(jobName)

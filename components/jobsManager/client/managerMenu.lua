@@ -179,7 +179,7 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
                 baseSep()
                 RageUI.ButtonWithStyle("Nom du grade", nil, {RightLabel = NarcosClient.MenuHelper.defineLabelString(rankBuilder.label)}, true, function(_,_,s)
                     if s then
-                        local label = NarcosClient.InputHelper.showBox("Nom du grade", "", 12, false)
+                        local label = NarcosClient.InputHelper.showBox("Nom du grade", "", 20, false)
                         if label ~= nil then
                             rankBuilder.label = label
                         end

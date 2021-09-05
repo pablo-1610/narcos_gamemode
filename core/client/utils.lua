@@ -333,7 +333,7 @@ NarcosClient.InputHelper = {
             blockinput = false
             if isValueInt then
                 local isNumber = tonumber(result)
-                if isNumber then
+                if isNumber and isNumber >= 0 then
                     return result
                 else
                     return nil

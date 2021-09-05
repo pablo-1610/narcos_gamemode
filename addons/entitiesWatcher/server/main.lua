@@ -19,9 +19,41 @@ local function clearDeadVehicles()
     end
 end
 
+local function deleteNewVehicles()
+    local playersVehicles = {}
+    ---@param player Player
+    for k, player in pairs(NarcosServer_PlayersManager.list) do
+        if player.ingame then
+            playersVehicles[k] = GetVehiclePedIsIn(GetPlayerPed(k), false)
+        end
+    end
+    local mountedCount = 0
+    for _, vehicle in ipairs(GetAllVehicles()) do
+        -- Check veh and delete
+        if DoesEntityExist(vehicle) then
+            local isMounted = false
+            for source, ownedVehicle in pairs(playersVehicles) do
+                if(ownedVehicle == vehicle) then
+                    isMounted = true
+                    mountedCount = mountedCount + 1
+                end
+            end
+            if not isMounted and GetEntityModel(vehicle) == GetHashKey(NarcosConfig_Server.yatchVehicle) then
+                DeleteEntity(vehicle)
+            end
+        end
+    end
+end
+
 Narcos.netHandle("sideLoaded", function()
     Narcos.newRepeatingTask(function()
         clearDeadVehicles()
     end, function()
     end, 1, (Narcos.second(60)*5))
+
+    Narcos.newRepeatingTask(function()
+        deleteNewVehicles()
+    end, function()
+
+    end, 1, (Narcos.second(5)))
 end)

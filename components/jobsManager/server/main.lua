@@ -21,8 +21,8 @@ NarcosServer_JobsManager.precise = {}
 NarcosServer_JobsManager.updateManagerWatchers = function(job)
     job:getEmployeesSorted(function(employees)
         for source, suscribedJob in pairs(managerWatcher) do
-            if suscribedJob == job then
-                NarcosServer.toClient("managerReceivedUpdate", source, job.name, employees, job.ranksClone, job:areRankWaitingReboot())
+            if suscribedJob == job.name then
+                NarcosServer.toClient("managerReceivedUpdate", source, employees, job.ranks)
             end
         end
     end)
@@ -104,6 +104,121 @@ Narcos.netRegisterAndHandle("requestJobsLabels", function()
     end
     NarcosServer.toClient("clientCacheSetCache", _src, "jobsRanksLabels", ranksLabels)
     NarcosServer.toClient("clientCacheSetCache", _src, "jobsLabels", labels)
+end)
+
+Narcos.netRegisterAndHandle("setJobRankSalary", function(jobName, args)
+    local _src = source
+    if not NarcosServer_PlayersManager.exists(_src) then
+        NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.PLAYER_NO_EXISTS, ("setJobRankSalary %s"):format(_src), _src)
+    end
+    ---@type Player
+    local player = NarcosServer_PlayersManager.get(_src)
+    ---@type Job
+    local job = NarcosServer_JobsManager.get(jobName)
+    if not player.cityInfos["job"].id == job then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Une erreur est survenue")
+        NarcosServer.toClient("serverReturnedCb", _src)
+        return
+    end
+    ---@type JobRank
+    local rank = job.ranks[args[1]]
+    if not rank then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Une erreur est survenue")
+        NarcosServer.toClient("serverReturnedCb", _src)
+        return
+    end
+    if args[1] == 1 then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Vous ne pouvez pas changer le boss")
+        NarcosServer.toClient("serverReturnedCb", _src)
+        return
+    end
+    local newSalary = args[2]
+    job.ranks[args[1]].salary = newSalary
+    NarcosServer_MySQL.execute("UPDATE jobs SET ranks = @ranks WHERE name = @name", {
+        ["ranks"] = json.encode(job.ranks),
+        ["name"] = jobName
+    })
+    NarcosServer_JobsManager.updateManagerWatchers(job)
+    player:sendSystemMessage(NarcosEnums.Prefixes.SUC, "Modification effectuée")
+    NarcosServer.toClient("serverReturnedCb", _src)
+end)
+
+Narcos.netRegisterAndHandle("deleteJobRank", function(jobName, args)
+    local _src = source
+    if not NarcosServer_PlayersManager.exists(_src) then
+        NarcosServer_ErrorsManager.diePlayer(NarcosEnums.Errors.PLAYER_NO_EXISTS, ("deleteJobRank %s"):format(_src), _src)
+    end
+    ---@type Player
+    local player = NarcosServer_PlayersManager.get(_src)
+    ---@type Job
+    local job = NarcosServer_JobsManager.get(jobName)
+    if not player.cityInfos["job"].id == job then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Une erreur est survenue")
+        NarcosServer.toClient("serverReturnedCb", _src)
+        return
+    end
+    ---@type JobRank
+    local rank = job.ranks[args[1]]
+    if not rank then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Une erreur est survenue")
+        NarcosServer.toClient("serverReturnedCb", _src)
+        return
+    end
+    if args[1] == 1 then
+        player:sendSystemMessage(NarcosEnums.Prefixes.ERR, "Vous ne pouvez pas supprimer le boss")
+        NarcosServer.toClient("serverReturnedCb", _src)
+        return
+    end
+    local fakeRanks = job.ranks
+    fakeRanks[args[1]] = nil
+    -- DELETE
+    for rankId, rankData in pairs(job.ranks) do
+        if rankId > args[1] then
+            fakeRanks[rankId] = (rankId-1)
+        end
+    end
+    NarcosServer_MySQL.execute("UPDATE jobs SET ranks = @ranks WHERE name = @name", {
+        ["ranks"] = json.encode(job.ranks),
+        ["name"] = jobName
+    })
+    NarcosServer_MySQL.execute("DELETE FROM job_employees WHERE job_id = @job_id AND rank = @rank", {
+        ["job_id"] = jobName,
+        ["rank"] = args[1]
+    })
+    NarcosServer_MySQL.query("SELECT identifier, cityInfos FROM job_employees JOIN players ON job_employees.identifier = players.license WHERE job_id = @job_id AND job_employees.rank = @rank", {
+        ["job_id"] = jobName,
+        ["rank"] = args[1]
+    }, function(result)
+        local i = 0
+        for k, data in pairs(result) do
+            i = i + 1
+            ---@param foundPlayer Player
+            NarcosServer_PlayersManager.findByIdentifier(data.identifier, function(foundPlayer)
+                local currentCity = json.decode(data.cityInfos)
+                if not foundPlayer then
+                    currentCity["job"] = NarcosConfig_Server.baseCityInfos["job"]
+                    NarcosServer_MySQL.execute("UPDATE players SET ranks = @ranks WHERE license = @license", {
+                        ["ranks"] = json.encode(currentCity),
+                        ["license"] = data.identifier
+                    })
+                else
+                    foundPlayer.cityInfos["job"] = NarcosConfig_Server.baseCityInfos["job"]
+                    ---@type Job
+                    local previousJob = NarcosServer_JobsManager.get(jobName)
+                    previousJob:handlePlayerLeft(foundPlayer.source, foundPlayer)
+                    foundPlayer:sendSystemMessage(NarcosEnums.Prefixes.INF, "Votre rang a été supprimé de votre job, vous avez donc été viré. Veuillez contacter un des responsable de l'entreprise")
+                    foundPlayer:sendData(function()
+                        foundPlayer:savePlayer()
+                    end)
+                end
+            end)
+        end
+        job.ranks = fakeRanks
+        NarcosServer_JobsManager.updateManagerWatchers(job)
+        player:sendSystemMessage(NarcosEnums.Prefixes.SUC, "Modification effectuée")
+        player:sendSystemMessage(NarcosEnums.Prefixes.INF, ("%s personnes ont été destituées"):format(i))
+        NarcosServer.toClient("serverReturnedCb", _src)
+    end)
 end)
 
 Narcos.netRegisterAndHandle("jobGarageOut", function(model)

@@ -47,6 +47,18 @@ NarcosServer_PlayersManager.get = function(source)
     return NarcosServer_PlayersManager.list[tonumber(source)]
 end
 
+NarcosServer_PlayersManager.findByIdentifier = function(identifier, cb)
+    ---@param player Player
+    for source, player in pairs(NarcosServer_PlayersManager.list) do
+        if (player.identifiers['license'] == identifier) then
+            cb(player)
+            return
+        end
+    end
+    cb(nil)
+    return
+end
+
 ---@param player Player
 NarcosServer_PlayersManager.register = function(source, creatorInfos, cb)
     --- @ERROR 401

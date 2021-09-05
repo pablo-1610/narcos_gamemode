@@ -14,18 +14,32 @@ local title, cat, desc = "Manager", "jobManager", "Gérez votre entreprise"
 local sub = function(str)
     return cat .. "_" .. str
 end
+local operationState = false
 --serverReturnedCb
 Narcos.netRegister("managerReceivedUpdate")
-Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, name, pendingReboot)
+Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, name)
+    local permissionsEditor = {}
+    ---@param rankData JobRank
+    for rankId, jobRank in pairs(ranks) do
+        permissionsEditor[rankId] = {}
+        for permissionName,_ in pairs(NarcosEnums.Permissions) do
+            permissionsEditor[rankId][permissionName] = (jobRank.permissions[permissionName] or false)
+        end
+    end
     if isAMenuActive then
         return
     end
     NarcosClient.toServer("managerSubscribe", name)
-    Narcos.netHandle("managerReceivedUpdate", function(job, employeesN, ranksN, pendingRebootN)
-        if job == name then
-            employees = employeesN
-            ranks = ranksN
-            pendingRebootN = pendingReboot
+    Narcos.netHandle("managerReceivedUpdate", function(employeesN, ranksN)
+        employees = employeesN
+        ranks = ranksN
+        permissionsEditor = {}
+        ---@param rankData JobRank
+        for rankId, jobRank in pairs(ranks) do
+            permissionsEditor[rankId] = {}
+            for permissionName,_ in pairs(NarcosEnums.Permissions) do
+                permissionsEditor[rankId][permissionName] = (jobRank.permissions[permissionName] or false)
+            end
         end
     end)
     RMenu.Add(cat, sub("main"), RageUI.CreateMenu(title, desc, nil, nil, "pablo", "black"))
@@ -52,7 +66,12 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
     RMenu:Get(cat, sub("ranks_manage")).Closed = function()
     end
 
+    RMenu.Add(cat, sub("ranks_manage_permissions"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("ranks_manage")), title, desc, nil, nil, "pablo", "black"))
+    RMenu:Get(cat, sub("ranks_manage_permissions")).Closed = function()
+    end
+
     RMenu.Add(cat, sub("confirm"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("main")), title, desc, nil, nil, "pablo", "black"))
+    RMenu:Get(cat, sub("confirm")).Closable = false
     RMenu:Get(cat, sub("confirm")).Closed = function()
     end
 
@@ -62,9 +81,6 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
     Narcos.newThread(function()
         local selectedEmployeed, selectedRank, confirmOption
         local function baseSep()
-            if pendingReboot then
-                RageUI.Separator(("%sDes modifications sont en attente d'application"):format(NarcosClient.MenuHelper.alert))
-            end
             RageUI.Separator(("Gestion de l'entreprise: ~y~%s"):format(label))
         end
         local function formatIdentity(identity)
@@ -111,6 +127,19 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
             RageUI.IsVisible(RMenu:Get(cat, sub("ranks_manage")), true, true, true, function()
                 baseSep()
                 RageUI.Separator(("Selection: ~o~%s"):format(ranks[selectedRank].label))
+
+                RageUI.ButtonWithStyle("Définir le salaire", nil, {RightLabel = ("~g~%s$~s~/~o~30m~s~ →→"):format(NarcosClient.MenuHelper.groupDigits(ranks[selectedRank].salary))}, true, function(_,_,s)
+                    if s then
+                        local newSalary = NarcosClient.InputHelper.showBox("Nouveau salaire par 30 minutes", "", 10, true)
+                        if newSalary ~= nil and tonumber(newSalary) ~= nil then
+                            newSalary = tonumber(newSalary)
+                            operationState = false
+                            confirmOption = {"setJobRankSalary", ("Changer le salaire (%s)"):format(ranks[selectedRank].label), "ranks_manage", true, {selectedRank, newSalary}}
+                            RageUI.Visible(RMenu:Get(cat, sub("confirm")), true)
+                        end
+                    end
+                end)
+
                 RageUI.ButtonWithStyle("Gestion des permissions", nil, {RightLabel = "→→"}, true, function(_,_,s)
                 end, RMenu:Get(cat, sub("ranks_manage_permissions")))
                 RageUI.ButtonWithStyle("Définir la tenue", nil, {RightLabel = "→→"}, true, function(_,_,s)
@@ -120,6 +149,7 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
                 end, RMenu:Get(cat, sub("ranks_manage_clothes")))
                 RageUI.ButtonWithStyle("~r~Supprimer le grade", nil, {RightLabel = "→→"}, true, function(_,_,s)
                     if s then
+                        operationState = false
                         confirmOption = {"deleteJobRank", ("Supprimer le grade (%s)"):format(ranks[selectedRank].label), "ranks_manage", true, {selectedRank}}
                     end
                 end, RMenu:Get(cat, sub("confirm")))
@@ -129,22 +159,34 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
             RageUI.IsVisible(RMenu:Get(cat, sub("confirm")), true, true, true, function()
                 baseSep()
                 RageUI.Separator(("~s~\"~b~%s~s~\""):format(confirmOption[2]))
-                RageUI.ButtonWithStyle("~r~Oups, retour en arrière", nil, {}, true, function(_,_,s)
-                    if s then
-                        RageUI.Visible(RMenu:Get(cat, sub(confirmOption[3])), true)
-                    end
-                end)
-                RageUI.ButtonWithStyle("~g~Confirmer l'opération", nil, {}, true, function(_,_,s)
-                    if s then
-                        if confirmOption[4] then
-                            serverUpdating = true
+                if not operationState then
+                    RageUI.ButtonWithStyle("~r~Oups, retour en arrière", nil, {}, true, function(_,_,s)
+                        if s then
+                            RageUI.Visible(RMenu:Get(cat, sub(confirmOption[3])), true)
                         end
-                        TriggerServerEvent(confirmOption[1], name, confirmOption[5])
-                    end
-                end)
+                    end)
+                    RageUI.ButtonWithStyle("~o~Confirmer l'opération", nil, {}, true, function(_,_,s)
+                        if s then
+                            if confirmOption[4] then
+                                serverUpdating = true
+                            end
+                            NarcosClient.toServer(confirmOption[1], name, confirmOption[5])
+                        end
+                    end)
+                else
+                    RageUI.ButtonWithStyle("~g~Opération complétée", nil, {RightLabel = "~g~Retour~s~ →→"}, true, function(_,_,s)
+                        if s then
+                            RageUI.Visible(RMenu:Get(cat, sub(confirmOption[3])), true)
+                        end
+                    end)
+                end
             end, function()
             end)
             Wait(0)
         end
     end)
+end)
+
+Narcos.netHandle("serverReturnedCb", function()
+    operationState = true
 end)

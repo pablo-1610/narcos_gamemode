@@ -19,11 +19,12 @@ local operationState = false
 Narcos.netRegister("managerReceivedUpdate")
 Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, name)
     local permissionsEditor = {}
+    local permissionsEditorFinal = {}
     ---@param rankData JobRank
     for rankId, jobRank in pairs(ranks) do
         permissionsEditor[rankId] = {}
-        for permissionName,_ in pairs(NarcosEnums.Permissions) do
-            permissionsEditor[rankId][permissionName] = (jobRank.permissions[permissionName] or false)
+        for permissionName, vv in pairs(NarcosEnums.Permissions) do
+            permissionsEditor[rankId][permissionName] = { grant = (jobRank.permissions[permissionName] or false), label = vv.desc }
         end
     end
     if isAMenuActive then
@@ -34,11 +35,12 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
         employees = employeesN
         ranks = ranksN
         permissionsEditor = {}
+        permissionsEditorFinal = {}
         ---@param rankData JobRank
         for rankId, jobRank in pairs(ranks) do
             permissionsEditor[rankId] = {}
-            for permissionName,_ in pairs(NarcosEnums.Permissions) do
-                permissionsEditor[rankId][permissionName] = (jobRank.permissions[permissionName] or false)
+            for permissionName, vv in pairs(NarcosEnums.Permissions) do
+                permissionsEditor[rankId][permissionName] = { grant = (jobRank.permissions[permissionName] or false), label = vv.desc }
             end
         end
     end)
@@ -68,6 +70,12 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
 
     RMenu.Add(cat, sub("ranks_manage_permissions"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("ranks_manage")), title, desc, nil, nil, "pablo", "black"))
     RMenu:Get(cat, sub("ranks_manage_permissions")).Closed = function()
+        for rankId, jobRank in pairs(ranks) do
+            permissionsEditor[rankId] = {}
+            for permissionName, vv in pairs(NarcosEnums.Permissions) do
+                permissionsEditor[rankId][permissionName] = { grant = (jobRank.permissions[permissionName] or false), label = vv.desc }
+            end
+        end
     end
 
     RMenu.Add(cat, sub("confirm"), RageUI.CreateSubMenu(RMenu:Get(cat, sub("main")), title, desc, nil, nil, "pablo", "black"))
@@ -89,15 +97,15 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
         while isAMenuActive do
             RageUI.IsVisible(RMenu:Get(cat, sub("main")), true, true, true, function()
                 baseSep()
-                RageUI.ButtonWithStyle("Gérer les employés", nil, {RightLabel = "→→"}, true, nil, RMenu:Get(cat, sub("employees")))
-                RageUI.ButtonWithStyle("Gérer les grades", nil, {RightLabel = "→→"}, true, nil, RMenu:Get(cat, sub("ranks")))
+                RageUI.ButtonWithStyle("Gérer les employés", nil, { RightLabel = "→→" }, true, nil, RMenu:Get(cat, sub("employees")))
+                RageUI.ButtonWithStyle("Gérer les grades", nil, { RightLabel = "→→" }, true, nil, RMenu:Get(cat, sub("ranks")))
             end, function()
             end)
 
             RageUI.IsVisible(RMenu:Get(cat, sub("employees")), true, true, true, function()
                 baseSep()
                 for localId, employeeData in pairs(employees) do
-                    RageUI.ButtonWithStyle(("~s~[~r~%s~s~] %s"):format(ranks[employeeData.rank].label, ("%s %s"):format(employeeData.identity.lastname:upper(), employeeData.identity.firstname)), nil, {RightLabel = "→→"}, (not (employeeData.identifier == personnalData.player.identifiers['license'])) and (employeeData.rank > personnalData.player.cityInfos["job"].rank), function(_,_,s)
+                    RageUI.ButtonWithStyle(("~s~[~r~%s~s~] %s"):format(ranks[employeeData.rank].label, ("%s %s"):format(employeeData.identity.lastname:upper(), employeeData.identity.firstname)), nil, { RightLabel = "→→" }, (not (employeeData.identifier == personnalData.player.identifiers['license'])) and (employeeData.rank > personnalData.player.cityInfos["job"].rank), function(_, _, s)
                         if s then
                             selectedEmployeed = localId
                         end
@@ -115,7 +123,7 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
             RageUI.IsVisible(RMenu:Get(cat, sub("ranks")), true, true, true, function()
                 baseSep()
                 for rankId, rankData in pairs(ranks) do
-                    RageUI.ButtonWithStyle(("~s~[~r~#%s~s~] %s"):format(rankId, rankData.label), nil, {RightLabel = "→→"}, (rankId > personnalData.player.cityInfos["job"].rank) and (rankId ~= 1), function(_,_,s)
+                    RageUI.ButtonWithStyle(("~s~[~r~#%s~s~] %s"):format(rankId, rankData.label), nil, { RightLabel = "→→" }, (rankId > personnalData.player.cityInfos["job"].rank) and (rankId ~= 1), function(_, _, s)
                         if s then
                             selectedRank = rankId
                         end
@@ -125,34 +133,63 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
             end)
 
             RageUI.IsVisible(RMenu:Get(cat, sub("ranks_manage")), true, true, true, function()
-                baseSep()
-                RageUI.Separator(("Selection: ~o~%s"):format(ranks[selectedRank].label))
+                if ranks[selectedRank] then
+                    baseSep()
+                    RageUI.Separator(("Selection: ~o~%s"):format(ranks[selectedRank].label))
 
-                RageUI.ButtonWithStyle("Définir le salaire", nil, {RightLabel = ("~g~%s$~s~/~o~30m~s~ →→"):format(NarcosClient.MenuHelper.groupDigits(ranks[selectedRank].salary))}, true, function(_,_,s)
-                    if s then
-                        local newSalary = NarcosClient.InputHelper.showBox("Nouveau salaire par 30 minutes", "", 10, true)
-                        if newSalary ~= nil and tonumber(newSalary) ~= nil then
-                            newSalary = tonumber(newSalary)
-                            operationState = false
-                            confirmOption = {"setJobRankSalary", ("Changer le salaire (%s)"):format(ranks[selectedRank].label), "ranks_manage", true, {selectedRank, newSalary}}
-                            RageUI.Visible(RMenu:Get(cat, sub("confirm")), true)
+                    RageUI.ButtonWithStyle("Définir le salaire", nil, { RightLabel = ("~g~%s$~s~/~o~30m~s~ →→"):format(NarcosClient.MenuHelper.groupDigits(ranks[selectedRank].salary)) }, true, function(_, _, s)
+                        if s then
+                            local newSalary = NarcosClient.InputHelper.showBox("Nouveau salaire par 30 minutes", "", 10, true)
+                            if newSalary ~= nil and tonumber(newSalary) ~= nil then
+                                newSalary = tonumber(newSalary)
+                                operationState = false
+                                confirmOption = { "setJobRankSalary", ("Changer le salaire (%s)"):format(ranks[selectedRank].label), "ranks_manage", true, { selectedRank, newSalary } }
+                                RageUI.Visible(RMenu:Get(cat, sub("confirm")), true)
+                            end
                         end
-                    end
-                end)
+                    end)
 
-                RageUI.ButtonWithStyle("Gestion des permissions", nil, {RightLabel = "→→"}, true, function(_,_,s)
-                end, RMenu:Get(cat, sub("ranks_manage_permissions")))
-                RageUI.ButtonWithStyle("Définir la tenue", nil, {RightLabel = "→→"}, true, function(_,_,s)
-                    if s then
+                    RageUI.ButtonWithStyle("Gestion des permissions", nil, { RightLabel = "→→" }, true, function(_, _, s)
+                    end, RMenu:Get(cat, sub("ranks_manage_permissions")))
+                    RageUI.ButtonWithStyle("Définir la tenue", nil, { RightLabel = "→→" }, true, function(_, _, s)
+                        if s then
 
+                        end
+                    end, RMenu:Get(cat, sub("ranks_manage_clothes")))
+                    RageUI.ButtonWithStyle("~r~Supprimer le grade", nil, { RightLabel = "→→" }, true, function(_, _, s)
+                        if s then
+                            operationState = false
+                            confirmOption = { "deleteJobRank", ("Supprimer le grade (%s)"):format(ranks[selectedRank].label), "ranks_manage", true, { selectedRank } }
+                        end
+                    end, RMenu:Get(cat, sub("confirm")))
+                else
+                    RageUI.GoBack()
+                end
+            end, function()
+            end)
+
+            RageUI.IsVisible(RMenu:Get(cat, sub("ranks_manage_permissions")), true, true, true, function()
+                if ranks[selectedRank] then
+                    baseSep()
+                    RageUI.Separator(("Selection: ~o~%s"):format(ranks[selectedRank].label))
+                    RageUI.ButtonWithStyle("~g~Appliquer les permissions", nil, {RightLabel = "→→"}, true, function(_,_,s)
+                        if s then
+                            permissionsEditorFinal = table.unpack({permissionsEditor})
+                            operationState = false
+                            confirmOption = { "setJobRankPermissions", ("Modif. permissions (%s)"):format(ranks[selectedRank].label), "ranks_manage_permissions", true, { selectedRank, permissionsEditorFinal } }
+                        end
+                    end, RMenu:Get(cat, sub("confirm")))
+                    RageUI.Separator("↓ ~r~Permissions ~s~↓")
+                    for k, v in pairs(permissionsEditor[selectedRank]) do
+                        RageUI.Checkbox(v.label, nil, v.grant, { Style = RageUI.CheckboxStyle.Tick }, function(_, _, _, c)
+                            permissionsEditor[selectedRank][k].grant = c
+                        end, function()
+                        end, function()
+                        end)
                     end
-                end, RMenu:Get(cat, sub("ranks_manage_clothes")))
-                RageUI.ButtonWithStyle("~r~Supprimer le grade", nil, {RightLabel = "→→"}, true, function(_,_,s)
-                    if s then
-                        operationState = false
-                        confirmOption = {"deleteJobRank", ("Supprimer le grade (%s)"):format(ranks[selectedRank].label), "ranks_manage", true, {selectedRank}}
-                    end
-                end, RMenu:Get(cat, sub("confirm")))
+                else
+                    RageUI.GoBack()
+                end
             end, function()
             end)
 
@@ -160,12 +197,12 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
                 baseSep()
                 RageUI.Separator(("~s~\"~b~%s~s~\""):format(confirmOption[2]))
                 if not operationState then
-                    RageUI.ButtonWithStyle("~r~Oups, retour en arrière", nil, {}, true, function(_,_,s)
+                    RageUI.ButtonWithStyle("~r~Oups, retour en arrière", nil, {}, true, function(_, _, s)
                         if s then
                             RageUI.Visible(RMenu:Get(cat, sub(confirmOption[3])), true)
                         end
                     end)
-                    RageUI.ButtonWithStyle("~o~Confirmer l'opération", nil, {}, true, function(_,_,s)
+                    RageUI.ButtonWithStyle("~o~Confirmer l'opération", nil, {}, true, function(_, _, s)
                         if s then
                             if confirmOption[4] then
                                 serverUpdating = true
@@ -174,7 +211,7 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
                         end
                     end)
                 else
-                    RageUI.ButtonWithStyle("~g~Opération complétée", nil, {RightLabel = "~g~Retour~s~ →→"}, true, function(_,_,s)
+                    RageUI.ButtonWithStyle("~g~Opération complétée", nil, { RightLabel = "~g~Retour~s~ →→" }, true, function(_, _, s)
                         if s then
                             RageUI.Visible(RMenu:Get(cat, sub(confirmOption[3])), true)
                         end

@@ -146,17 +146,20 @@ Narcos.netRegisterAndHandle("playerJoined", function()
                 local pos, heading = GetEntityCoords(GetPlayerPed(_src)), GetEntityHeading(GetPlayerPed(_src))
                 NarcosServer.toClient("playerSpawnBase", _src, {pos = {x = pos.x, y = pos.y, z = pos.z}, heading = heading}, player.body, player.outfits[player.selectedOutfit], player.loadout, true)
                 NarcosServer.trace(("Le joueur ^2%s ^7a été chargé"):format(GetPlayerName(_src)), Narcos.prefixes.connection)
+                player:setInGame(true)
             end)
         end)
         return
     end
     if player:getIsNewPlayer() then
+        player:setInGame(true)
         NarcosServer_InstancesManager.setInstance(_src, (NarcosConfig_Server.instancesRanges.creator + _src))
         NarcosServer.trace(("Le joueur ^3%s^7 est nouveau ! Bienvenue"):format(player.name), Narcos.prefixes.connection)
         NarcosServer.toClient("creatorInitialize", _src)
     else
         NarcosServer_MySQL.execute("UPDATE players SET lastInGameId = @a WHERE license = @b", { ['a'] = tonumber(_src), ['b'] = player:getLicense() })
         player:sendData(function()
+            player:setInGame(true)
             NarcosServer.toClient("playerSpawnBase", _src, player.position, player.body, player.outfits[player.selectedOutfit], player.loadout)
         end)
     end

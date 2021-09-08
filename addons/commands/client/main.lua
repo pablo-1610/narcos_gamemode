@@ -11,6 +11,10 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
+RegisterCommand("night", function()
+    NarcosClient_SyncManager.overrideTime(00,00)
+end)
+
 RegisterCommand("coords", function()
     local pos = GetEntityCoords(PlayerPedId())
     print(("%s, %s, %s et %s°"):format(pos.x, pos.y, pos.z, GetEntityHeading(PlayerPedId())))

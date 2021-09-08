@@ -60,6 +60,7 @@ Narcos.newThread(function()
         HideHudComponentThisFrame(8)
         HideHudComponentThisFrame(9)
         HideHudComponentThisFrame(13)
+        HideHudComponentThisFrame(14)
     end
 end)
 

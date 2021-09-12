@@ -17,8 +17,6 @@ NarcosConfig_Server = {
     defaultRank = "default",
     defaultJob = "unemployed",
 
-    yatchVehicle = "seashark",
-
     paycheckInterval = 30, -- In minutes
 
     bannedInstance = 1,
@@ -26,8 +24,8 @@ NarcosConfig_Server = {
     blipsScale = 0.90,
 
     startingCash = 500,
-    startingPosition = vector3(-1424.89, 6754.07, 8.97),
-    startingHeading = 250.94,
+    startingPosition = vector3(-724.64, -1444.10, 5.0),
+    startingHeading = 325.13,
 
     unemployedJobName = "Explorateur",
 
@@ -38,9 +36,13 @@ NarcosConfig_Server = {
     errorWebhook = "https://discord.com/api/webhooks/856303231235260416/QCbp0wufoZb50RgL5aE9Hpu0R_h-u5VgyY2Jnj2Y049KUW9ErNl-jadAFvX4BWx-sVNI",
     staffWebhook = "https://discord.com/api/webhooks/857439977629810709/YVGozHr9x9qRT_8NZDF-sZ_hHGvf65-lANsIoA_fjwJT6gQ6ndyy8PSNE2s9Ma0tR9lx0",
 
-    locationPosition = vector3(2606.98, 2909.81, 40.42),
-    locationNpc = { type = "a_m_m_mexlabor_01", pos = vector3(2606.60, 2909.09, 40.42), heading = 330.02 },
-    locationOut = { pos = vector3(2600.62, 2914.49, 39.63), heading = 147.93 },
+    locationPosition = vector3(-700.07, -1425.54, 5.00),
+    locationNpc = { type = "a_m_m_mexlabor_01", pos = vector3(-699.24, -1425.34, 5.00), heading = 108.13 },
+    locationOut = { pos = vector3(-681.46, -1428.14, 5.00), heading = 85.74 },
+
+    locationsOut = {
+
+    },
 
     cardCreationCost = 150,
     cardsByVip = function(vipLevel)

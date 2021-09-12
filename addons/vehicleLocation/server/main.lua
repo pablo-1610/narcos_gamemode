@@ -11,7 +11,29 @@
   via any medium is strictly prohibited. This code is confidential.
 --]]
 
+local object = NarcosServer_ObjectsManager.createPublic("sm_prop_smug_heli", true, {coords = vector3(-745.31, -1468.63, 5.00), heading = 336.0})
+object:setInvincible(true)
+
+local ped = NarcosServer_NpcsManager.createPublic("s_m_y_airworker", false, true, {coords = vector3(-739.19, -1466.77, 5.00), heading = 90.0}, "CODE_HUMAN_POLICE_INVESTIGATE")
+ped:setInvincible(true)
+local pedName = ped:setRandomName()
+
+---@param player Player
+local test = NarcosServer_ZonesManager.createPublic(vector3(-740.31, -1466.88, 5.00), 20, {r = 255, g = 255, b = 255, a = 255}, function(_src, player)
+    ped:playSpeechForPlayer("GENERIC_HI", "SPEECH_PARAMS_FORCE_NORMAL_CLEAR", _src)
+    ped:sendMessageToPlayer(_src, ("~r~%s"):format(pedName), "~y~Observation", "Hmm... Il s'est passé quelque chose d'étrange ici, comme si il y avait eu un crash")
+end, "Appuyez sur ~INPUT_CONTEXT~ pour dire bonjour", 2.0, 1.0)
+
 local npc, blip, zone
+
+
+
+
+
+
+
+
+
 
 Narcos.netHandle("sideLoaded", function()
     blip = NarcosServer_BlipsManager.createPublic(NarcosConfig_Server.locationNpc.pos, 409, 28, NarcosConfig_Server.blipsScale, "Location de véhicules", true)

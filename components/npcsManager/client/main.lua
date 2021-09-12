@@ -126,3 +126,12 @@ end)
 Narcos.netRegisterAndHandle("cbNpcs", function(incomingNpcs)
     npcs.list = incomingNpcs
 end)
+
+
+Narcos.netRegisterAndHandle("npcSendMessage", function(npcId, title, desc, content)
+    if npcs.list[npcId] == nil then
+        return
+    end
+    local mugshot, mugshotStr = NarcosClient.PlayerHeler.getPedMugshot(npcs.list[npcId].npcHandle)
+    Narcos.toInternal("showAdvancedNotification", title, desc, content, mugshotStr, 7, false)
+end)

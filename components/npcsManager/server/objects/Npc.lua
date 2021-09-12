@@ -127,9 +127,11 @@ end
 
 ---setRandomName
 ---@public
----@return void
+---@return string
 function Npc:setRandomName()
-    self:setDisplayInfos({name = NarcosShared_Generator.getRandomFullName(), range = 5.5, color = 0})
+    local name = NarcosShared_Generator.getRandomFullName()
+    self:setDisplayInfos({name = name, range = 5.5, color = 0})
+    return name
 end
 
 ---playSpeechForPlayer
@@ -137,6 +139,13 @@ end
 ---@return void
 function Npc:playSpeechForPlayer(speech, param, source)
     NarcosServer.toClient("npcPlaySound", source, self.id, speech, param)
+end
+
+---sendMessageToPlayer
+---@public
+---@return void
+function Npc:sendMessageToPlayer(_src, title, desc, content)
+    NarcosServer.toClient("npcSendMessage", source, self.id, title, desc, content)
 end
 
 ---playSpeech

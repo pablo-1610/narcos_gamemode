@@ -38,9 +38,12 @@ local function deleteNewVehicles()
                     mountedCount = mountedCount + 1
                 end
             end
+            -- TODO -> Change to location
+            --[[
             if not isMounted and GetEntityModel(vehicle) == GetHashKey(NarcosConfig_Server.yatchVehicle) then
                 DeleteEntity(vehicle)
             end
+            --]]
         end
     end
 end

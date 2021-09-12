@@ -1,1 +1,1 @@
-FXServer.exe +exec server.cfg +set sv_enforceGameBuild 2189 +set onesync_enabled 1
+FXServer.exe +exec server.cfg +set sv_enforceGameBuild 2372 +set onesync_enabled 1

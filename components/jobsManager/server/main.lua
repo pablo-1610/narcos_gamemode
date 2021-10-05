@@ -320,9 +320,12 @@ Narcos.netRegisterAndHandle("deleteJobRank", function(jobName, args)
                     ---@type Job
                     local previousJob = NarcosServer_JobsManager.get(jobName)
                     previousJob:handlePlayerLeft(foundPlayer.source, foundPlayer)
+                    foundPlayer.cityInfos["job"] = NarcosConfig_Server.baseCityInfos["job"]
                     foundPlayer:sendSystemMessage(NarcosEnums.Prefixes.INF, "Votre rang a été supprimé de votre job, vous avez donc été viré. Veuillez contacter un des responsable de l'entreprise")
                     foundPlayer:savePlayer()
-                    foundPlayer:sendData()
+                    foundPlayer:sendData(function()
+                        foundPlayer:sendData()
+                    end)
                 end
             end)
         end

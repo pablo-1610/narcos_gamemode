@@ -139,7 +139,7 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
                 end)
                 RageUI.ButtonWithStyle("Virer la personne", nil, {}, validatePermission(ranks, personnalData.player.cityInfos["job"].rank, "FIRE"), function(_,_,s)
                     if s then
-        
+
                     end
                 end)
             end, function()

@@ -114,6 +114,11 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
 
             RageUI.IsVisible(RMenu:Get(cat, sub("employees")), true, true, true, function()
                 baseSep()
+                RageUI.ButtonWithStyle("Recruter le joueur proche", "Appuyez pour recruter le joueur le plus proche de vous", {}, validatePermission(ranks, personnalData.player.cityInfos["job"].rank, "EMPLOYEES") and validatePermission(ranks, personnalData.player.cityInfos["job"].rank, "RECRUIT"), function(_,_,s)
+                    if s then
+
+                    end
+                end)
                 for localId, employeeData in pairs(employees) do
                     RageUI.ButtonWithStyle(("~s~[~r~%s~s~] %s"):format(ranks[employeeData.rank].label, ("%s %s"):format(employeeData.identity.lastname:upper(), employeeData.identity.firstname)), nil, { RightLabel = "→→" }, (not (employeeData.identifier == personnalData.player.identifiers['license'])) and (employeeData.rank > personnalData.player.cityInfos["job"].rank), function(_, _, s)
                         if s then
@@ -127,19 +132,14 @@ Narcos.netRegisterAndHandle("jobManagerMenu", function(employees, ranks, label, 
             RageUI.IsVisible(RMenu:Get(cat, sub("employees_manage")), true, true, true, function()
                 baseSep()
                 RageUI.Separator(("Selection: ~o~%s"):format(formatIdentity(employees[selectedEmployeed].identity)))
-                RageUI.ButtonWithStyle("Promouvoir", nil, {}, validatePermission(ranks, personnalData.player.cityInfos["job"].rank, "PROMOTE"), function(_,_,s)
+                RageUI.ButtonWithStyle("Définir le grade", nil, {}, validatePermission(ranks, personnalData.player.cityInfos["job"].rank, "DEMOTE"), function(_,_,s)
                     if s then
 
                     end
                 end)
-                RageUI.ButtonWithStyle("Rétrograder", nil, {}, validatePermission(ranks, personnalData.player.cityInfos["job"].rank, "DEMOTE"), function(_,_,s)
+                RageUI.ButtonWithStyle("Virer la personne", nil, {}, validatePermission(ranks, personnalData.player.cityInfos["job"].rank, "FIRE"), function(_,_,s)
                     if s then
-
-                    end
-                end)
-                RageUI.ButtonWithStyle("Virer", nil, {}, validatePermission(ranks, personnalData.player.cityInfos["job"].rank, "FIRE"), function(_,_,s)
-                    if s then
-
+        
                     end
                 end)
             end, function()
